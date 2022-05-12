@@ -1,1 +1,1 @@
-QT Separation
+QT
