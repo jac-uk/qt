@@ -1,0 +1,75 @@
+
+// Scheduled
+exports.backupFirestore = require('./scheduledFunctions/backupFirestore');
+exports.backupAuthentication = require('./scheduledFunctions/backupAuthentication');
+exports.processNotifications = require('./scheduledFunctions/processNotifications');
+
+// Background
+exports.onDelete = require('./backgroundFunctions/onDelete');
+// exports.onExerciseCreate = require('./backgroundFunctions/onExerciseCreate');
+exports.onExerciseUpdate = require('./backgroundFunctions/onExerciseUpdate');
+exports.onApplicationCreate = require('./backgroundFunctions/onApplicationCreate');
+exports.onApplicationUpdate = require('./backgroundFunctions/onApplicationUpdate');
+exports.onAssessmentUpdate = require('./backgroundFunctions/onAssessmentUpdate');
+exports.onApplicationRecordUpdate = require('./backgroundFunctions/onApplicationRecordUpdate');
+exports.onQualifyingTestResponseUpdate = require('./backgroundFunctions/onQualifyingTestResponseUpdate');
+exports.onPanelUpdate = require('./backgroundFunctions/onPanelUpdate');
+exports.onDocumentUploaded = require('./backgroundFunctions/onDocumentUploaded');
+exports.onCandidatePersonalDetailsCreate = require('./backgroundFunctions/onCandidatePersonalDetailsCreate');
+exports.onCandidatePersonalDetailsUpdate = require('./backgroundFunctions/onCandidatePersonalDetailsUpdate');
+
+// Callable
+exports.getApplicationData = require('./callableFunctions/getApplicationData');
+exports.generateDiversityReport = require('./callableFunctions/generateDiversityReport');
+exports.generateOutreachReport = require('./callableFunctions/generateOutreachReport');
+exports.flagApplicationIssuesForExercise = require('./callableFunctions/flagApplicationIssuesForExercise');
+exports.initialiseAssessments = require('./callableFunctions/initialiseAssessments');
+exports.cancelAssessments = require('./callableFunctions/cancelAssessments');
+exports.testAssessmentNotification = require('./callableFunctions/testAssessmentNotification');
+exports.sendAssessmentRequests = require('./callableFunctions/sendAssessmentRequests');
+exports.sendAssessmentReminders = require('./callableFunctions/sendAssessmentReminders');
+exports.generateSignInWithEmailLink = require('./callableFunctions/generateSignInWithEmailLink');
+exports.initialiseApplicationRecords = require('./callableFunctions/initialiseApplicationRecords');
+exports.sendCharacterCheckRequests = require('./callableFunctions/sendCharacterCheckRequests');
+exports.enableCharacterChecks = require('./callableFunctions/enableCharacterChecks');
+exports.initialiseQualifyingTest = require('./callableFunctions/initialiseQualifyingTest');
+exports.activateQualifyingTest = require('./callableFunctions/activateQualifyingTest');
+exports.initialiseMissingApplicationRecords = require('./callableFunctions/initialiseMissingApplicationRecords');
+exports.sendQualifyingTestReminders = require('./callableFunctions/sendQualifyingTestReminders');
+exports.scoreQualifyingTest = require('./callableFunctions/scoreQualifyingTest');
+exports.cutOffScoreUpdateStatuses = require('./callableFunctions/cutOffScoreUpdateStatuses');
+exports.updateStatus = require('./callableFunctions/updateStatus');
+exports.generateQualifyingTestReport = require('./callableFunctions/generateQualifyingTestReport');
+exports.exportExerciseData = require('./callableFunctions/exportExerciseData');
+exports.transferHandoverData = require('./callableFunctions/transferHandoverData');
+exports.exportApplicationContactsData = require('./callableFunctions/exportApplicationContactsData');
+exports.exportApplicationEligibilityIssues = require('./callableFunctions/exportApplicationEligibilityIssues');
+exports.generateHandoverReport = require('./callableFunctions/generateHandoverReport');
+exports.generateReasonableAdjustmentsReport = require('./callableFunctions/generateReasonableAdjustmentsReport');
+exports.exportQualifyingTestResponses = require('./callableFunctions/exportQualifyingTestResponses');
+exports.generateAgencyReport = require('./callableFunctions/generateAgencyReport');
+exports.logEvent = require('./callableFunctions/logEvent');
+exports.scanFile = require('./callableFunctions/scanFile');
+exports.exportApplicationCharacterIssues = require('./callableFunctions/exportApplicationCharacterIssues');
+exports.getUserEmailByID = require('./callableFunctions/getUserEmailByID');
+exports.updateEmailAddress = require('./callableFunctions/updateEmailAddress');
+exports.ensureEmailVerified = require('./callableFunctions/ensureEmailVerified');
+exports.adminGetUsers = require('./callableFunctions/adminGetUsers');
+exports.adminGetUserRoles = require('./callableFunctions/adminGetUserRoles');
+exports.adminDisableUser = require('./callableFunctions/adminDisableUser');
+exports.adminCreateUserRole = require('./callableFunctions/adminCreateUserRole');
+exports.adminUpdateUserRole = require('./callableFunctions/adminUpdateUserRole');
+exports.adminSetUserRole = require('./callableFunctions/adminSetUserRole');
+exports.adminSetDefaultRole = require('./callableFunctions/adminSetDefaultRole');
+exports.adminDisableNewUser = require('./callableFunctions/adminDisableNewUser');
+exports.adminSyncUserRolePermissions = require('./callableFunctions/adminSyncUserRolePermissions');
+exports.customReport = require('./callableFunctions/customReport');
+exports.refreshApplicationCounts = require('./callableFunctions/refreshApplicationCounts');
+exports.createTestApplications = require('./callableFunctions/createTestApplications');
+exports.deleteApplications = require('./callableFunctions/deleteApplications');
+exports.createTestUsers = require('./callableFunctions/createTestUsers');
+exports.deleteTestUsers = require('./callableFunctions/deleteTestUsers');
+exports.initialiseTask = require('./callableFunctions/tasks/initialiseTask');
+exports.activateTask = require('./callableFunctions/tasks/activateTask');
+exports.finaliseTask = require('./callableFunctions/tasks/finaliseTask');
+exports.completeTask = require('./callableFunctions/tasks/completeTask');
