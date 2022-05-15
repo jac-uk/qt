@@ -12,7 +12,7 @@
             href="/"
             class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
           >
-            JAC Digital Platform
+            JAC Qualifying Tests
           </a>
           <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
@@ -21,51 +21,6 @@
             class="float-right"
           >
             <ul class="govuk-header__navigation user-menu">
-              <li class="govuk-header__navigation-item">
-                <RouterLink
-                  v-if="authorisedToPerformAction"
-                  :to="{ name: 'events' }"
-                  class="govuk-header__link"
-                >
-                  Events
-                </RouterLink>
-              </li>
-              <li class="govuk-header__navigation-item">
-                <RouterLink
-                  :to="{ name: 'notifications' }"
-                  class="govuk-header__link"
-                >
-                  Notifications
-                </RouterLink>
-              </li>
-              <li class="govuk-header__navigation-item">
-                <RouterLink
-                  :to="{ name: 'exercises' }"
-                  class="govuk-header__link"
-                >
-                  Exercises
-                </RouterLink>
-              </li>
-              <li class="govuk-header__navigation-item">
-                <RouterLink
-                  :to="{ name: 'candidates-list' }"
-                  class="govuk-header__link"
-                >
-                  Candidates
-                </RouterLink>
-              </li>
-
-              <li
-                v-if="authorisedToPerformAction"
-                class="govuk-header__navigation-item"
-              >
-                <RouterLink
-                  :to="{ name: 'users' }"
-                  class="govuk-header__link"
-                >
-                  Users
-                </RouterLink>
-              </li>
               <li class="govuk-header__navigation-item">
                 <a
                   v-if="$route.name !== 'sign-in'"
