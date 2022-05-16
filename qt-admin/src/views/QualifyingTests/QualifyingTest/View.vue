@@ -362,7 +362,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     isProcessing() {
-      return false;
+      return true;
     },
     applicationRecordCounts() {
       return {};
