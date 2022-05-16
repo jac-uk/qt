@@ -9,6 +9,7 @@ import auth from '@/store/auth';
 import services from '@/store/services';
 import clipboard from '@/store/clipboard';
 
+import exerciseDocument from '@/store/exerciseDocument';  // TODO remove this
 import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 import connectionMonitor from '@/store/connectionMonitor';
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     auth,
     services,
     clipboard,
+    exerciseDocument,
     qualifyingTest,
     qualifyingTestResponses,
     connectionMonitor,
