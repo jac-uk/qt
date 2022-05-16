@@ -340,7 +340,6 @@ import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constan
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -363,10 +362,10 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     isProcessing() {
-      return isProcessing(this.exercise);
+      return false;
     },
     applicationRecordCounts() {
-      return applicationRecordCounts(this.exercise);
+      return {};
     },
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
