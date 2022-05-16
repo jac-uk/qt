@@ -39,6 +39,7 @@ Object.keys(localFilters)
   });
 
 let vueInstance = false;
+
 auth().onAuthStateChanged((user) => {
   // check if user is a new user.
   // TODO: check if there is a better way of doing this

@@ -29,10 +29,10 @@ const router = new Router({
   routes: [
     {
       path: '*',
-      redirect: '/',
+      redirect: '/qualifying-tests',
     },
     {
-      path: 'qualifying-tests',
+      path: '/qualifying-tests',
       component: QualifyingTests,
       props: {
         tieBreakers: false,
@@ -44,7 +44,7 @@ const router = new Router({
       },
     },
     {
-      path: 'qualifying-tests/new',
+      path: '/qualifying-tests/new',
       component: QualifyingTestNew,
       props: {
         isTieBreaker: false,
@@ -56,7 +56,7 @@ const router = new Router({
       },
     },
     {
-      path: 'qualifying-tests/new-from-clipboard',
+      path: '/qualifying-tests/new-from-clipboard',
       component: QualifyingTestNewFromClipboard,
       name: 'qualifying-test-new-from-clipboard',
       meta: {
@@ -65,7 +65,7 @@ const router = new Router({
       },
     },
     {
-      path: 'qualifying-tests/:qualifyingTestId',
+      path: '/qualifying-tests/:qualifyingTestId',
       component: QualifyingTest,
       children: [
         {
