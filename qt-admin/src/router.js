@@ -4,7 +4,8 @@ import store from '@/store';
 
 import SignIn from '@/views/SignIn';
 
-// Exercise tasks
+import Folders from '@/views/Folders/List';
+
 import QualifyingTests from '@/views/QualifyingTests/Cover';
 import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/QualifyingTests/QualifyingTest/New';
@@ -29,7 +30,16 @@ const router = new Router({
   routes: [
     {
       path: '*',
-      redirect: '/qualifying-tests',
+      redirect: '/folders',
+    },
+    {
+      path: '/folders',
+      component: Folders,
+      name: 'folders',
+      meta: {
+        requiresAuth: true,
+        title: 'Folders',
+      },
     },
     {
       path: '/qualifying-tests',
