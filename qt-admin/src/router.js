@@ -5,18 +5,18 @@ import store from '@/store';
 import SignIn from '@/views/SignIn';
 
 // Exercise tasks
-import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
-import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
-import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
-import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
-import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit';
-import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View';
-import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
-import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun';
-import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
-import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
-import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
+import QualifyingTests from '@/views/QualifyingTests/Cover';
+import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
+import QualifyingTestNew from '@/views/QualifyingTests/QualifyingTest/New';
+import QualifyingTestNewFromClipboard from '@/views/QualifyingTests/QualifyingTest/NewFromClipboard';
+import QualifyingTestEdit from '@/views/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/QualifyingTests/QualifyingTest/View';
+import QualifyingTestQuestionBuilder from '@/views/QualifyingTests/QualifyingTest/TestBuilder';
+import QualifyingTestDryRun from '@/views/QualifyingTests/QualifyingTest/DryRun';
+import QualifyingTestReview from '@/views/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/QualifyingTests/QualifyingTest/Response/View';
 
 // Error pages
 import PageNotFound from '@/views/Errors/PageNotFound';
