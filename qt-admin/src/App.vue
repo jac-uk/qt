@@ -118,13 +118,7 @@
         </p>
         <p class="govuk-body govuk-!-margin-bottom-0">
           You have {{ clipboardData.type }} "{{ clipboardData.title }}" from <strong>{{ clipboardData.environment }}</strong> on your clipboard. <br>
-          Navigate to the
-          <RouterLink
-            :to="{ name: 'create-exercise' }"
-            class="govuk-link govuk-link--inverse"
-          >
-            Create Exercise
-          </RouterLink>
+          Navigate to the Create Exercise
           page and press the <strong>Create exercise from clipboard</strong> button in order to import it.
         </p>
       </div>
