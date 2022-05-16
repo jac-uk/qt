@@ -1,49 +1,52 @@
 <template>
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
-    <form
-      v-if="activeTab == 'code'"
-      class="govuk-grid-column-three-quarters"
-      @submit.prevent="validateAndSave"
-    >
-      <TextareaInput
-        id="testQuestions"
-        v-model="testQuestionsJson"
-        label="Questions"
-        hint="Provide questions in JSON format"
-        required
-      />
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
-    <form
-      v-else
-      class="govuk-grid-column-three-quarters"
-      @submit.prevent="validateAndSave"
-    >
-      <TextareaInput
-        id="testQuestions-introduction"
-        v-model="qualifyingTest.testQuestions.introduction"
-        label="Introduction"
-        hint="Short introductory instruction text."
-        rows="2"
-      />
-      <RepeatableFields
-        v-model="qualifyingTest.testQuestions.questions"
-        :component="repeatableFields.QualifyingTestQuestion"
-        :ident="qualifyingTest.type"
-        :type="qualifyingTest.type"
-        :type-name="typeName"
-        required
-      />
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
+    <div class="row">
+      <form
+        v-if="activeTab == 'code'"
+        class="govuk-grid-column-three-quarters"
+        @submit.prevent="validateAndSave"
+      >
+        <TextareaInput
+          id="testQuestions"
+          v-model="testQuestionsJson"
+          label="Questions"
+          hint="Provide questions in JSON format"
+          required
+        />
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+      <form
+        v-else
+        class="govuk-grid-column-three-quarters"
+        @submit.prevent="validateAndSave"
+      >
+        <TextareaInput
+          id="testQuestions-introduction"
+          v-model="qualifyingTest.testQuestions.introduction"
+          label="Introduction"
+          hint="Short introductory instruction text."
+          rows="2"
+        />
+        <RepeatableFields
+          v-model="qualifyingTest.testQuestions.questions"
+          :component="repeatableFields.QualifyingTestQuestion"
+          :ident="qualifyingTest.type"
+          :type="qualifyingTest.type"
+          :type-name="typeName"
+          required
+        />
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+
+    </div>
   </div>
 </template>
 <script>
