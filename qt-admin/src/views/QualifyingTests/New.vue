@@ -74,10 +74,11 @@ export default {
   },
   data(){
     const exercise = this.$store.state.exerciseDocument.record;
-
+    const folder = this.$store.state.folder.record;
     const defaults = {
       isTieBreaker: this.isTieBreaker,
       type: this.isTieBreaker ? QUALIFYING_TEST.TYPE.SCENARIO : null,
+      folderId: folder.id,
       vacancy: {
         mailbox: exercise.exerciseMailbox,
         contactPhone: exercise.exercisePhoneNumber,

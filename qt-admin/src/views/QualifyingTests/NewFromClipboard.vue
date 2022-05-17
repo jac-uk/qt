@@ -60,9 +60,10 @@ export default {
   extends: Form,
   data(){
     const exercise = this.$store.state.exerciseDocument.record;
-
+    const folder = this.$store.state.folder.record;
     const defaults = {
       type: null,
+      folderId: folder.id,
       vacancy: {
         mailbox: exercise.exerciseMailbox,
         contactPhone: exercise.exercisePhoneNumber,
