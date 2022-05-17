@@ -1,28 +1,30 @@
 <template>
-  <div class="govuk-grid-column-two-thirds">
-    <form @submit.prevent="validateAndSave">
-      <h2 class="govuk-heading-l">
-        Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} dry run details
-      </h2>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form @submit.prevent="validateAndSave">
+        <h2 class="govuk-heading-l">
+          Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} dry run details
+        </h2>
 
-      <ErrorSummary
-        :errors="errors"
-        :show-save-button="false"
-        @save="save"
-      />
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="false"
+          @save="save"
+        />
 
-      <TextareaInput
-        id="invitedEmailsText"
-        v-model="invitedEmailsText"
-        label="Invited emails"
-        hint="Please add one email address per line"
-        rows="20"
-      />
+        <TextareaInput
+          id="invitedEmailsText"
+          v-model="invitedEmailsText"
+          label="Invited emails"
+          hint="Please add one email address per line"
+          rows="20"
+        />
 
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-grid-column-full">
+  <div>
+    <h2 class="govuk-heading-l">
+      Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
+    </h2>
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
