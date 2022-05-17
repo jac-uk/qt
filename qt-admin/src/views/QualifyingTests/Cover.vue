@@ -1,8 +1,16 @@
 <template>
   <div>
-    <h2 class="govuk-heading-l">
-      {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
-    </h2>
+    <RouterLink
+      class="govuk-back-link"
+      :to="{ name: 'folders' }"
+    >
+      Back
+    </RouterLink>
+    <span class="govuk-caption-l">{{ folder.name }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+      Qualifying tests
+    </h1>
+
     <Table
       data-key="id"
       :data="qualifyingTests"
@@ -85,6 +93,12 @@ export default {
     };
   },
   computed: {
+    folderId() {
+      return this.$route.params.folderId;
+    },
+    folder() {
+      return this.$store.state.folder.record;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -143,7 +157,7 @@ export default {
       this.$store.dispatch(
         'qualifyingTest/bindQTs',
         {
-          exerciseId: this.exerciseId,
+          folderId: this.folderId,
           ...params,
         }
       );

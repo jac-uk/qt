@@ -13,12 +13,6 @@
       </div>
     </div>
 
-    <h1
-      class="govuk-heading-xl govuk-!-margin-bottom-6"
-    >
-      Qualifying Tests
-    </h1>
-
     <Table
       data-key="id"
       :data="tableData"
@@ -29,13 +23,13 @@
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
           <RouterLink
-            :to="{ name: 'folders-view', params: { id: row.id } }"
+            :to="{ name: 'qualifying-tests', params: { folderId: row.id } }"
           >
             {{ row.name }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.created }}
+          {{ row.created | formatDate }}
         </TableCell>
       </template>
     </Table>
@@ -71,7 +65,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Name', sort: 'name', default: true },
+        { title: 'Folder', sort: 'name', default: true },
         { title: 'Created', sort: 'created' },
       ],
     };

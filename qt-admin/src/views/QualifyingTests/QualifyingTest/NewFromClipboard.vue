@@ -1,37 +1,46 @@
 <template>
-  <div class="govuk-grid-column-two-thirds">
-    <form @submit.prevent="validateAndSave">
-      <h2 class="govuk-heading-l">
-        Create a qualifying test from Clipboard
-      </h2>
-
-      <ErrorSummary
-        :errors="errors"
-        :show-save-button="false"
-        @save="save"
-      />
-
-      <TextareaInput
-        id="statutory-consultation-waived-details"
-        v-model="copiedTest"
-        hint="Paste the copied qualifying test from the clipboard: (Ctrl + V)"
-        label="Clipboard text"
-        rows="15"
-        required
-      />
-
-      <Checkbox
-        id="is-dry-run"
-        v-model="isDryRun"
-        label="Dry run"
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <RouterLink
+        class="govuk-back-link"
+        :to="{ name: 'qualifying-tests', params: { folderId: folderId } }"
       >
-        Yes, this is a dry run
-      </Checkbox>
+        Back
+      </RouterLink>
+      <span class="govuk-caption-l">{{ folder.name }}</span>
+      <form @submit.prevent="validateAndSave">
+        <h2 class="govuk-heading-l">
+          Create a qualifying test from Clipboard
+        </h2>
 
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="false"
+          @save="save"
+        />
+
+        <TextareaInput
+          id="statutory-consultation-waived-details"
+          v-model="copiedTest"
+          hint="Paste the copied qualifying test from the clipboard: (Ctrl + V)"
+          label="Clipboard text"
+          rows="15"
+          required
+        />
+
+        <Checkbox
+          id="is-dry-run"
+          v-model="isDryRun"
+          label="Dry run"
+        >
+          Yes, this is a dry run
+        </Checkbox>
+
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -73,6 +82,12 @@ export default {
     };
   },
   computed: {
+    folderId() {
+      return this.$route.params.folderId;
+    },
+    folder() {
+      return this.$store.state.folder.record;
+    },
     testTypes() {
       return QUALIFYING_TEST.TYPE;
     },

@@ -1,42 +1,52 @@
 <template>
-  <div class="govuk-grid-column-two-thirds">
-    <form @submit.prevent="validateAndSave">
-      <h2 class="govuk-heading-l">
-        Create {{ isTieBreaker ? 'an equal merit tie-breaker' : 'a qualifying test' }}
-      </h2>
-
-      <ErrorSummary
-        :errors="errors"
-        :show-save-button="false"
-        @save="save"
-      />
-
-      <RadioGroup
-        id="qualifyingTest-type"
-        v-model="qualifyingTest.type"
-        label="Type of test"
-        required
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <RouterLink
+        class="govuk-back-link"
+        :to="{ name: 'qualifying-tests', params: { folderId: folderId } }"
       >
-        <RadioItem
-          v-for="item in testTypes"
-          :key="item"
-          :value="item"
-          :label="item | lookup"
+        Back
+      </RouterLink>
+      <span class="govuk-caption-l">{{ folder.name }}</span>
+      <form @submit.prevent="validateAndSave">
+        <h2 class="govuk-heading-l">
+          Create {{ isTieBreaker ? 'an equal merit tie-breaker' : 'a qualifying test' }}
+        </h2>
+
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="false"
+          @save="save"
         />
-      </RadioGroup>
 
-      <Checkbox
-        id="is-dry-run"
-        v-model="isDryRun"
-        label="Dry run"
-      >
-        Yes, this is a dry run
-      </Checkbox>
+        <RadioGroup
+          id="qualifyingTest-type"
+          v-model="qualifyingTest.type"
+          label="Type of test"
+          required
+        >
+          <RadioItem
+            v-for="item in testTypes"
+            :key="item"
+            :value="item"
+            :label="item | lookup"
+          />
+        </RadioGroup>
 
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
+        <Checkbox
+          id="is-dry-run"
+          v-model="isDryRun"
+          label="Dry run"
+        >
+          Yes, this is a dry run
+        </Checkbox>
+
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+    </div>
+
   </div>
 </template>
 
@@ -86,6 +96,12 @@ export default {
     };
   },
   computed: {
+    folderId() {
+      return this.$route.params.folderId;
+    },
+    folder() {
+      return this.$store.state.folder.record;
+    },
     testTypes() {
       return this.isTieBreaker ? [QUALIFYING_TEST.TYPE.SCENARIO] : QUALIFYING_TEST.TYPE;
     },

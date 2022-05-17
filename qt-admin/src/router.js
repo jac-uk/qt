@@ -5,6 +5,7 @@ import store from '@/store';
 import SignIn from '@/views/SignIn';
 
 import Folders from '@/views/Folders/List';
+import Folder from '@/views/Folders/View';
 
 import QualifyingTests from '@/views/QualifyingTests/Cover';
 import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
@@ -42,108 +43,114 @@ const router = new Router({
       },
     },
     {
-      path: '/qualifying-tests',
-      component: QualifyingTests,
-      props: {
-        tieBreakers: false,
-      },
-      name: 'exercise-tasks-qualifying-tests',
-      meta: {
-        requiresAuth: true,
-        title: 'Qualifying Tests | Exercise Tasks',
-      },
-    },
-    {
-      path: '/qualifying-tests/new',
-      component: QualifyingTestNew,
-      props: {
-        isTieBreaker: false,
-      },
-      name: 'qualifying-test-new',
-      meta: {
-        requiresAuth: true,
-        title: 'Create Qualifying Test | Exercise Tasks',
-      },
-    },
-    {
-      path: '/qualifying-tests/new-from-clipboard',
-      component: QualifyingTestNewFromClipboard,
-      name: 'qualifying-test-new-from-clipboard',
-      meta: {
-        requiresAuth: true,
-        title: 'Create Qualifying Test from Clipboard | Exercise Tasks',
-      },
-    },
-    {
-      path: '/qualifying-tests/:qualifyingTestId',
-      component: QualifyingTest,
+      path: '/folder/:folderId',
+      component: Folder,
       children: [
         {
-          path: '',
-          component: QualifyingTestView,
-          name: 'qualifying-test-view',
+          path: 'qualifying-tests',
+          component: QualifyingTests,
+          props: {
+            tieBreakers: false,
+          },
+          name: 'qualifying-tests',
           meta: {
             requiresAuth: true,
-            title: 'Qualifying Test | Exercise Tasks',
+            title: 'Qualifying Tests',
           },
         },
         {
-          path: 'edit',
-          component: QualifyingTestEdit,
-          name: 'qualifying-test-edit',
+          path: 'qualifying-tests/new',
+          component: QualifyingTestNew,
+          props: {
+            isTieBreaker: false,
+          },
+          name: 'qualifying-test-new',
           meta: {
             requiresAuth: true,
-            title: 'Edit Qualifying Test | Exercise Tasks',
+            title: 'Create Qualifying Test',
           },
         },
         {
-          path: 'build',
-          component: QualifyingTestQuestionBuilder,
-          name: 'qualifying-test-question-builder',
+          path: 'qualifying-tests/new-from-clipboard',
+          component: QualifyingTestNewFromClipboard,
+          name: 'qualifying-test-new-from-clipboard',
           meta: {
             requiresAuth: true,
-            title: 'Edit Questions | Qualifying Test | Exercise Tasks',
+            title: 'Create Qualifying Test from Clipboard',
           },
         },
         {
-          path: 'dry-run',
-          component: QualifyingTestDryRun,
-          name: 'qualifying-test-dry-run',
-          meta: {
-            requiresAuth: true,
-            title: 'Dry Run | Qualifying Test | Exercise Tasks',
-          },
-        },
-        {
-          path: 'review',
-          component: QualifyingTestReview,
-          name: 'qualifying-test-review',
-          meta: {
-            requiresAuth: true,
-            title: 'Review | Qualifying Test | Exercise Tasks',
-          },
-        },
-        {
-          path: 'responses/:status',
-          component: QualifyingTestResponses,
-          name: 'qualifying-test-responses',
-          meta: {
-            requiresAuth: true,
-            title: 'Responses | Qualifying Test | Exercise Tasks',
-          },
-        },
-        {
-          path: 'response/:responseId',
-          component: QualifyingTestResponse,
+          path: 'qualifying-tests/:qualifyingTestId',
+          component: QualifyingTest,
           children: [
             {
               path: '',
-              component: QualifyingTestResponseView,
-              name: 'qualifying-test-response-view',
+              component: QualifyingTestView,
+              name: 'qualifying-test-view',
               meta: {
                 requiresAuth: true,
-                title: 'Response | Qualifying Test | Exercise Tasks',
+                title: 'Qualifying Test',
               },
+            },
+            {
+              path: 'edit',
+              component: QualifyingTestEdit,
+              name: 'qualifying-test-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Qualifying Test',
+              },
+            },
+            {
+              path: 'build',
+              component: QualifyingTestQuestionBuilder,
+              name: 'qualifying-test-question-builder',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Questions | Qualifying Test',
+              },
+            },
+            {
+              path: 'dry-run',
+              component: QualifyingTestDryRun,
+              name: 'qualifying-test-dry-run',
+              meta: {
+                requiresAuth: true,
+                title: 'Dry Run | Qualifying Test',
+              },
+            },
+            {
+              path: 'review',
+              component: QualifyingTestReview,
+              name: 'qualifying-test-review',
+              meta: {
+                requiresAuth: true,
+                title: 'Review | Qualifying Test',
+              },
+            },
+            {
+              path: 'responses/:status',
+              component: QualifyingTestResponses,
+              name: 'qualifying-test-responses',
+              meta: {
+                requiresAuth: true,
+                title: 'Responses | Qualifying Test',
+              },
+            },
+            {
+              path: 'response/:responseId',
+              component: QualifyingTestResponse,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestResponseView,
+                  name: 'qualifying-test-response-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Response | Qualifying Test',
+                  },
+                },
+              ],
             },
           ],
         },

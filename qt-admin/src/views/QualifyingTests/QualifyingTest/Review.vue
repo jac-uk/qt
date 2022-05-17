@@ -1,15 +1,12 @@
 <template>
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">
-      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
-    </h2>
-    <h3 class="govuk-heading-l">
+  <div>
+    <h1 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
       <span
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
       >{{ qualifyingTest.mode | lookup }}</span>
-    </h3>
+    </h1>
 
     <div class="text-right">
       <router-link
@@ -150,14 +147,14 @@
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
             class="govuk-!-padding-1"
           >
-            <strong> 
+            <strong>
               Most appropriate:
-            </strong> 
-            {{ testQuestion.options[testQuestion.mostAppropriate].answer }} 
+            </strong>
+            {{ testQuestion.options[testQuestion.mostAppropriate].answer }}
             <br>
-            <strong> 
+            <strong>
               Least appropriate:
-            </strong> 
+            </strong>
             {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div

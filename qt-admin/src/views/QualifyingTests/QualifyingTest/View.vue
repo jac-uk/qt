@@ -1,17 +1,14 @@
 
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
-      <h2 class="govuk-heading-m">
-        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
-      </h2>
-      <h3 class="govuk-heading-l">
+      <h1 class="govuk-heading-l">
         {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         <span
           v-if="qualifyingTest.mode"
           class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
         >{{ qualifyingTest.mode | lookup }}</span>
-      </h3>
+      </h1>
 
       <table class="govuk-table">
         <tbody class="govuk-table__body">

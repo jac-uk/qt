@@ -1,5 +1,13 @@
 <template>
-  <div class="govuk-grid-row">
+  <div class="xgovuk-grid-row">
+    <RouterLink
+      class="govuk-back-link"
+      :to="{ name: 'qualifying-tests', params: { folderId: folderId } }"
+    >
+      Back
+    </RouterLink>
+    <span class="govuk-caption-l">{{ folder.name }}</span>
+
     <LoadingMessage
       v-if="loaded === false"
       :load-failed="loadFailed"
@@ -21,6 +29,12 @@ export default {
     };
   },
   computed: {
+    folderId() {
+      return this.$route.params.folderId;
+    },
+    folder() {
+      return this.$store.state.folder.record;
+    },
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
@@ -56,7 +70,7 @@ export default {
       // this.$router.replace({ name: 'page-not-found' });
       // TODO: If the requested test is an Equal Merit tie-breaker redirects to the EM tie-breakers page
       // else redirect to the QTs page
-      this.$router.replace({ name: 'exercise-tasks-qualifying-tests' });
+      this.$router.replace({ name: 'qualifying-tests' });
     },
   },
 };

@@ -11,6 +11,7 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
       const firestoreRef = collection.doc(id);
+      console.log('bind folder');
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {

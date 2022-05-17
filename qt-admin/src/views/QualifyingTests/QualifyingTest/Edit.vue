@@ -1,73 +1,76 @@
 <template>
-  <div class="govuk-grid-column-two-thirds">
-    <form @submit.prevent="validateAndSave">
-      <h2 class="govuk-heading-l">
-        Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
-      </h2>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form @submit.prevent="validateAndSave">
+        <h2 class="govuk-heading-l">
+          Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
+        </h2>
 
-      <ErrorSummary
-        :errors="errors"
-        :show-save-button="false"
-        @save="save"
-      />
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="false"
+          @save="save"
+        />
 
-      <TextField
-        id="qualifyingTest-title"
-        v-model="qualifyingTest.title"
-        label="Title"
-        required
-      />
+        <TextField
+          id="qualifyingTest-title"
+          v-model="qualifyingTest.title"
+          label="Title"
+          required
+        />
 
-      <DateInput
-        id="qualifyingTest-startDate"
-        v-model="qualifyingTest.startDate"
-        type="datetime"
-        label="Start date"
-        required
-        :min-date="minDate"
-      />
+        <DateInput
+          id="qualifyingTest-startDate"
+          v-model="qualifyingTest.startDate"
+          type="datetime"
+          label="Start date"
+          required
+          :min-date="minDate"
+        />
 
-      <DateInput
-        id="qualifyingTest-endDate"
-        v-model="qualifyingTest.endDate"
-        type="datetime"
-        label="End date"
-        required
-        :min-date="minDate"
-      />
+        <DateInput
+          id="qualifyingTest-endDate"
+          v-model="qualifyingTest.endDate"
+          type="datetime"
+          label="End date"
+          required
+          :min-date="minDate"
+        />
 
-      <TextField
-        id="qualifyingTest-testDuration"
-        v-model="qualifyingTest.testDuration"
-        label="Duration"
-        hint="In minutes."
-        type="number"
-        required
-        input-class="govuk-input--width-3"
-      />
+        <TextField
+          id="qualifyingTest-testDuration"
+          v-model="qualifyingTest.testDuration"
+          label="Duration"
+          hint="In minutes."
+          type="number"
+          required
+          input-class="govuk-input--width-3"
+        />
 
-      <h3 class="govuk-heading-m">
-        Additional instructions
-      </h3>
-      <span class="govuk-hint">Any additional instructions for the candidate - will be displayed before they start the test.</span>
+        <h3 class="govuk-heading-m">
+          Additional instructions
+        </h3>
+        <span class="govuk-hint">Any additional instructions for the candidate - will be displayed before they start the test.</span>
 
-      <RepeatableFields
-        v-model="qualifyingTest.additionalInstructions"
-        :component="repeatableFields.QTAdditionalInstruction"
-        ident="additionalInstructions"
-        required
-      />
+        <RepeatableFields
+          v-model="qualifyingTest.additionalInstructions"
+          :component="repeatableFields.QTAdditionalInstruction"
+          ident="additionalInstructions"
+          required
+        />
 
-      <TextField
-        id="qualifyingTest-feedback-survey"
-        v-model="qualifyingTest.feedbackSurvey"
-        label="Feedback Survey URL"
-      />
+        <TextField
+          id="qualifyingTest-feedback-survey"
+          v-model="qualifyingTest.feedbackSurvey"
+          label="Feedback Survey URL"
+        />
 
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </form>
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </form>
+    </div>
+
   </div>
 </template>
 
