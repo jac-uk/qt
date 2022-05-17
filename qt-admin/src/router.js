@@ -7,10 +7,10 @@ import SignIn from '@/views/SignIn';
 import Folders from '@/views/Folders/List';
 import Folder from '@/views/Folders/View';
 
-import QualifyingTests from '@/views/QualifyingTests/Cover';
+import QualifyingTests from '@/views/QualifyingTests/List';
 import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
-import QualifyingTestNew from '@/views/QualifyingTests/QualifyingTest/New';
-import QualifyingTestNewFromClipboard from '@/views/QualifyingTests/QualifyingTest/NewFromClipboard';
+import QualifyingTestNew from '@/views/QualifyingTests/New';
+import QualifyingTestNewFromClipboard from '@/views/QualifyingTests/NewFromClipboard';
 import QualifyingTestEdit from '@/views/QualifyingTests/QualifyingTest/Edit';
 import QualifyingTestView from '@/views/QualifyingTests/QualifyingTest/View';
 import QualifyingTestQuestionBuilder from '@/views/QualifyingTests/QualifyingTest/TestBuilder';
