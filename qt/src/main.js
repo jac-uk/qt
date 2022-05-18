@@ -4,20 +4,20 @@ import router from '@/router';
 import store from '@/store';
 import * as filters from '@/filters';
 import { auth } from '@/firebase';
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
-import VueGtag from 'vue-gtag';
+// import * as Sentry from '@sentry/browser';
+// import * as Integrations from '@sentry/integrations';
+// import VueGtag from 'vue-gtag';
 import browserDetect from 'vue-browser-detect-plugin';
 
 if (process.env.NODE_ENV !== 'development') {
-  Sentry.init({
-    dsn: 'https://2366ef9baa1a49bb8aa29c5262757de9@sentry.io/1499367',
-    integrations: [new Integrations.Vue({ Vue, attachProps: true })],
-  });
+  // Sentry.init({
+  //   dsn: 'https://2366ef9baa1a49bb8aa29c5262757de9@sentry.io/1499367',
+  //   integrations: [new Integrations.Vue({ Vue, attachProps: true })],
+  // });
 
-  Vue.use(VueGtag, {
-    config: { id: 'UA-153516887-1' },
-  }, router);
+  // Vue.use(VueGtag, {
+  //   config: { id: 'UA-153516887-1' },
+  // }, router);
 }
 
 Vue.config.productionTip = false;
