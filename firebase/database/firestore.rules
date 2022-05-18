@@ -58,10 +58,7 @@ service cloud.firestore {
 
       // allow candidate to read their own document
       allow read: if userIsAuthenticated()
-        && (
-          fieldHasValue(resource.data.candidate, 'id', currentUser())
-          || fieldHasValue(resource.data.candidate, 'email', request.auth.token.email)
-        );
+        && fieldHasValue(resource.data.participant, 'email', request.auth.token.email);
 
       // allow candidates to update their own document
       // @TODO but only the responses field and only if within allowed duration from start time
