@@ -260,6 +260,7 @@
       <ActionButton
         v-if="isInitialised"
         :disabled="!isUserAdded || !canOpenTests"
+        type="primary"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
@@ -269,7 +270,7 @@
       <button
         v-if="isActivated"
         :disabled="true"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        class="govuk-button govuk-!-margin-right-3"
         @click="btnPause"
       >
         Pause
@@ -277,7 +278,7 @@
 
       <button
         v-if="isInitialised || isActivated || isPaused || isCompleted"
-        class="govuk-button govuk-!-margin-right-3"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnResponses('all')"
       >
         Responses

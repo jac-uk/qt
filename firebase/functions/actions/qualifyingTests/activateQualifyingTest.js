@@ -58,7 +58,7 @@ module.exports = (config, firebase, db) => {
       },
     });
 
-    // // write to db
+    // write to db
     const result = await applyUpdates(db, commands);
 
     // @TODO send notifications

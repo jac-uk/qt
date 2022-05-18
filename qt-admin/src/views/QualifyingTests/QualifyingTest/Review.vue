@@ -276,6 +276,9 @@ export default {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,
     }),
+    folderId() {
+      return this.$route.params.folderId;
+    },
     isDraft() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
     },
@@ -333,7 +336,7 @@ export default {
     },
     btnDelete() {
       this.$store.dispatch('qualifyingTest/delete');
-      this.$router.push({ name: `exercise-tasks-${this.routeNamePrefix}s` });
+      this.$router.push({ name: 'qualifying-tests', folderId: this.folderId });
     },
   },
 };

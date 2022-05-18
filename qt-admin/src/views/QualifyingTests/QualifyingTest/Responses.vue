@@ -1,10 +1,7 @@
 <template>
   <div class="govuk-!-margin-bottom-1">
-    <h2 class="govuk-heading-m">
-      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
-    </h2>
-    <h3
-      class="govuk-heading-l"
+    <h1
+      class="govuk-heading-l govuk-!-margin-bottom-4"
       @click="goToQualifyingTest"
     >
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
@@ -12,13 +9,10 @@
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
       >{{ qualifyingTest.mode | lookup }}</span>
-    </h3>
-    <button
-      class="govuk-button govuk-!-margin-left-3 float-right"
-      @click="downloadResponses"
-    >
-      Download responses
-    </button>
+    </h1>
+    <h2 class="govuk-heading-m">
+      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
+    </h2>
     <Table
       data-key="id"
       :data="responses"
@@ -31,6 +25,14 @@
       }"
       @change="getTableData"
     >
+      <template #actions>
+        <button
+          class="govuk-button govuk-!-margin-left-3 float-right"
+          @click="downloadResponses"
+        >
+          Download responses
+        </button>
+      </template>
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
           {{ row.participant.fullName | showAlternative(row.participant.email) }}

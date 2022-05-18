@@ -28,7 +28,7 @@ export default {
 
       if (isSearchAdjustment) {
         firestoreRef = firestoreRef
-          .where('candidate.reasonableAdjustments', '==', true);
+          .where('participant.reasonableAdjustments', '==', true);
       }
 
       if (isSearchStarted) {

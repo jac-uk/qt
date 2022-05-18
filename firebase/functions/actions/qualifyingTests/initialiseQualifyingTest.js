@@ -15,6 +15,13 @@ module.exports = (config, firebase, db) => {
   */
   async function initialiseQualifyingTest(params) {
 
+    /**
+     * TODO:
+     *  - [ ] remove applicationRecords
+     *  - [ ] import participants from API call
+     */
+
+
     // get qualifying test
     const qualifyingTest = await getDocument(db.doc(`qualifyingTests/${params.qualifyingTestId}`));
 
