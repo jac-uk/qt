@@ -1,5 +1,5 @@
 <template>
-  <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
+  <div class="govuk-!-margin-bottom-1">
     <h2 class="govuk-heading-m">
       {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
     </h2>
@@ -33,7 +33,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
+          {{ row.participant.fullName | showAlternative(row.participant.email) }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.status | lookup }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
@@ -69,12 +69,12 @@ export default {
     const qualifyingTest = this.$store.state.qualifyingTest.record;
     const tableColumns = [];
     if (qualifyingTest.mode === 'dry-run') {
-      tableColumns.push({ title: 'Name', sort: 'candidate.email', default: true });
+      tableColumns.push({ title: 'Name', sort: 'participant.email', default: true });
       tableColumns.push({ title: 'Status' });
       tableColumns.push({ title: 'Time Limit' });
       tableColumns.push({ title: '' });
     } else {
-      tableColumns.push({ title: 'Name', sort: 'candidate.fullName', default: true });
+      tableColumns.push({ title: 'Name', sort: 'participant.fullName', default: true });
       tableColumns.push({ title: 'Status' });
       tableColumns.push({ title: 'Time Limit', sort: 'duration.testDurationAdjusted' });
       tableColumns.push({ title: '' });

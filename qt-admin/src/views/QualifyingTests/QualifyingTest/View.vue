@@ -352,6 +352,12 @@ export default {
     };
   },
   computed: {
+    folderId() {
+      return this.$route.params.folderId;
+    },
+    folder() {
+      return this.$store.state.folder.record;
+    },
     exerciseId() {
       return this.$route.params.id;
     },
@@ -487,7 +493,7 @@ export default {
   },
   created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
-      this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
+      this.$store.dispatch('qualifyingTest/bindQTs', { folderId: this.folderId });
     }
   },
   methods: {

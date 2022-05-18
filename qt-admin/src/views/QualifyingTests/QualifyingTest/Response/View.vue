@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
+    <div class="govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
         {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
         <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
@@ -8,7 +8,7 @@
         </routerLink>
       </h2>
       <h3 class="govuk-heading-l">
-        {{ candidate && candidate.fullName | showAlternative(candidate && candidate.email) | showAlternative(candidate && candidate.id) }}
+        {{ participant && participant.fullName | showAlternative(participant && participant.email) }}
       </h3>
 
       <h2 class="govuk-heading-m">
@@ -150,7 +150,7 @@
                     :edit-mode="true"
                     @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
                   />
-                  {{ response.candidate.reasonableAdjustmentsDetails }}
+                  {{ response.participant.reasonableAdjustmentsDetails }}
                 </td>
               </tr>
               <tr
@@ -183,7 +183,7 @@
           </div>
           <div class="modal__content govuk-!-padding-4">
             <p class="modal__message govuk-body-l">
-              Reseting this candidate's test will overwrite their
+              Reseting this participant's test will overwrite their
               'started', 'completed' and 'time taken' fields.
               <br>
               Please ensure there is a record of these before continuing.
@@ -592,8 +592,8 @@ export default {
     hasRelatedTests() {
       return this.relatedTests && this.relatedTests.length;
     },
-    candidate() {
-      return this.response ? this.response.candidate : null;
+    participant() {
+      return this.response ? this.response.participant : null;
     },
     questionLabel() {
       let label = 'Question';
@@ -674,9 +674,9 @@ export default {
   watch: {
     activeTab: async function (newActiveTab) {
       if (newActiveTab === 'logs') {
-        const candidateId = this.candidate.id;
+        const participantId = this.participant.id;
         const qualifyingTestId = this.$route.params.qualifyingTestId;
-        await this.$store.dispatch('connectionMonitor/bind', { qualifyingTestId, candidateId });
+        await this.$store.dispatch('connectionMonitor/bind', { qualifyingTestId, participantId });
       }
       if (newActiveTab === 'history') {
         this.dateCalculate = null;

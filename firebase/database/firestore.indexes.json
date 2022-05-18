@@ -27,6 +27,20 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "participant.email",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

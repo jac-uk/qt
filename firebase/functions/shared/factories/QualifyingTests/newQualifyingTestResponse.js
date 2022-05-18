@@ -32,7 +32,7 @@ module.exports = (config, firebase) => {
       lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
     };
     if (qualifyingTest.mode === 'dry-run') {
-      data.candidate = {
+      data.participant = {
         email: inputData.toLowerCase(),
         id: null,
         fullName: null,
@@ -46,7 +46,7 @@ module.exports = (config, firebase) => {
         };
       }
       if (inputData.candidate) {
-        data.candidate = {
+        data.participant = {
           id: inputData.candidate.id,
           fullName: inputData.candidate.fullName,
           reasonableAdjustments: inputData.candidate.reasonableAdjustments ? true : false,
