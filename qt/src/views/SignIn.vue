@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     exerciseId () {
-      return this.$store.state.vacancy.record && this.$store.state.vacancy.record.id;
+      return 'exID';
     },
   },
   methods: {

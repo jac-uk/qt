@@ -1,6 +1,6 @@
 {
   "hosting": [{
-      "target": "develop-candidate-app",
+      "target": "develop-qt-app",
       "public": "dist",
       "ignore": [
         "firebase.json",
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "target": "staging-candidate-app",
+      "target": "staging-qt-app",
       "public": "dist",
       "ignore": [
         "firebase.json",
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "target": "production-candidate-app",
+      "target": "production-qt-app",
       "public": "dist",
       "ignore": [
         "firebase.json",
@@ -157,6 +157,6 @@
           ]
         }
       ]
-    } 
+    }
   ]
 }
