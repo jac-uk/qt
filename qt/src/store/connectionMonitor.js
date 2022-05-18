@@ -13,7 +13,7 @@ export default {
       if (context.state.started) {
         return;
       }
-      const userId = firebase.auth().currentUser.uid;
+      const userId = firebase.auth.currentUser.uid;
       const userStatusPath = `/${ref}/userStatus/${userId}`;
       const userStatusDatabaseRef = firebase.database().ref(userStatusPath);
       await firebase.database().ref('.info/connected').on('value', (snapshot) => {

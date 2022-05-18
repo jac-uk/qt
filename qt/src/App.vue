@@ -6,7 +6,9 @@
     />
     <template v-else>
       <!-- <Header v-if="!fullPageMode" /> -->
-      <h1>Online tests</h1>
+      <header class="govuk-width-container">
+        <h1>Online tests</h1>
+      </header>
 
       <main
         id="main-content"
@@ -16,7 +18,6 @@
         <div
           :class="fullPageMode ? 'govuk-!-margin-0' : 'govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-!-padding-top-0'"
         >
-          <Breadcrumb />
           <RouterView />
         </div>
       </main>
@@ -32,7 +33,6 @@
 // import Header from '@/components/Page/Header';
 import Footer from '@/components/Page/Footer';
 import LoadingMessage from '@/components/LoadingMessage';
-import Breadcrumb from '@/components/Breadcrumb.vue';
 
 export default {
   name: 'App',
@@ -40,7 +40,6 @@ export default {
     LoadingMessage,
     // Header,
     Footer,
-    Breadcrumb,
   },
   data() {
     return {

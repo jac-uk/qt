@@ -1,73 +1,71 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
       <form
         ref="formRef"
         @submit.prevent="login"
       >
-        <div class="govuk-grid-column-two-thirds">
-          <h1 class="govuk-heading-xl">
-            Sign in
-          </h1>
+        <h1 class="govuk-heading-xl">
+          Sign in
+        </h1>
 
-          <p class="govuk-body-l">
-            Or
-            <RouterLink
-              class="govuk-link"
-              data-module="govuk-button"
-              :to="{ name: 'sign-up' }"
+        <p class="govuk-body-l">
+          Or
+          <RouterLink
+            class="govuk-link"
+            data-module="govuk-button"
+            :to="{ name: 'sign-up' }"
+          >
+            create an account
+          </RouterLink>
+          if you do not have one.
+        </p>
+
+        <!-- <p>
+          <button
+            type="button"
+            class="govuk-button button-image"
+            @click="loginWithGoogle"
+          >
+            <img
+              alt="Sign in with Google"
+              src="@/assets/btn_google_signin_light_normal_web@2x.png"
+              width="191"
             >
-              create an account
-            </RouterLink>
-            if you do not have one.
-          </p>
-
-          <!-- <p>
-            <button
-              type="button"
-              class="govuk-button button-image"
-              @click="loginWithGoogle"
-            >
-              <img
-                alt="Sign in with Google"
-                src="@/assets/btn_google_signin_light_normal_web@2x.png"
-                width="191"
-              >
-            </button>
-          </p> -->
-
-          <ErrorSummary :errors="errors" />
-
-          <TextField
-            id="email"
-            v-model="formData.email"
-            label="Email address"
-            type="email"
-          />
-
-          <TextField
-            id="password"
-            v-model="formData.password"
-            label="Password"
-            type="password"
-          />
-
-          <button class="govuk-button">
-            Continue
           </button>
+        </p> -->
 
-          <p class="govuk-body">
-            Problems signing in?
-            <RouterLink
-              class="govuk-link"
-              data-module="govuk-button"
-              :to="{ name: 'reset-password' }"
-            >
-              Reset your password
-            </RouterLink>
-            here.
-          </p>
-        </div>
+        <ErrorSummary :errors="errors" />
+
+        <TextField
+          id="email"
+          v-model="formData.email"
+          label="Email address"
+          type="email"
+        />
+
+        <TextField
+          id="password"
+          v-model="formData.password"
+          label="Password"
+          type="password"
+        />
+
+        <button class="govuk-button">
+          Continue
+        </button>
+
+        <p class="govuk-body">
+          Problems signing in?
+          <RouterLink
+            class="govuk-link"
+            data-module="govuk-button"
+            :to="{ name: 'reset-password' }"
+          >
+            Reset your password
+          </RouterLink>
+          here.
+        </p>
       </form>
     </div>
   </div>
@@ -97,12 +95,12 @@ export default {
   methods: {
     // loginWithGoogle() {
     //   const provider = new auth.GoogleAuthProvider();
-    //   auth().signInWithPopup(provider);
+    //   auth.signInWithPopup(provider);
     // },
     login() {
       if (this.formData.email && this.formData.password) {
         this.errors = [];
-        auth().signInWithEmailAndPassword(this.formData.email, this.formData.password)
+        auth.signInWithEmailAndPassword(this.formData.email, this.formData.password)
           .then((userCredential) => {
 
             // LOG
