@@ -69,7 +69,7 @@ const module = {
             await functions.httpsCallable('ensureEmailValidated')({});
           }
         } else {
-          auth().signOut();
+          auth.signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
         }
       }

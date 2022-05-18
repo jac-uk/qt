@@ -3,7 +3,7 @@ import App from '@/App';
 import router from '@/router';
 import store from '@/store';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { auth, functions } from '@/firebase';
+import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -40,7 +40,8 @@ Object.keys(localFilters)
 
 let vueInstance = false;
 
-auth().onAuthStateChanged((user) => {
+auth.onAuthStateChanged((user) => {
+  console.log('auth state has changed');
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
   // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines
@@ -52,15 +53,6 @@ auth().onAuthStateChanged((user) => {
   // Bind Firebase auth state to the vuex auth state store
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
-    user.getIdTokenResult()
-      .then(async (idTokenResult) => {
-        if (idTokenResult.claims && idTokenResult.claims.r) {
-          await functions.httpsCallable('adminSyncUserRolePermissions')();
-        }
-      })
-      .catch(() => {
-        // console.log(error);
-      });
     if (window.location.pathname == '/sign-in') {
       router.push('/');
     }

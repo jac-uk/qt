@@ -15,23 +15,17 @@ const config = {
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
+
 const functions = firebase.initializeApp(config).functions('europe-west2');
-
-if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
-  functions.useEmulator('http://localhost', '5001');
-}
-
-// Initialise Firestore
 const firestore = firebase.firestore();
+const auth = firebase.auth();
 
-// App check
-const appCheck = firebase.appCheck();
-if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
-  appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+if (location.hostname === 'localhost') {
+  console.log('using local emulators');
+  firestore.useEmulator('localhost', 8080);
+  functions.useEmulator('localhost', 5001);
+  auth.useEmulator('http://localhost:9099');
 }
 
-// Other firebase exports
-const auth = firebase.auth;
-
-export { firestore, auth, functions, appCheck };
+export { firestore, auth, functions };
 export default firebase;
