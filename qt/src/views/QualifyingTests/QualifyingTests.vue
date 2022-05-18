@@ -5,46 +5,7 @@
       :load-failed="loadFailed"
     />
     <template v-else>
-      <div class="govuk-grid-column-one-quarter">
-        <nav
-          class="moj-side-navigation"
-          aria-label="Side navigation"
-        >
-          <ul class="moj-side-navigation__list">
-            <li class="moj-side-navigation__item">
-              <RouterLink
-                class="govuk-link info-link--nav-qualifying-tests--vacancies"
-                :to="{ name: 'vacancies' }"
-              >
-                Vacancies
-              </RouterLink>
-            </li>
-            <li class="moj-side-navigation__item">
-              <RouterLink
-                class="govuk-link info-link--nav-qualifying-tests--applications"
-                :to="{ name: 'applications' }"
-              >
-                Applications
-              </RouterLink>
-            </li>
-            <li class="moj-side-navigation__item moj-side-navigation__item--active">
-              <RouterLink
-                class="govuk-link info-link--nav-qualifying-tests--qualifying-tests"
-                aria-current="page"
-                :to="{ name: 'qualifying-tests' }"
-              >
-                Online tests
-              </RouterLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">
-          Online tests
-        </h1>
-
         <TabsList
           :tabs="tabs"
           :active-tab.sync="activeTab"

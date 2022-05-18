@@ -5,35 +5,7 @@
         ref="formRef"
         @submit.prevent="login"
       >
-        <h1 class="govuk-heading-xl">
-          Sign in
-        </h1>
-
-        <p class="govuk-body-l">
-          Or
-          <RouterLink
-            class="govuk-link"
-            data-module="govuk-button"
-            :to="{ name: 'sign-up' }"
-          >
-            create an account
-          </RouterLink>
-          if you do not have one.
-        </p>
-
-        <!-- <p>
-          <button
-            type="button"
-            class="govuk-button button-image"
-            @click="loginWithGoogle"
-          >
-            <img
-              alt="Sign in with Google"
-              src="@/assets/btn_google_signin_light_normal_web@2x.png"
-              width="191"
-            >
-          </button>
-        </p> -->
+        <p>To access online tests please provide your email address</p>
 
         <ErrorSummary :errors="errors" />
 
@@ -44,28 +16,9 @@
           type="email"
         />
 
-        <TextField
-          id="password"
-          v-model="formData.password"
-          label="Password"
-          type="password"
-        />
-
         <button class="govuk-button">
           Continue
         </button>
-
-        <p class="govuk-body">
-          Problems signing in?
-          <RouterLink
-            class="govuk-link"
-            data-module="govuk-button"
-            :to="{ name: 'reset-password' }"
-          >
-            Reset your password
-          </RouterLink>
-          here.
-        </p>
       </form>
     </div>
   </div>
@@ -87,44 +40,22 @@ export default {
       errors: [],
     };
   },
-  computed: {
-    exerciseId () {
-      return 'exID';
-    },
-  },
   methods: {
-    // loginWithGoogle() {
-    //   const provider = new auth.GoogleAuthProvider();
-    //   auth.signInWithPopup(provider);
-    // },
-    login() {
-      if (this.formData.email && this.formData.password) {
+    async login() {
+      if (this.formData.email) {
         this.errors = [];
-        auth.signInWithEmailAndPassword(this.formData.email, this.formData.password)
-          .then((userCredential) => {
-
-            // LOG
-            const objToLog = {
-              type: 'login',
-              id: userCredential.user.uid,
-              data: {
-                uid: userCredential.user.uid,
-                meta: this.$browserDetect.meta,
-              },
-            };
-            this.$store.dispatch('logs/save', objToLog);
-            // LOG
-
-            this.$store.dispatch('auth/setCurrentUser', userCredential.user);
-            if (this.$store.getters['vacancy/id']) {
-              this.$router.push({ name: 'GDPR', params: { id: `${this.$store.getters['vacancy/id']}` } });
-            } else {
-              this.$router.push({ name: 'applications' });
-            }
-          })
-          .catch((error) => {
-            this.errors.push({ id: 'email', message: error.message });
-          });
+        console.log('send email link to user', auth.currentUser);
+        const actionCodeSettings = {
+          url: 'http://localhost:8181/sign-in-completed',
+          handleCodeInApp: true,
+        };
+        try {
+          await auth.sendSignInLinkToEmail(this.formData.email, actionCodeSettings);
+          window.localStorage.setItem('emailForSignIn', this.formData.email);
+          this.$router.push({ name: 'sign-in-progress' });
+        } catch (e) {
+          console.log('error', e);
+        }
       }
     },
   },

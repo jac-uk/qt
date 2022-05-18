@@ -6,7 +6,7 @@
     />
     <template v-else>
       <!-- <Header v-if="!fullPageMode" /> -->
-      <header class="govuk-width-container">
+      <header v-if="!fullPageMode" class="govuk-width-container">
         <h1>Online tests</h1>
       </header>
 
@@ -22,16 +22,16 @@
         </div>
       </main>
 
-      <Footer
+      <!-- <Footer
         v-if="!fullPageMode"
-      />
+      /> -->
     </template>
   </div>
 </template>
 
 <script>
 // import Header from '@/components/Page/Header';
-import Footer from '@/components/Page/Footer';
+// import Footer from '@/components/Page/Footer';
 import LoadingMessage from '@/components/LoadingMessage';
 
 export default {
@@ -39,7 +39,7 @@ export default {
   components: {
     LoadingMessage,
     // Header,
-    Footer,
+    // Footer,
   },
   data() {
     return {
@@ -66,7 +66,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   .page-container {
     position: relative;

@@ -32,27 +32,10 @@ Object.keys(filters)
 
 let vueInstance = false;
 auth.onAuthStateChanged( (user) => {
+  console.log('auth state changed');
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
-    if (store.getters['vacancy/id']) {
-      // TODO check that we're not already on this page!
-      const urlToGo = {
-        name: 'task-list',
-        params: { id: store.getters['vacancy/id'] },
-      };
-      const thePageIamIn = {
-        name: router.currentRoute.name,
-        params: router.currentRoute.params,
-      };
-      const isSamePage = urlToGo.name === thePageIamIn.name && urlToGo.params.id === thePageIamIn.params.id;
-      if (!isSamePage) {
-        router.push(urlToGo);
-      } else {
-        router.push('');
-      }
-    } else {
-      // router.push('applications');
-    }
+    router.push('');
   }
   if (!vueInstance) {
     vueInstance = new Vue({
