@@ -16,7 +16,7 @@
         role="main"
       >
         <div
-          :class="fullPageMode ? 'govuk-!-margin-0' : 'govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-!-padding-top-0'"
+          :class="fullPageMode ? 'full-page' : 'govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-!-padding-top-0'"
         >
           <RouterView />
         </div>
@@ -67,10 +67,12 @@ export default {
 </script>
 
 <style lang="scss">
-
   .page-container {
     position: relative;
     min-height: 100%;
     overflow: hidden;
+  }
+  .full-page {
+    margin-top: 60px;
   }
 </style>

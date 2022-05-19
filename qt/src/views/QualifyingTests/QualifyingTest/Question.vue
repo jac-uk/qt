@@ -1,51 +1,54 @@
 <template>
-  <div class="govuk-grid-column-two-thirds">
-    <Banner
-      v-if="previousTestQuestion"
-      status="warning"
-    >
-      <template>
-        You cannot amend your answer for this question as it was started on a previous test
-      </template>
-    </Banner>
-
-    <form
-      ref="formRef"
-      @submit.prevent="save(true, {})"
-    >
-      <component
-        :is="questionType"
-        v-model="response.selection"
-        :question="`${questionNumber}. ${question.details}`"
-        :options="question.options"
-        @answered="questionAnswered"
-      />
-
-      <p
-        v-if="!canSaveAndContinue && isSituationalJudgment"
-        class="govuk-hint"
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <Banner
+        v-if="previousTestQuestion"
+        status="warning"
       >
-        Please select one option 'Most appropriate' and one 'Least appropriate' before clicking on 'Save and continue'.
-      </p>
+        <template>
+          You cannot amend your answer for this question as it was started on a previous test
+        </template>
+      </Banner>
 
-      <div class="moj-button-menu">
-        <div class="moj-button-menu__wrapper">
-          <button
-            :class="`moj-button-menu__item govuk-button govuk-button--secondary govuk-!-margin-right-2 info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-skip`"
-            type="button"
-            @click="skip"
-          >
-            Skip
-          </button>
-          <button
-            :class="`moj-button-menu__item govuk-button info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
-            :disabled="!canSaveAndContinue"
-          >
-            Save and continue
-          </button>
+      <form
+        ref="formRef"
+        @submit.prevent="save(true, {})"
+      >
+        <component
+          :is="questionType"
+          v-model="response.selection"
+          :question="`${questionNumber}. ${question.details}`"
+          :options="question.options"
+          @answered="questionAnswered"
+        />
+
+        <p
+          v-if="!canSaveAndContinue && isSituationalJudgment"
+          class="govuk-hint"
+        >
+          Please select one option 'Most appropriate' and one 'Least appropriate' before clicking on 'Save and continue'.
+        </p>
+
+        <div class="moj-button-menu">
+          <div class="moj-button-menu__wrapper">
+            <button
+              :class="`moj-button-menu__item govuk-button govuk-button--secondary govuk-!-margin-right-2 info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-skip`"
+              type="button"
+              @click="skip"
+            >
+              Skip
+            </button>
+            <button
+              :class="`moj-button-menu__item govuk-button info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
+              :disabled="!canSaveAndContinue"
+            >
+              Save and continue
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
+
   </div>
 </template>
 <script>

@@ -61,17 +61,13 @@
         message="Are you sure you want to exit this test? The timer will continue ticking down even if you do?"
         @confirmed="btnExitModalConfirmed"
       />
-      <div
-        class="govuk-!-margin-left-5 govuk-!-margin-right-5"
-      >
-        <RouterView
-          v-if="isSupportingPage || testInProgress"
-          :key="$route.fullPath"
-          :time-is-up="timerEnded"
-          :auto-save="autoSave"
-          :exit-test="exitTest"
-        />
-      </div>
+      <RouterView
+        v-if="isSupportingPage || testInProgress"
+        :key="$route.fullPath"
+        :time-is-up="timerEnded"
+        :auto-save="autoSave"
+        :exit-test="exitTest"
+      />
     </template>
   </div>
 </template>
@@ -264,7 +260,7 @@ export default {
   }
 
   .qt_page {
-    padding-top: 60px;
+    // padding-top: 60px;
   }
 
 </style>
