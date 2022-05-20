@@ -11,24 +11,19 @@
       Next Steps
 
       <p class="govuk-body-m govuk-!-margin-top-0">
-        You will be informed of the outcome of your test, as indicated on the
-        <router-link
+        You will be informed of the outcome of your test, as indicated on the vacancy timeline.
+        <!-- <router-link
           v-if="qualifyingTestResponse.vacancy"
           class="govuk-link"
           :to="`/vacancy/${qualifyingTestResponse.vacancy.id}`"
         >
           vacancy timeline
         </router-link>
-        <span v-else>vacancy timeline</span>.
+        <span v-else>vacancy timeline</span>. -->
         <br>
-        You may now close this page, return to the
-        <router-link
-          class="govuk-link"
-          to="/"
-        >
-          homepage
-        </router-link>
-        or go back to
+        You may now
+        <a class="govuk-link" href="javascript:;" @click="signOut">sign out</a>
+        and close this page or go back to
         <router-link
           class="govuk-link"
           :to="{ name: 'qualifying-tests' }"
@@ -82,6 +77,7 @@
 import Banner from '@/components/Page/Banner';
 import { isToday, formatDate } from '@/helpers/date';
 import { QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
+import { auth } from '@/firebase';
 
 export default {
   components: {
@@ -98,7 +94,7 @@ export default {
       return this.qualifyingTestResponses.find((qt) => {
         if (
           this.notThisTest(qt) &&
-          this.sameVacancyID(qt) &&
+          // this.sameVacancyID(qt) &&
           this.isReadyToStart(qt)
         ) {
           return true;
@@ -115,18 +111,21 @@ export default {
       const day = formatDate(qualifyingTest.qualifyingTest.endDate);
       return isToday(qualifyingTest.qualifyingTest.endDate) ? `${time} today` : `${time} on ${day}`;
     },
-    sameVacancyID(qt) {
-      if (qt.vacancy && this.$store.state.qualifyingTestResponse.record.vacancy) {
-        return qt.vacancy.id === this.$store.state.qualifyingTestResponse.record.vacancy.id;
-      } else {
-        return false;
-      }
-    },
+    // sameVacancyID(qt) {
+    //   if (qt.vacancy && this.$store.state.qualifyingTestResponse.record.vacancy) {
+    //     return qt.vacancy.id === this.$store.state.qualifyingTestResponse.record.vacancy.id;
+    //   } else {
+    //     return false;
+    //   }
+    // },
     notThisTest(qt) {
       return qt.id !== this.$store.state.qualifyingTestResponse.record.id;
     },
     isReadyToStart(qt) {
       return qt.status === QUALIFYING_TEST_RESPONSE.STATUS.ACTIVATED;
+    },
+    signOut() {
+      auth.signOut();
     },
   },
 };

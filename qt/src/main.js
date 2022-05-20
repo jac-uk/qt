@@ -35,7 +35,17 @@ auth.onAuthStateChanged( (user) => {
   console.log('auth state changed');
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
-    router.push('');
+    console.log('signed in');
+    if (window.location.pathname.indexOf('/sign-in') === 0) {
+      console.log('ON a sign in page -> online-tests');
+      router.push({ name: 'qualifying-tests' });
+    }
+  } else {
+    console.log('not signed in');
+    if (window.location.pathname.indexOf('/sign-in') !== 0) {
+      console.log('NOT on a sign in page -> sign-in');
+      router.push({ name: 'sign-in' });
+    }
   }
   if (!vueInstance) {
     vueInstance = new Vue({

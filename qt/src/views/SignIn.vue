@@ -5,7 +5,7 @@
         ref="formRef"
         @submit.prevent="login"
       >
-        <p>To access online tests please provide your email address</p>
+        <p class="govuk-body-l">To access your tests please provide your email address</p>
 
         <ErrorSummary :errors="errors" />
 

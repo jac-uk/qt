@@ -5,9 +5,22 @@
       :load-failed="loadFailed"
     />
     <template v-else>
-      <!-- <Header v-if="!fullPageMode" /> -->
       <header v-if="!fullPageMode" class="govuk-width-container">
-        <h1>Online tests</h1>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1>Online tests</h1>
+          </div>
+          <div class="govuk-grid-column-one-third text-right">
+            <button
+              v-if="isSignedIn"
+              class="govuk-button govuk-!-margin-top-4"
+              data-module="govuk-button"
+              @click="signOut"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
       </header>
 
       <main
@@ -33,6 +46,7 @@
 // import Header from '@/components/Page/Header';
 // import Footer from '@/components/Page/Footer';
 import LoadingMessage from '@/components/LoadingMessage';
+import { auth } from '@/firebase';
 
 export default {
   name: 'App',
@@ -62,6 +76,11 @@ export default {
     } catch {
       this.loadFailed = true;
     }
+  },
+  methods: {
+    signOut() {
+      auth.signOut();
+    },
   },
 };
 </script>
