@@ -28,7 +28,9 @@ module.exports = (config, firebase, db) => {
     const qualifyingTests = await getDocuments(db.collection('qualifyingTests').where('folderId', '==', folder.id));
     const data = qualifyingTests.filter(qt => ['dry-run', 'mop-up'].indexOf(qt.mode) < 0).map(qt => {
       return {
-        id: qt.id, title: qt.title, type: qt.type
+        id: qt.id,
+        title: qt.title,
+        type: qt.type,
       };
     });
 

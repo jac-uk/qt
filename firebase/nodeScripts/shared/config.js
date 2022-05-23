@@ -1,6 +1,6 @@
 module.exports = {
   PROJECT_ID: process.env.PROJECT_ID,
-  QT_URL: 'http://localhost:5001/jac-qualifying-tests-develop/europe-west2/api/v1',
+  QT_URL: 'https://europe-west2-jac-qualifying-tests-develop.cloudfunctions.net/api/v1',
   QT_KEY: 'secret',
   QUALIFYING_TEST: {
     TYPE: {

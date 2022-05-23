@@ -42,7 +42,7 @@ const DEFAULT_STYLESHEET = `
 describe('htmlWriter', () => {
 
   let writer;
-  
+
   beforeEach(()=>{
     writer = new htmlWriter();
   });
@@ -50,7 +50,7 @@ describe('htmlWriter', () => {
   it('writer has html', () => {
     expect(writer).toHaveProperty('html');
   });
-  
+
   it('writer has StyleSheet', () => {
     expect(writer).toHaveProperty('stylesheet');
   });
@@ -58,7 +58,7 @@ describe('htmlWriter', () => {
   it('writer StyleSheet empty by default', () => {
     expect(writer.stylesheet).toBe('');
   });
-  
+
   it('pageHeader() contains default stylesheet', () => {
     expect(writer.pageHeader()).toContain(DEFAULT_STYLESHEET);
   });
@@ -103,7 +103,7 @@ describe('htmlWriter', () => {
         lineBreak: false,
       },
     ]);
-    expect(writer.html).toBe('<table><tr class=\"sectionStart\"><th>table label</th><td>table value</td></tr><tr><th>table label 2</th><td>table value 2</td></tr></table>');
+    expect(writer.html).toBe('<table><tr class="sectionStart"><th>table label</th><td>table value</td></tr><tr><th>table label 2</th><td>table value 2</td></tr></table>');
   });
 
   it('addParagraph() ...', async () => {

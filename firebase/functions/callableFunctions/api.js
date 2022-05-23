@@ -9,6 +9,13 @@ const api = express();
 
 api.use(cors({ origin: true }));
 
+// api home page
+api.get(['/v1', '/v1/'], async (req, res) => {
+  res
+    .status(200)
+    .send('API: Online tests');
+});
+
 // list qualifying tests
 api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
   checkAccess(req, res);

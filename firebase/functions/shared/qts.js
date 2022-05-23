@@ -12,7 +12,7 @@ module.exports = (config) => {
       try {
         const result = await axios.get(
           `${config.QT_URL}/${url}?key=${config.QT_KEY}`,
-          { params: params },
+          { params: params }
         );
         return result.data;
       } catch (e) {
@@ -33,7 +33,7 @@ module.exports = (config) => {
       try {
         const result = await axios.post(
           `${config.QT_URL}/${url}?key=${config.QT_KEY}`,
-          data,
+          data
         );
         return result.data;
       } catch (e) {

@@ -2,8 +2,8 @@ const functions = require('firebase-functions');
 
 module.exports = {
   PROJECT_ID: functions.config().project.id,
-  QT_URL: 'http://localhost:5001/jac-qualifying-tests-develop/europe-west2/api/v1',
-  QT_KEY: functions.config().qts.key,
+  QT_URL: 'https://europe-west2-jac-qualifying-tests-develop.cloudfunctions.net/api/v1',
+  QT_KEY: 'JAC12345',
   QUALIFYING_TEST: {
     TYPE: {
       SCENARIO: 'scenario',
