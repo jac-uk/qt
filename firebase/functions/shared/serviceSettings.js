@@ -5,6 +5,7 @@ module.exports = (db) => {
   return {
     serviceSettings,
     checkFunctionEnabled,
+    isFunctionEnabled,
   };
 
   async function serviceSettings() {
@@ -19,4 +20,10 @@ module.exports = (db) => {
     }
     return;
   }
+
+  async function isFunctionEnabled(name) {
+    const services = await serviceSettings();
+    return services.functions.enabled ? true : false;
+  }
+
 };

@@ -9,6 +9,12 @@
           >
             Add a folder
           </button>
+          <button
+            class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
+            @click="createQT"
+          >
+            Create Online Test
+          </button>
         </div>
       </div>
     </div>
@@ -53,6 +59,8 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import FoldersForm from './components/AddEdit';
+import { functions } from '@/firebase';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
@@ -82,6 +90,17 @@ export default {
     async createFolder(data) {
       await this.$store.dispatch('folder/create', data );
       this.$refs['createFolderModal'].closeModal();
+    },
+    async createQT() {
+      await functions.httpsCallable('adminCallAPI')({
+        folder: 'JAC0006',
+        test: {
+          type: QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS,
+          title: 'CA for JAC0006',
+          startDate: '2022-05-17T09:00:00',
+          endDate: '2022-05-18T21:00:00',
+        },
+      });
     },
   },
 };
