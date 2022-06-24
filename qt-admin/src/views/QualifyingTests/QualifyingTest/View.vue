@@ -159,95 +159,22 @@
           </ActionButton>
         </div>
         <div v-else>
-          <div v-if="isProcessing">
-            <Select
-              v-if="!isTieBreaker"
-              id="exercise-stage"
-              v-model="exerciseStage"
+          <div v-if="hasParticipants">
+            <ActionButton
+              type="primary"
+              :disabled="!hasParticipants"
+              class="govuk-!-margin-right-3"
+              @click="btnInitialise"
             >
-              <option value="">
-                Choose applications
-              </option>
-              <option
-                v-if="applicationRecordCounts.review"
-                value="review"
-              >
-                Review ({{ applicationRecordCounts.review }})
-              </option>
-              <option
-                v-if="applicationRecordCounts.shortlisted"
-                value="shortlisted"
-              >
-                Shortlisted ({{ applicationRecordCounts.shortlisted }})
-              </option>
-              <option
-                v-if="applicationRecordCounts.selected"
-                value="selected"
-              >
-                Selected ({{ applicationRecordCounts.selected }})
-              </option>
-            </Select>
-            <Select
-              v-if="isTieBreaker && hasEMPCandidates"
-              id="exercise-stage"
-              v-model="exerciseStage"
-            >
-              <option value="">
-                Choose applications (for EMP candidates)
-              </option>
-              <option
-                v-if="applicationRecordCounts.reviewEMP"
-                value="review"
-              >
-                Review ({{ applicationRecordCounts.reviewEMP }})
-              </option>
-              <option
-                v-if="applicationRecordCounts.shortlistedEMP"
-                value="shortlisted"
-              >
-                Shortlisted ({{ applicationRecordCounts.shortlistedEMP }})
-              </option>
-              <option
-                v-if="applicationRecordCounts.selectedEMP"
-                value="selected"
-              >
-                Selected ({{ applicationRecordCounts.selectedEMP }})
-              </option>
-            </Select>
+              Create {{ qualifyingTest.participants.length }} tests
+            </ActionButton>
           </div>
           <div v-else>
             <Banner
-              :message="`No applications found`"
+              :message="`No participants found`"
               status="warning"
             />
           </div>
-          <Select
-            v-if="availableStatuses && availableStatuses.length > 0"
-            id="availableStatuses"
-            v-model="candidateStatus"
-            required
-          >
-            <option
-              value="all"
-            >
-              All
-            </option>
-            <option
-              v-for="item in availableStatuses"
-              :key="item"
-              :value="item"
-            >
-              {{ item | lookup }}
-            </option>
-          </Select>
-          <ActionButton
-            type="primary"
-            :disabled="!exerciseStage"
-            class="govuk-!-margin-right-3"
-            @click="btnInitialise"
-          >
-            Create tests
-          </ActionButton>
         </div>
       </div>
 
@@ -336,13 +263,11 @@ import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {
   components: {
     ActionButton,
-    Select,
     Banner,
   },
   data() {
@@ -376,6 +301,9 @@ export default {
     },
     qualifyingTest() {
       return this.$store.state.qualifyingTest.record;
+    },
+    hasParticipants() {
+      return this.qualifyingTest && this.qualifyingTest.participants && this.qualifyingTest.participants.length;
     },
     hasCounts() {
       return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
@@ -509,12 +437,6 @@ export default {
     },
     async btnInitialise() {
       const data = { qualifyingTestId: this.qualifyingTestId };
-      if (!this.isDryRun) {
-        data.stage = this.exerciseStage;
-        if (this.candidateStatus) {
-          data.status = this.candidateStatus;
-        }
-      }
       await functions.httpsCallable('initialiseQualifyingTest')( data );
     },
     async btnActivate() {

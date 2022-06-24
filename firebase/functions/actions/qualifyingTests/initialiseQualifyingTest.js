@@ -15,13 +15,6 @@ module.exports = (config, firebase, db) => {
   */
   async function initialiseQualifyingTest(params) {
 
-    /**
-     * TODO:
-     *  - [ ] remove applicationRecords
-     *  - [ ] import participants from API call
-     */
-
-
     // get qualifying test
     const qualifyingTest = await getDocument(db.doc(`qualifyingTests/${params.qualifyingTestId}`));
 
@@ -34,17 +27,7 @@ module.exports = (config, firebase, db) => {
     } else if (qualifyingTest.mode === 'dry-run') {
       participants = qualifyingTest.invitedEmails;
     } else {
-      let applicationRecordsRef = db.collection('applicationRecords')
-        .where('exercise.id', '==', qualifyingTest.vacancy.id)
-        .where('stage', '==', params.stage);
-      if (params.status !== 'all') {
-        applicationRecordsRef = applicationRecordsRef.where('status', '==', params.status);
-      }
-      if (qualifyingTest.isTieBreaker) { // for EMP tie-breaker tests, only include EMP candidates
-        applicationRecordsRef = applicationRecordsRef.where('flags.empApplied', '==', true);
-      }
-
-      participants = await getDocuments(applicationRecordsRef);
+      participants = qualifyingTest.participants;
     }
 
     // construct db commands

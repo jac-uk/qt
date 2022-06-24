@@ -59,6 +59,49 @@ api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
   }
 });
 
+// update qualifying participants
+api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
+  checkAccess(req, res);
+  if (!checkArguments({
+    key: { required: true },
+    testId: { required: true },
+    participants: { required: true },
+  }, { ...req.query, ...req.body })) {
+    return res.status(400).send('Please provide valid arguments');
+  }
+  if (!isFunctionEnabled('updateQualifyingTestParticipants')) return res.status(400).send('Service offline');
+  try {
+    const updateQualifyingTestParticipants = require('../actions/qualifyingTests/updateQualifyingTestParticipants')(config, firebase, db);
+    const result = await updateQualifyingTestParticipants(req.body);
+    res
+      .status(200)
+      .send(result);
+  } catch (error) {
+    res.error(error);
+  }
+});
+
+// get
+api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
+  checkAccess(req, res);
+  if (!checkArguments({
+    key: { required: true },
+    testId: { required: true },
+  }, req.query)) {
+    return res.status(400).send('Please provide valid arguments');
+  }
+  if (!isFunctionEnabled('getQualifyingTestScores')) return res.status(400).send('Service offline');
+  try {
+    const getQualifyingTestScores = require('../actions/qualifyingTests/getQualifyingTestScores')(config, firebase, db);
+    const result = await getQualifyingTestScores({ testId: req.query.testId });
+    res
+      .status(200)
+      .send(result);
+  } catch (error) {
+    res.error(error);
+  }
+});
+
 function checkAccess(req, res) {
   if (!req.query.key) { res.status(400).send('Missing key'); }
   if (req.query.key !== config.QT_KEY) { res.status(400).send('Incorrect key'); }

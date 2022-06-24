@@ -50,6 +50,7 @@ module.exports = (config, firebase, db) => {
     return {
       success: true,
       message: 'Test created successfully',
+      folderId: folder.id,
       testId: testRef.id,
     };
 

@@ -5,7 +5,7 @@
         ref="formRef"
         @submit.prevent="login"
       >
-        <p class="govuk-body-l">To access your tests please provide your email address</p>
+        <p class="govuk-body-l">To access your test please provide your email address</p>
 
         <ErrorSummary :errors="errors" />
 
@@ -44,17 +44,16 @@ export default {
     async login() {
       if (this.formData.email) {
         this.errors = [];
-        console.log('send email link to user', auth.currentUser);
         const actionCodeSettings = {
-          url: 'http://localhost:8181/sign-in-completed',
+          url: `${window.location.origin}/sign-in-completed`,
           handleCodeInApp: true,
         };
         try {
           await auth.sendSignInLinkToEmail(this.formData.email, actionCodeSettings);
           window.localStorage.setItem('emailForSignIn', this.formData.email);
           this.$router.push({ name: 'sign-in-progress' });
-        } catch (e) {
-          console.log('error', e);
+        } catch {
+          console.log('Send sign in link error');
         }
       }
     },

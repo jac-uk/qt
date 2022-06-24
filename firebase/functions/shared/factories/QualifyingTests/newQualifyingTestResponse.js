@@ -39,25 +39,32 @@ module.exports = (config, firebase) => {
         reasonableAdjustments: false,
       };
     } else {
-      if (inputData.application) {
-        data.application = {
-          id: inputData.application.id,
-          referenceNumber: inputData.application.referenceNumber,
-        };
-      }
-      if (inputData.candidate) {
-        data.participant = {
-          id: inputData.candidate.id,
-          fullName: inputData.candidate.fullName,
-          reasonableAdjustments: inputData.candidate.reasonableAdjustments ? true : false,
-          reasonableAdjustmentsDetails: inputData.candidate.reasonableAdjustmentsDetails ? inputData.candidate.reasonableAdjustmentsDetails : null,
-        };
-      }
-      if (inputData.exercise) {
-        data.vacancy = {
-          id: inputData.exercise.id,
-        };
-      }
+      data.participant = {
+        id: null,
+        ref: inputData.ref,
+        email: inputData.email,
+        fullName: inputData.fullName,
+        reasonableAdjustments: inputData.adjustments ? true : false,
+      };
+      // if (inputData.application) {
+      //   data.application = {
+      //     id: inputData.application.id,
+      //     referenceNumber: inputData.application.referenceNumber,
+      //   };
+      // }
+      // if (inputData.candidate) {
+      //   data.participant = {
+      //     id: inputData.candidate.id,
+      //     fullName: inputData.candidate.fullName,
+      //     reasonableAdjustments: inputData.candidate.reasonableAdjustments ? true : false,
+      //     reasonableAdjustmentsDetails: inputData.candidate.reasonableAdjustmentsDetails ? inputData.candidate.reasonableAdjustmentsDetails : null,
+      //   };
+      // }
+      // if (inputData.exercise) {
+      //   data.vacancy = {
+      //     id: inputData.exercise.id,
+      //   };
+      // }
     }
     return data;
   }

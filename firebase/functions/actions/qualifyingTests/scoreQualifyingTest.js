@@ -65,7 +65,7 @@ module.exports = (config, firebase, db) => {
         data.exitedTest = true;
         data.status = config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED;
         if (qualifyingTest.endDate.toMillis() < endedTimestamp.toMillis()) {
-          data['statusLog.completed'] = qualifyingTest.endDate;  
+          data['statusLog.completed'] = qualifyingTest.endDate;
         } else {
           data['statusLog.completed'] = endedTimestamp;
         }
@@ -76,23 +76,6 @@ module.exports = (config, firebase, db) => {
           command: 'update',
           ref: qualifyingTestResponse.ref,
           data: data,
-        });
-      }
-      // update corresponding application record, if we have one (dry run won't)
-      if (qualifyingTestResponse.application && qualifyingTestResponse.application.id) {
-        const applicationRecordData = {};
-        applicationRecordData[`qualifyingTests.${mainQualifyingTestId}`] = {
-          hasData: true,
-          responseId: qualifyingTestResponse.id,
-          score: score,
-          status: qualifyingTestResponse.status,
-          pass: null,
-          rank: null,
-        };
-        commands.push({
-          command: 'update',
-          ref: db.doc(`applicationRecords/${qualifyingTestResponse.application.id}`),
-          data: applicationRecordData,
         });
       }
     }

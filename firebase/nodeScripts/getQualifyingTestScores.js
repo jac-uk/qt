@@ -2,12 +2,17 @@
 
 const config = require('./shared/config');
 const { firebase, app, db } = require('./shared/admin.js');
-const initialiseQualifyingTest = require('../functions/actions/qualifyingTests/initialiseQualifyingTest')(config, firebase, db);
+const getQualifyingTestScores = require('../functions/actions/qualifyingTests/getQualifyingTestScores')(config, firebase, db);
+// const qts = require('../functions/shared/qts')(config);
 
 const main = async () => {
-  return initialiseQualifyingTest({
-    qualifyingTestId: 'fCAno7PwgrbdiXAOFZ2K',
+
+  const result = await getQualifyingTestScores({
+    testId: 'yOoxvzGEx2FSRko04zop',
   });
+
+  return result;
+
 };
 
 main()
