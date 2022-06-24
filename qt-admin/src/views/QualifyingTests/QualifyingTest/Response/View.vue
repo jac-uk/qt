@@ -3,44 +3,35 @@
     <div class="govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
         {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
-        <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
+        <routerLink
+          :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
           {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         </routerLink>
       </h2>
-      <h3 class="govuk-heading-l">
-        {{ participant && participant.fullName | showAlternative(participant && participant.email) }}
+      <h3 v-if="participant.fullName" class="govuk-heading-l">
+        {{ participant.fullName }} ({{ participant.email }})
+      </h3>
+      <h3 v-else class="govuk-heading-l">
+        {{ participant.email }}
       </h3>
 
       <h2 class="govuk-heading-m">
         Test details
       </h2>
 
-      <dl
-        v-if="response"
-        class="govuk-summary-list"
-      >
+      <dl v-if="response" class="govuk-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Status
           </dt>
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
-            <button
-              v-if="authorisedToPerformAction"
-              :disabled="hasActivated"
-              type="secondary"
-              class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1"
-              @click="resetTest"
-            >
+            <button v-if="authorisedToPerformAction" :disabled="hasActivated" type="secondary"
+              class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1" @click="resetTest">
               Reset
             </button>
-            <ActionButton
-              v-if="authorisedToPerformAction"
-              :disabled="hasCompleted"
-              type="secondary"
-              class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
-              @click="markAsCompleted"
-            >
+            <ActionButton v-if="authorisedToPerformAction" :disabled="hasCompleted" type="secondary"
+              class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1" @click="markAsCompleted">
               Mark as completed
             </ActionButton>
           </dd>
@@ -53,46 +44,24 @@
             <span v-if="response.statusLog.started">{{ response.statusLog.started | formatDate('datetime') }}</span>
             <span v-else>{{ qualifyingTest.startDate | formatDate('datetime') }}</span>
             <div v-if="hasRelatedTests && isEditingTestDate">
-              <Select
-                id="moveToTest"
-                v-model="moveToTest"
-                required
-              >
+              <Select id="moveToTest" v-model="moveToTest" required>
                 <option value="">
                   Choose new test date
                 </option>
-                <option
-                  v-for="test in relatedTests"
-                  :key="test.id"
-                  :value="test.id"
-                >
+                <option v-for="test in relatedTests" :key="test.id" :value="test.id">
                   {{ test.title }} - {{ test.startDate | formatDate('datetime') }}
                 </option>
               </Select>
-              <button
-                class="govuk-button"
-                :disabled="!moveToTest"
-                @click="btnMoveTest"
-              >
+              <button class="govuk-button" :disabled="!moveToTest" @click="btnMoveTest">
                 Save
               </button>
             </div>
-            <span
-              v-if="hasRelatedTests && !isEditingTestDate"
-              class="float-right"
-            >
-              <a
-                href="#"
-                class="govuk-link print-none"
-                @click.prevent="btnEditTestDate"
-              >Change</a>
+            <span v-if="hasRelatedTests && !isEditingTestDate" class="float-right">
+              <a href="#" class="govuk-link print-none" @click.prevent="btnEditTestDate">Change</a>
             </span>
           </dd>
         </div>
-        <div
-          v-if="hasCompleted"
-          class="govuk-summary-list__row"
-        >
+        <div v-if="hasCompleted" class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             End date
           </dt>
@@ -100,10 +69,7 @@
             {{ response.statusLog.completed | formatDate('datetime') }}
           </dd>
         </div>
-        <div
-          v-if="hasCompleted"
-          class="govuk-summary-list__row"
-        >
+        <div v-if="hasCompleted" class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Time taken
           </dt>
@@ -111,10 +77,7 @@
             {{ timeTaken }}
           </dd>
         </div>
-        <div
-          v-if="response.score"
-          class="govuk-summary-list__row"
-        >
+        <div v-if="response.score" class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Score
           </dt>
@@ -126,10 +89,7 @@
           <dt class="govuk-summary-list__key">
             Reasonable Adjustments
           </dt>
-          <dd
-            v-if="response"
-            class="govuk-summary-list__value"
-          >
+          <dd v-if="response" class="govuk-summary-list__value">
             <table class="govuk-table">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
@@ -144,39 +104,27 @@
                   Adjustment
                 </td>
                 <td class="govuk-table__cell">
-                  <EditableField
-                    :value="response.duration.reasonableAdjustment"
-                    field="reasonableAdjustment"
+                  <EditableField :value="response.duration.reasonableAdjustment" field="reasonableAdjustment"
                     :edit-mode="true"
-                    @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
-                  />
+                    @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)" />
                   {{ response.participant.reasonableAdjustmentsDetails }}
                 </td>
               </tr>
-              <tr
-                v-if="response.duration.reasonableAdjustment"
-                class="govuk-table__row"
-              >
+              <tr v-if="response.duration.reasonableAdjustment" class="govuk-table__row">
                 <td class="govuk-table__cell">
                   Justification
                 </td>
                 <td class="govuk-table__cell">
-                  <EditableField
-                    :value="response.duration.reasonableAdjustmentsJustification"
-                    field="reasonableAdjustmentsJustification"
-                    :edit-mode="true"
-                    type="textarea"
-                    @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
-                  />
+                  <EditableField :value="response.duration.reasonableAdjustmentsJustification"
+                    field="reasonableAdjustmentsJustification" :edit-mode="true" type="textarea"
+                    @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)" />
                 </td>
               </tr>
             </table>
           </dd>
         </div>
       </dl>
-      <Modal
-        ref="confirmResetModal"
-      >
+      <Modal ref="confirmResetModal">
         <div class="container">
           <div class="modal__title govuk-!-padding-2 govuk-heading-m">
             Caution
@@ -190,27 +138,19 @@
             </p>
 
             <span>
-              <button
-                class="govuk-button govuk-button--secondary govuk-!-margin-right-3 deny info-btn--modal--cancel"
-                @click="$refs['confirmResetModal'].closeModal()"
-              >
+              <button class="govuk-button govuk-button--secondary govuk-!-margin-right-3 deny info-btn--modal--cancel"
+                @click="$refs['confirmResetModal'].closeModal()">
                 Cancel
               </button>
             </span>
-            <ActionButton
-              class="govuk-button govuk-button--warning"
-              @click="confirmReset"
-            >
+            <ActionButton class="govuk-button govuk-button--warning" @click="confirmReset">
               Reset Test
             </ActionButton>
           </div>
         </div>
       </Modal>
       <div v-if="hasStarted">
-        <TabsList
-          :tabs="tabs"
-          :active-tab.sync="activeTab"
-        />
+        <TabsList :tabs="tabs" :active-tab.sync="activeTab" />
 
         <div v-if="activeTab === 'questions'">
           <h2 class="govuk-heading-m">
@@ -218,13 +158,8 @@
           </h2>
 
           <dl class="govuk-summary-list">
-            <div
-              v-if="response.testQuestions.introduction"
-              class="govuk-summary-list__row"
-            >
-              <dt
-                class="govuk-summary-list__key"
-              >
+            <div v-if="response.testQuestions.introduction" class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
                 Introduction
               </dt>
               <dd class="govuk-summary-list__value">
@@ -232,90 +167,52 @@
               </dd>
             </div>
 
-            <div
-              v-for="(testQuestion, index) in questions"
-              :key="index"
-              class="govuk-summary-list__row"
-            >
+            <div v-for="(testQuestion, index) in questions" :key="index" class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 {{ questionLabel }} {{ index + 1 }}
-                <QuestionDuration
-                  v-if="!isScenario"
-                  :start="responses[index] && responses[index].started"
-                  :end="lastUpdatedQuestion(index)"
-                />
+                <QuestionDuration v-if="!isScenario" :start="responses[index] && responses[index].started"
+                  :end="lastUpdatedQuestion(index)" />
               </dt>
               <dd class="govuk-summary-list__value">
-                <div
-                  v-if="isScenario"
-                >
-                  <dl
-                    v-for="(document, docIndex) in testQuestion.documents"
-                    :key="docIndex"
-                  >
+                <div v-if="isScenario">
+                  <dl v-for="(document, docIndex) in testQuestion.documents" :key="docIndex">
                     <dt>{{ document.title }}</dt>
                     <!-- eslint-disable -->
                     <dd v-html="document.content" />
                     <!-- eslint-enable -->
                   </dl>
                 </div>
-                <div
-                  v-else
-                >
+                <div v-else>
                   {{ testQuestion.details }}
                 </div>
                 <hr class="govuk-section-break govuk-section-break--visible">
-                <ol
-                  v-if="isCriticalAnalysis && responses[index]"
-                >
-                  <li
-                    v-for="(res, i) in testQuestion.options"
-                    :key="i"
-                    :class="checkSelected(i, testQuestion.correct, responses[index].selection)"
-                  >
+                <ol v-if="isCriticalAnalysis && responses[index]">
+                  <li v-for="(res, i) in testQuestion.options" :key="i"
+                    :class="checkSelected(i, testQuestion.correct, responses[index].selection)">
                     {{ res.answer }}
                   </li>
                 </ol>
 
-                <ol
-                  v-if="isSituationalJudgment && responses[index]"
-                >
-                  <li
-                    v-for="(res, i) in testQuestion.options"
-                    :key="i"
-                    :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...responses[index].selection })"
-                  >
+                <ol v-if="isSituationalJudgment && responses[index]">
+                  <li v-for="(res, i) in testQuestion.options" :key="i"
+                    :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...responses[index].selection })">
                     {{ res.answer }}
                   </li>
                 </ol>
 
-                <ol
-                  v-if="isScenario && responses[index]"
-                >
-                  <li
-                    v-for="(res, i) in responses[index].responsesForScenario"
-                    :key="i"
-                  >
+                <ol v-if="isScenario && responses[index]">
+                  <li v-for="(res, i) in responses[index].responsesForScenario" :key="i">
                     <p>
                       <strong>{{ testQuestion.options[i].question }}</strong>
-                      <span
-                        v-if="testQuestion.options[i].hint"
-                        class="govuk-hint"
-                      >{{ testQuestion.options[i].hint }}</span>
+                      <span v-if="testQuestion.options[i].hint" class="govuk-hint">{{ testQuestion.options[i].hint
+                        }}</span>
                     </p>
 
-                    <QuestionDuration
-                      :start="res.started"
-                      :end="res.completed"
-                    />
-                    <span
-                      v-if="res.started !== null && res.text === null"
-                    >
+                    <QuestionDuration :start="res.started" :end="res.completed" />
+                    <span v-if="res.started !== null && res.text === null">
                       [Answer skipped]
                     </span>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       <p>{{ res.text }} </p>
                     </span>
                   </li>
@@ -328,10 +225,7 @@
           <h2 class="govuk-heading-m">
             Connection
           </h2>
-          <div
-            v-for="(log, i) in logs"
-            :key="i"
-          >
+          <div v-for="(log, i) in logs" :key="i">
             <table>
               <tr class="log_row">
                 <td class="log_row_time">
@@ -356,10 +250,7 @@
           <h2 class="govuk-heading-m">
             Client
           </h2>
-          <dl
-            v-if="response.client"
-            class="govuk-summary-list"
-          >
+          <dl v-if="response.client" class="govuk-summary-list">
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Platform
@@ -384,10 +275,7 @@
                 {{ response.client.timezone }}
               </dd>
             </div>
-            <div
-              v-if="initialServerOffset"
-              class="govuk-summary-list__row"
-            >
+            <div v-if="initialServerOffset" class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Initial time offset
               </dt>
@@ -395,10 +283,7 @@
                 {{ initialServerOffset / 1000 }} seconds
               </dd>
             </div>
-            <div
-              v-if="latestServerOffset"
-              class="govuk-summary-list__row"
-            >
+            <div v-if="latestServerOffset" class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Latest time offset
               </dt>
@@ -414,45 +299,44 @@
           </h2>
           <div v-if="responses.length">
             <table class="history-logs">
-              <div
-                v-for="(testQuestion, index) in questions"
-                :key="index"
-              >
-                <tr
-                  class="log_row"
-                >
+              <div v-for="(testQuestion, index) in questions" :key="index">
+                <tr class="log_row">
                   <td rowspan="8">
                     Question {{ index + 1 }}
                   </td>
                 </tr>
                 <tr>
-                  <td>First started question: </td><td>{{ responses[index].started | formatDate('datetime') }}</td>
+                  <td>First started question: </td>
+                  <td>{{ responses[index].started | formatDate('datetime') }}</td>
                 </tr>
                 <tr>
-                  <td>Last updated answer: </td><td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
+                  <td>Last updated answer: </td>
+                  <td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
                 </tr>
                 <tr>
-                  <td>Amount of time on question: </td><td>{{ amountOfTimeOnQuestion(index) }}</td>
+                  <td>Amount of time on question: </td>
+                  <td>{{ amountOfTimeOnQuestion(index) }}</td>
                 </tr>
                 <tr>
-                  <td>How many times visited question: </td><td>{{ amountOfTimeVisitedQuestion(index) }} </td>
+                  <td>How many times visited question: </td>
+                  <td>{{ amountOfTimeVisitedQuestion(index) }} </td>
                 </tr>
                 <tr>
-                  <td>How many times saved: </td><td>{{ historyCount('save', index) }}</td>
+                  <td>How many times saved: </td>
+                  <td>{{ historyCount('save', index) }}</td>
                 </tr>
                 <tr>
-                  <td>How many times skipped: </td><td>{{ historyCount('skip', index) }}</td>
+                  <td>How many times skipped: </td>
+                  <td>{{ historyCount('skip', index) }}</td>
                 </tr>
                 <tr>
-                  <td>How many times changed answer: </td><td>{{ historyCount('changed', index) }}</td>
+                  <td>How many times changed answer: </td>
+                  <td>{{ historyCount('changed', index) }}</td>
                 </tr>
               </div>
             </table>
           </div>
-          <div
-            v-for="(log, i) in sortHistory()"
-            :key="i"
-          >
+          <div v-for="(log, i) in sortHistory()" :key="i">
             <table>
               <tr class="log_row">
                 <td class="log_row_time">
