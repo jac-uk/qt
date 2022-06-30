@@ -78,8 +78,7 @@ export default {
     },
     loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).then((user) => {
-        console.log('log in success', user);
+      auth.signInWithPopup(provider).then(() => {
         // this.checkIfNewUser(user);
       }).catch(err => {
         this.signInError = err.message;
@@ -87,8 +86,7 @@ export default {
     },
     loginWithMicrosoft() {
       const provider = new firebase.auth.OAuthProvider('microsoft.com');
-      auth.signInWithPopup(provider).then((user) => {
-        console.log('log in success', user);
+      auth.signInWithPopup(provider).then(() => {
         // this.checkIfNewUser(user);
       }).catch(err => {
         this.signInError = err.message;

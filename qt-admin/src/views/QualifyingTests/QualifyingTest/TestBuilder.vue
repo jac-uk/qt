@@ -48,7 +48,6 @@
           Save and continue
         </button>
       </form>
-
     </div>
   </div>
 </template>

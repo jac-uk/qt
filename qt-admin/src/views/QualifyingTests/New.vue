@@ -33,21 +33,11 @@
           />
         </RadioGroup>
 
-        <Checkbox
-          id="is-dry-run"
-          v-model="isDryRun"
-          label="Dry run"
-          disabled
-        >
-          Yes, this is a dry run
-        </Checkbox>
-
         <button class="govuk-button">
           Save and continue
         </button>
       </form>
     </div>
-
   </div>
 </template>
 
@@ -56,7 +46,6 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
@@ -64,7 +53,6 @@ export default {
     ErrorSummary,
     RadioGroup,
     RadioItem,
-    Checkbox,
   },
   extends: Form,
   props: {
@@ -94,7 +82,7 @@ export default {
 
     return {
       qualifyingTest: qualifyingTest,
-      isDryRun: true,
+      isDryRun: true, // all tests created on QT Platform are considered dry runs. Main tests are created via API integration
     };
   },
   computed: {

@@ -3,3 +3,9 @@
     <slot />
   </div>
 </template>
+
+<style scoped>
+.text--inverse {
+  color: white;
+}
+</style>

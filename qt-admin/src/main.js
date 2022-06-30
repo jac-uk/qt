@@ -41,7 +41,6 @@ Object.keys(localFilters)
 let vueInstance = false;
 
 auth.onAuthStateChanged((user) => {
-  console.log('auth state has changed');
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
   // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines

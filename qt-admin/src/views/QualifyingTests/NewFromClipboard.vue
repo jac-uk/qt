@@ -28,14 +28,6 @@
           required
         />
 
-        <Checkbox
-          id="is-dry-run"
-          v-model="isDryRun"
-          label="Dry run"
-        >
-          Yes, this is a dry run
-        </Checkbox>
-
         <button class="govuk-button">
           Save and continue
         </button>
@@ -46,7 +38,6 @@
 
 <script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
@@ -55,7 +46,6 @@ export default {
   components: {
     ErrorSummary,
     TextareaInput,
-    Checkbox,
   },
   extends: Form,
   data(){
@@ -79,7 +69,7 @@ export default {
     return {
       qualifyingTest: qualifyingTest,
       copiedTest: null,
-      isDryRun: false,
+      isDryRun: true,
     };
   },
   computed: {

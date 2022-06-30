@@ -20,8 +20,7 @@ const functions = firebase.initializeApp(config).functions('europe-west2');
 const firestore = firebase.firestore();
 const auth = firebase.auth();
 
-if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULATORS) {
-  console.log('using local emulators');
+if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULATORS == 'true') {
   firestore.useEmulator('localhost', 8080);
   functions.useEmulator('localhost', 5001);
   auth.useEmulator('http://localhost:9099');

@@ -6,7 +6,7 @@
     @delete="remove"
   >
     <TextField
-      id="full-name"
+      id="name"
       v-model="formData.name"
       label="Name"
       required
@@ -19,7 +19,7 @@ import Form from '@/components/Page/Form';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
-  name: 'SelectPanel',
+  name: 'AddEditFolder',
   components: {
     Form,
     TextField,
@@ -28,7 +28,7 @@ export default {
   methods: {
     load(data) {
       return {
-        fullName: data ? data.name : '',
+        name: data ? data.name : '',
       };
     },
   },
