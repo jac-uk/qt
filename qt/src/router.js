@@ -3,8 +3,6 @@ import Router from 'vue-router';
 import store from '@/store';
 
 import SignIn from '@/views/SignIn';
-import SignInProgress from '@/views/SignInProgress';
-import SignInCompleted from '@/views/SignInCompleted';
 
 // Online Tests
 import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
@@ -103,22 +101,6 @@ const router = new Router({
       path: '/sign-in',
       name: 'sign-in',
       component: SignIn,
-      meta: {
-        title: 'Sign In',
-      },
-    },
-    {
-      path: '/sign-in-progress',
-      name: 'sign-in-progress',
-      component: SignInProgress,
-      meta: {
-        title: 'Sign In',
-      },
-    },
-    {
-      path: '/sign-in-completed',
-      name: 'sign-in-completed',
-      component: SignInCompleted,
       meta: {
         title: 'Sign In',
       },

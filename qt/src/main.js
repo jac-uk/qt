@@ -32,7 +32,6 @@ Object.keys(filters)
 
 let vueInstance = false;
 auth.onAuthStateChanged( (user) => {
-  console.log('auth state changed');
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
     console.log('signed in');

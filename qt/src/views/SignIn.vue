@@ -1,39 +1,36 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form
-        ref="formRef"
-        @submit.prevent="login"
-      >
+      <form ref="formRef">
         <p class="govuk-body-l">To access your test please provide your email address</p>
 
         <ErrorSummary :errors="errors" />
 
-        <TextField
-          id="email"
-          v-model="formData.email"
-          label="Email address"
-          type="email"
-        />
+        <TextField id="email" v-model="formData.email" label="Email address" type="email" required />
 
-        <button class="govuk-button">
+        <ActionButton type="button" @click.prevent="login">
           Continue
-        </button>
+        </ActionButton>
+
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import TextField from '@/components/Form/TextField';
-import { auth } from '@/firebase';
+import { functions, auth } from '@/firebase';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   components: {
     ErrorSummary,
     TextField,
+    ActionButton,
   },
+  extends: Form,
   data () {
     return {
       formData: {},
@@ -42,18 +39,26 @@ export default {
   },
   methods: {
     async login() {
-      if (this.formData.email) {
+      this.validate();
+      if (this.isValid) {
         this.errors = [];
-        const actionCodeSettings = {
-          url: `${window.location.origin}/sign-in-completed`,
-          handleCodeInApp: true,
-        };
         try {
-          await auth.sendSignInLinkToEmail(this.formData.email, actionCodeSettings);
-          window.localStorage.setItem('emailForSignIn', this.formData.email);
-          this.$router.push({ name: 'sign-in-progress' });
+          // request access
+          const response = await functions.httpsCallable('signIn')({ email: this.formData.email });
+          if (response && response.data && response.data.success) {
+            // sign in with token
+            await auth.signInWithCustomToken(response.data.token);
+          } else {
+            this.errors = [{
+              id: 'email',
+              message: 'Your email address is not recognised',
+            }];
+          }
         } catch {
-          console.log('Send sign in link error');
+          this.errors = [{
+            id: 'email',
+            message: 'Your email address is not recognised (error)',
+          }];
         }
       }
     },
