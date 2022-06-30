@@ -9,7 +9,7 @@ export default {
   actions: {
     bind: async (context, params ) => {
       firebase.database()
-        .ref(`qualifyingTest/${params.qualifyingTestId}/userStatus/${params.candidateId}`)
+        .ref(`qualifyingTest/${params.qualifyingTestId}/userStatus/${params.participantId}`)
         .on('value', snap => {
           const results = snap.val();
           if (results) {

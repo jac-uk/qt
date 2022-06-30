@@ -37,6 +37,7 @@
           id="is-dry-run"
           v-model="isDryRun"
           label="Dry run"
+          disabled
         >
           Yes, this is a dry run
         </Checkbox>
@@ -93,7 +94,7 @@ export default {
 
     return {
       qualifyingTest: qualifyingTest,
-      isDryRun: false,
+      isDryRun: true,
     };
   },
   computed: {

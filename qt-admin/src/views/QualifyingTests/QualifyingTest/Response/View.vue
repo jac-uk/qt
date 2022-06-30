@@ -477,7 +477,7 @@ export default {
       return this.relatedTests && this.relatedTests.length;
     },
     participant() {
-      return this.response ? this.response.participant : null;
+      return this.response ? this.response.participant : {};
     },
     questionLabel() {
       let label = 'Question';
