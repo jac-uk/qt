@@ -32,6 +32,7 @@ module.exports = (config, firebase, db) => {
     params.participants.forEach(p => {
       if (p.ref && p.email) {
         const participant = {};
+        participant.srcId = p.srcId;
         participant.ref = p.ref;
         participant.email = p.email;
         participant.fullName = p.fullName ? p.fullName : '';

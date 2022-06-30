@@ -81,7 +81,7 @@ api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
   }
 });
 
-// get
+// get scores
 api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
   checkAccess(req, res);
   if (!checkArguments({

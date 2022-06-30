@@ -41,6 +41,7 @@ module.exports = (config, firebase) => {
     } else {
       data.participant = {
         id: null,
+        srcId: inputData.srcId,
         ref: inputData.ref,
         email: inputData.email,
         fullName: inputData.fullName,

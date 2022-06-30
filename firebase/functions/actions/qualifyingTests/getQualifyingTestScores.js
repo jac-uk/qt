@@ -32,15 +32,9 @@ module.exports = (config, firebase, db) => {
     // TODO ensure we include all mopup test responses too
 
     // get scores data
-    const scores = [];
+    const scores = {};
     qualifyingTestResponses.forEach(response => {
-      scores.push({
-        ref: response.participant.ref,
-        email: response.participant.email,
-        fullName: response.participant.fullName,
-        score: response.score,
-        status: response.status,
-      });
+      scores[response.participant.srcId] = response.score;
     });
 
     return {
