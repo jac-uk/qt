@@ -14,6 +14,7 @@ exports.exportQualifyingTestResponses = require('./callableFunctions/exportQuali
 exports.initialiseQualifyingTest = require('./callableFunctions/initialiseQualifyingTest');
 exports.logEvent = require('./callableFunctions/logEvent');
 exports.scoreQualifyingTest = require('./callableFunctions/scoreQualifyingTest');
+exports.signIn = require('./callableFunctions/signIn');
 
 // admin call api
 exports.adminCallAPI = require('./callableFunctions/admin.callAPI');
