@@ -68,7 +68,7 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {

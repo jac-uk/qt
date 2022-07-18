@@ -1,11 +1,6 @@
 import {
-  STATUS,
-  // EXERCISE_STAGE,
-  // APPLICATION_STATUS,
-  // SHORTLISTING,
-  // QUALIFYING_TEST,
-  QUALIFYING_TEST_RESPONSE,
-  DEFAULT
+  EXERCISE_STAGE,
+  QUALIFYING_TEST_RESPONSE
 } from '@jac-uk/jac-kit/helpers/constants';
 
 const QUALIFYING_TEST = {
@@ -13,6 +8,10 @@ const QUALIFYING_TEST = {
     SCENARIO: 'scenario',
     CRITICAL_ANALYSIS: 'criticalAnalysis',
     SITUATIONAL_JUDGEMENT: 'situationalJudgement',
+  },
+  MODE: {
+    DRY_RUN: 'dry-run',
+    MOP_UP: 'mop-up',
   },
   STATUS: {
     CREATED: 'created',
@@ -27,14 +26,8 @@ const QUALIFYING_TEST = {
   },
 };
 
-const WELSH_POSTS_CONTACT_MAILBOX = 'enquiries@judicialappointments.gov.uk';
-const WELSH_POSTS_EMAIL_SUBJECT = 'Welsh application form request';
-
 export {
-  STATUS,
+  EXERCISE_STAGE,
   QUALIFYING_TEST,
-  QUALIFYING_TEST_RESPONSE,
-  DEFAULT,
-  WELSH_POSTS_CONTACT_MAILBOX,
-  WELSH_POSTS_EMAIL_SUBJECT
+  QUALIFYING_TEST_RESPONSE
 };

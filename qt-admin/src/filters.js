@@ -1,4 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -61,6 +62,9 @@ const lookup = (value) => {
 
     // 'xxx': 'xxx',
   };
+
+  lookup[`${QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS}`] = 'Critical Analysis';
+  lookup[`${QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement';
 
   returnValue = lookup[value];
 

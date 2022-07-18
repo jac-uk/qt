@@ -46,7 +46,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {

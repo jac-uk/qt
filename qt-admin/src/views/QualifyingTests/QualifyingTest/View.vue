@@ -261,7 +261,7 @@
 <script>
 import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { EXERCISE_STAGE, QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 

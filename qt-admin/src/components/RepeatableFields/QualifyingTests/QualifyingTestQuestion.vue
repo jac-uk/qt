@@ -126,7 +126,7 @@ import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/Ad
 import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   name: 'QualifyingTestQuestion',

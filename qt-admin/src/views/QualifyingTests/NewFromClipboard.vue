@@ -40,7 +40,7 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {

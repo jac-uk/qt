@@ -80,7 +80,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import QTAdditionalInstruction from '@/components/RepeatableFields/QualifyingTests/AdditionalInstruction.vue';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {

@@ -478,7 +478,7 @@
 
 <script>
 import { auth } from '@/firebase';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
