@@ -7,8 +7,8 @@ module.exports = {
   QUALIFYING_TEST: {
     TYPE: {
       SCENARIO: 'scenario',
-      CRITICAL_ANALYSIS: 'critical-analysis',
-      SITUATIONAL_JUDGEMENT: 'situational-judgement',
+      CRITICAL_ANALYSIS: 'criticalAnalysis',
+      SITUATIONAL_JUDGEMENT: 'situationalJudgement',
     },
     MODE: {
       DRY_RUN: 'dry-run',
