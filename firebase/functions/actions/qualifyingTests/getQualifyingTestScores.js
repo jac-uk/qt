@@ -22,27 +22,51 @@ module.exports = (config, firebase, db) => {
     if (!qualifyingTest) return { success: false, message: 'Test not found' };
     if (qualifyingTest.status !== config.QUALIFYING_TEST.STATUS.COMPLETED) return { success: false, message: 'Test not completed' };
 
-    // get test responses
-    let qualifyingTestResponsesRef = db.collection('qualifyingTestResponses')
-      .where('qualifyingTest.id', '==', qualifyingTest.id)
-      // .where('activated', '==', null)
-      .select('score', 'status', 'participant');
-    const qualifyingTestResponses = await getDocuments(qualifyingTestResponsesRef);
+    // get scores (for CA & SJ)
+    let scores;
+    if ([config.QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS, config.QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT].indexOf(qualifyingTest.type) >= 0) {
+      // get test responses
+      let qualifyingTestResponsesRef = db.collection('qualifyingTestResponses')
+        .where('qualifyingTest.id', '==', qualifyingTest.id)
+        .select('score', 'status', 'participant');
+      const qualifyingTestResponses = await getDocuments(qualifyingTestResponsesRef);
 
-    // TODO ensure we include all mopup test responses too
+      // TODO ensure we include all mopup test responses too
 
-    // get scores data
-    const scores = {};
-    qualifyingTestResponses.forEach(response => {
-      scores[response.participant.srcId] = response.score;
-    });
+      // get scores data
+      scores = {};
+      qualifyingTestResponses.forEach(response => {
+        scores[response.participant.srcId] = response.score;
+      });
+    }
 
-    return {
+    const returnData = {
       success: true,
-      message: 'Scores are available',
-      scores: scores,
+      message: 'Results are available',
+      questionIds: getQuestionIds(qualifyingTest),
     };
+    if (scores) returnData.scores = scores;
 
+    return returnData;
+  }
+
+  function getQuestionIds(qualifyingTest) {
+    const questionIds = [];
+    if (!qualifyingTest) return questionIds;
+    if (!qualifyingTest.testQuestions) return questionIds;
+    if (!qualifyingTest.testQuestions.questions) return questionIds;
+    if (qualifyingTest.type === config.QUALIFYING_TEST.TYPE.SCENARIO) {
+      qualifyingTest.testQuestions.questions.forEach((s, sIndex) => {
+        s.options.forEach((q, qIndex) => {
+          questionIds.push(`S${1 + sIndex}Q${1+qIndex}`);
+        });
+      });
+    } else {
+      qualifyingTest.testQuestions.questions.forEach((q, qIndex) => {
+        questionIds.push(`Q${1+qIndex}`);
+      });
+    }
+    return questionIds;
   }
 
 };
