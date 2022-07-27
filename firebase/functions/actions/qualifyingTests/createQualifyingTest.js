@@ -1,4 +1,4 @@
-const { getDocument, getDocuments } = require('../../shared/helpers');
+const { getDocument, getDocuments, lookup } = require('../../shared/helpers');
 
 module.exports = (config, firebase, db) => {
 
@@ -33,7 +33,7 @@ module.exports = (config, firebase, db) => {
 
     // create test
     const data = {
-      title: params.test.title,
+      title: params.test.title || `${lookup(config, params.test.type)} for ${params.folder}`,
       type: params.test.type,
       folderId: folder.id,
       startDate: new Date(params.test.startDate),
