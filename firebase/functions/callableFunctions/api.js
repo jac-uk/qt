@@ -33,7 +33,9 @@ api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
       .status(200)
       .send(result);
   } catch (error) {
-    res.error(error);
+    res
+      .status(500)
+      .send(error);
   }
 });
 
@@ -55,7 +57,9 @@ api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
       .status(200)
       .send(result);
   } catch (error) {
-    res.error(error);
+    res
+      .status(500)
+      .send(error);
   }
 });
 
@@ -77,7 +81,9 @@ api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
       .status(200)
       .send(result);
   } catch (error) {
-    res.error(error);
+    res
+      .status(500)
+      .send(error);
   }
 });
 
@@ -98,7 +104,9 @@ api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
       .status(200)
       .send(result);
   } catch (error) {
-    res.error(error);
+    res
+      .status(500)
+      .send(error);
   }
 });
 
