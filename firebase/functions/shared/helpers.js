@@ -18,6 +18,7 @@ module.exports = {
   getLatestDate,
   convertStringToSearchParts,
   isProduction,
+  lookup,
 };
 
 async function getDocument(query) {
@@ -258,4 +259,18 @@ function convertStringToSearchParts(value, delimiter) {
 function isProduction() {
   const projectId = firebase.instanceId().app.options.projectId;
   return projectId.includes('production');
+}
+
+function lookup(config, value) {
+  const lookup = {};
+
+  lookup[config.QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS] = 'Critical Analysis test';
+  lookup[config.QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT] = 'Situational Judgement Test';
+  lookup[config.QUALIFYING_TEST.TYPE.SCENARIO] = 'Scenario Test';
+
+  returnValue = lookup[value];
+  if (!returnValue) {
+    returnValue = value;
+  }
+  return returnValue;
 }
