@@ -48,6 +48,8 @@ module.exports = (config, firebase, db) => {
       });
     }
 
+    // TODO calculate maxScore and store it on test so it can be sent back with scores
+
     // update qualifying test status and counts
     commands.push({
       command: 'update',

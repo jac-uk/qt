@@ -164,9 +164,8 @@ export default {
     }
   },
   methods: {
-    signOut() {
-      auth.signOut();
-      this.$router.go('/sign-in');
+    async signOut() {
+      await auth.signOut();
     },
     async onMouseOver() {
       await this.$store.dispatch('clipboard/read');

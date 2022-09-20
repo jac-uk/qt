@@ -12,13 +12,9 @@ import * as Integrations from '@sentry/integrations';
 import './styles/main.scss';
 
 if (process.env.NODE_ENV !== 'development') {
-  // Split the URL
-  const host = window.location.host;
-  const parts = host.split('.');
-
   Sentry.init({
     dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-    environment: parts[0] == 'admin' ? 'production' : 'staging',
+    environment: store.getters.appEnvironment.toLowerCase(),
     release: process.env.PACKAGE_VERSION, // made available in vue.config.js
     integrations: [new Integrations.Vue({ Vue, attachProps: true })],
   });
@@ -39,8 +35,8 @@ Object.keys(localFilters)
   });
 
 let vueInstance = false;
-
 auth.onAuthStateChanged((user) => {
+  console.log('auth changed');
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
   // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines
@@ -52,12 +48,20 @@ auth.onAuthStateChanged((user) => {
   // Bind Firebase auth state to the vuex auth state store
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
+    console.log('is signed in', window.location.pathname);
     if (window.location.pathname == '/sign-in') {
       router.push('/');
     }
+  } else {
+    console.log('is signed out');
+    if (window.location.pathname != '/sign-in') {
+      router.push('/sign-in');
+    }
   }
+
   // Create the Vue instance, but only once
   if (!vueInstance) {
+    console.log('create vue app');
     vueInstance = new Vue({
       el: '#app',
       render: h => h(App),
@@ -65,4 +69,5 @@ auth.onAuthStateChanged((user) => {
       store,
     });
   }
+
 });

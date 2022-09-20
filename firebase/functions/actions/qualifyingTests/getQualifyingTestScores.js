@@ -46,6 +46,7 @@ module.exports = (config, firebase, db) => {
       questionIds: getQuestionIds(qualifyingTest),
     };
     if (scores) returnData.scores = scores;
+    if (qualifyingTest.maxScore) returnData.maxScore = qualifyingTest.maxScore;
 
     return returnData;
   }
@@ -58,7 +59,7 @@ module.exports = (config, firebase, db) => {
     if (qualifyingTest.type === config.QUALIFYING_TEST.TYPE.SCENARIO) {
       qualifyingTest.testQuestions.questions.forEach((s, sIndex) => {
         s.options.forEach((q, qIndex) => {
-          questionIds.push(`S${1 + sIndex}Q${1+qIndex}`);
+          questionIds.push(`S${1 + sIndex}.Q${1+qIndex}`);
         });
       });
     } else {
