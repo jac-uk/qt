@@ -105,7 +105,7 @@ export default {
       return this.qualifyingTestResponse.qualifyingTest.id;
     },
     isSupportingPage() {
-      return ['qualifying-test-information', 'qualifying-test-submitted'].indexOf(this.$route.name) >= 0;
+      return ['online-test-information', 'online-test-submitted'].indexOf(this.$route.name) >= 0;
     },
   },
   watch: {
@@ -158,7 +158,7 @@ export default {
       this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
     },
     redirectToList() {
-      this.$router.replace({ name: 'qualifying-tests' });
+      this.$router.replace({ name: 'online-tests' });
     },
     handleCountdown(params) {
       switch (params.action) {
@@ -193,10 +193,10 @@ export default {
       this.$refs.exitModalRef.openModal();
     },
     btnModalConfirmed() {
-      this.$router.push({ name: 'qualifying-test-submitted' });
+      this.$router.push({ name: 'online-test-submitted' });
     },
     btnClockChangedModalConfirmed() {
-      this.$router.push({ name: 'qualifying-tests' });
+      this.$router.push({ name: 'online-tests' });
     },
     btnExitModalConfirmed() {
       if (this.$route.params.questionNumber) {
@@ -212,7 +212,7 @@ export default {
       }
       this.timerEnded = true;
       this.$nextTick(() => {  // ensures change is picked up before we leave this route
-        this.$router.push({ name: 'qualifying-tests' });
+        this.$router.push({ name: 'online-tests' });
       });
     },
     infoClass() {

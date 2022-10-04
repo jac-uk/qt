@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 
+import Default from '@/views/Default';
 import SignIn from '@/views/SignIn';
 
 // Online Tests
@@ -24,20 +25,26 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/online-tests',
+      name: 'default',
+      component: Default,
+      meta: {
+        requiresAuth: false,
+        title: 'Online Tests',
+      },
     },
     {
       path: '*',
       component: NotFound,
       name: 'not-found',
       meta: {
+        requiresAuth: false,
         title: 'Error',
       },
     },
     {
       path: '/online-tests',
       component: QualifyingTests,
-      name: 'qualifying-tests',
+      name: 'online-tests',
       meta: {
         requiresAuth: true,
         title: 'Online Tests | List',
@@ -48,9 +55,13 @@ const router = new Router({
       component: QualifyingTest,
       children: [
         {
+          path: '/',
+          redirect: 'information',
+        },
+        {
           path: 'information',
           component: QualifyingTestInformation,
-          name: 'qualifying-test-information',
+          name: 'online-test-information',
           meta: {
             requiresAuth: true,
             title: 'Online Test | Information',
@@ -59,7 +70,7 @@ const router = new Router({
         {
           path: 'question/:questionNumber',
           component: QualifyingTestQuestion,
-          name: 'qualifying-test-question',
+          name: 'online-test-question',
           meta: {
             requiresAuth: true,
             title: 'Online Test | Question',
@@ -69,7 +80,7 @@ const router = new Router({
         {
           path: 'scenario/:scenarioNumber/:questionNumber',
           component: QualifyingTestScenario,
-          name: 'qualifying-test-scenario',
+          name: 'online-test-scenario',
           meta: {
             requiresAuth: true,
             title: 'Online Test | Scenario',
@@ -79,7 +90,7 @@ const router = new Router({
         {
           path: 'review',
           component: QualifyingTestReview,
-          name: 'qualifying-test-review',
+          name: 'online-test-review',
           meta: {
             requiresAuth: true,
             title: 'Online Test | Review',
@@ -89,7 +100,7 @@ const router = new Router({
         {
           path: 'submitted',
           component: QualifyingTestSubmitted,
-          name: 'qualifying-test-submitted',
+          name: 'online-test-submitted',
           meta: {
             requiresAuth: true,
             title: 'Online Test | Submitted',
@@ -98,10 +109,11 @@ const router = new Router({
       ],
     },
     {
-      path: '/sign-in',
+      path: '/:qualifyingTestId',
       name: 'sign-in',
       component: SignIn,
       meta: {
+        requiresAuth: false,
         title: 'Sign In',
       },
     },
@@ -121,11 +133,13 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const isSignedIn = store.getters['auth/isSignedIn'];
   if (requiresAuth && !isSignedIn) {
-    // @todo Save destination so we can navigate there after sign-in
-    return next({ name: 'sign-in' });
-  } else {
-    return next();
+    if (to.params.qualifyingTestId) {
+      return next({ name: 'sign-in', params: to.params });
+    } else {
+      return next({ name: 'default' });
+    }
   }
+  return next();
 });
 
 // Global after hook to set an appropriate title for the page

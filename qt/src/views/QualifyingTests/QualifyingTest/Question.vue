@@ -141,12 +141,12 @@ export default {
     nextPage() {
       if (this.isLastQuestion || this.hasStartedAllQuestions) {
         return {
-          name: 'qualifying-test-review',
+          name: 'online-test-review',
         };
       }
 
       return {
-        name: 'qualifying-test-question',
+        name: 'online-test-question',
         params: {
           questionNumber: this.questionNumber + 1,
         },
@@ -169,7 +169,7 @@ export default {
   },
   async created() {
     if (this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-      return this.$router.replace({ name: 'qualifying-tests' });
+      return this.$router.replace({ name: 'online-tests' });
     }
     if (!this.response.started) {
       this.response.started = firebase.firestore.Timestamp.fromDate(new Date());

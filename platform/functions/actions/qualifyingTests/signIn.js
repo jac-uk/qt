@@ -21,6 +21,14 @@ module.exports = (config, firebase, db, auth) => {
       return { success: false, message: 'No tests' };
     }
 
+    // check email has access to requested test
+    if (params.testId) {
+      const test = tests.find(test => (test.qualifyingTest && test.qualifyingTest.id === params.testId));
+      if (!test) {
+        return { success: false, message: 'Not invited to test' };
+      }
+    }
+
     // get custom token
     try {
       let userRecord;

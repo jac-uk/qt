@@ -44,7 +44,10 @@
             <th class="govuk-table__header">
               URL
             </th>
-            <td class="govuk-table__cell" colspan="3">
+            <td
+              class="govuk-table__cell"
+              colspan="3"
+            >
               <a
                 :href="`https://qt-develop.judicialappointments.digital/${qualifyingTestId}`"
                 target="_blank"
@@ -71,13 +74,13 @@
 
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: 'all', }}"
           >
             Initialised
           </RouterLink>
           /
           <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
@@ -87,7 +90,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
           </RouterLink> / Auto-submitted
@@ -110,7 +113,7 @@
         </h2>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
           >
             Started
           </RouterLink>
@@ -118,7 +121,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
           >
             In Progress
           </RouterLink>

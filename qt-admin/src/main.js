@@ -36,33 +36,18 @@ Object.keys(localFilters)
 
 let vueInstance = false;
 auth.onAuthStateChanged(async (user) => {
-  console.log('auth changed');
-  // check if user is a new user.
-  // TODO: check if there is a better way of doing this
-  // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines
-  // TODO: and a check within auth.js
-  if (user && user.metadata.lastSignInTime === user.metadata.creationTime) {
-    user.isNewUser = true;
-  }
-
-  // Bind Firebase auth state to the vuex auth state store
   await store.dispatch('auth/setCurrentUser', user);
-
-  if (store.getters['auth/isSignedIn']) {
-    console.log('is signed in', window.location.pathname);
-    if (window.location.pathname == '/sign-in') {
-      router.push('/');
+  if (vueInstance) {
+    if (store.getters['auth/isSignedIn']) {
+      if (router.currentRoute && router.currentRoute.name === 'sign-in') {
+        router.push('/');
+      }
+    } else {
+      if (router.currentRoute && router.currentRoute.name !== 'sign-in') {
+        router.push({ name: 'sign-in' });
+      }
     }
   } else {
-    console.log('is signed out');
-    if (window.location.pathname != '/sign-in') {
-      router.push('/sign-in');
-    }
-  }
-
-  // Create the Vue instance, but only once
-  if (!vueInstance) {
-    console.log('create vue app');
     vueInstance = new Vue({
       el: '#app',
       render: h => h(App),
@@ -70,5 +55,4 @@ auth.onAuthStateChanged(async (user) => {
       store,
     });
   }
-
 });

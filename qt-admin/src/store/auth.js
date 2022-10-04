@@ -1,5 +1,4 @@
-import { auth, functions } from '@/firebase';
-import { get } from 'lodash';
+import { auth } from '@/firebase';
 
 const module = {
   namespaced: true,
@@ -17,43 +16,33 @@ const module = {
   },
   actions: {
     async setCurrentUser({ state, commit }, user) {
-      if (user === null || (user && user.isNewUser)) {
+      if (user === null) {
         commit('setCurrentUser', null);
       } else {
         if (state.authError) {
           commit('setAuthError', null);
         }
         let allOk = false;
-
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
           'warren.searle@judicialappointments.digital',
-          'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
           'andrew.isaac@judicialappointments.digital',
-          'blaise.buckland@judicialappointments.digital',
-          'julian.sandler@justice.gov.uk',
-          'lisa.grant@justice.gov.uk',
-          'rita.kumi.ampofo@justice.gov.uk',
-          'wincen.lowe@justice.gov.uk',
-          'molly.meadows@justice.gov.uk',
+          'halcyon@judicialappointments.digital',
+          'lisias.loback@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
         if (allOk) {
-          let shouldEnsureEmailVerified = false;
-          if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
-            user = { ...user, emailVerified: true };
-            shouldEnsureEmailVerified = true;
-          }
           let role = 'staff';
           if (
-            [ // TODO User roles!
+            [
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
               'andrew.isaac@judicialappointments.digital',
-              'blaise.buckland@judicialappointments.digital',
+              'halcyon@judicialappointments.digital',
+              'lisias.loback@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
@@ -65,9 +54,6 @@ const module = {
             displayName: user.displayName,
             role: role,
           });
-          if (shouldEnsureEmailVerified) {
-            await functions.httpsCallable('ensureEmailValidated')({});
-          }
         } else {
           auth.signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');

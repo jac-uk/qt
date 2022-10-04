@@ -26,7 +26,7 @@
         and close this page or go back to
         <router-link
           class="govuk-link"
-          :to="{ name: 'qualifying-tests' }"
+          :to="{ name: 'online-tests' }"
         >
           your online tests.
         </router-link>
@@ -44,7 +44,7 @@
         <ul class="govuk-list">
           <li>
             <RouterLink
-              :to="{ name: 'qualifying-test-information', params: { qualifyingTestId: upcomingTest.id }}"
+              :to="{ name: 'online-test-information', params: { qualifyingTestId: upcomingTest.id }}"
             >
               {{ upcomingTest.qualifyingTest.title }}<br>
             </RouterLink>

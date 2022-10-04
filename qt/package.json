@@ -68,7 +68,6 @@
     "y18n": ">=4.0.1"
   },
   "resolutions": {
-    "lodash.merge": "4.6.2",
     "ssri": "6.0.2",
     "websocket-extensions": "0.1.4"
   }

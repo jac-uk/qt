@@ -40,6 +40,11 @@ export default {
       errors: [],
     };
   },
+  computed: {
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
+    },
+  },
   methods: {
     async login() {
       this.validate();
@@ -47,7 +52,7 @@ export default {
         this.errors = [];
         try {
           // request access
-          const response = await functions.httpsCallable('signIn')({ email: this.formData.email });
+          const response = await functions.httpsCallable('signIn')({ email: this.formData.email, testId: this.qualifyingTestId });
           if (response && response.data && response.data.success) {
             // sign in with token
             await auth.signInWithCustomToken(response.data.token);

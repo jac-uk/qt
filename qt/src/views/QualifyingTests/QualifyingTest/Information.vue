@@ -195,7 +195,7 @@ export default {
     nextPage() {
       if (this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
         return {
-          name: 'qualifying-test-scenario',
+          name: 'online-test-scenario',
           params: {
             scenarioNumber: 1,
             questionNumber: 1,
@@ -203,7 +203,7 @@ export default {
         };
       }
       return {
-        name: 'qualifying-test-question',
+        name: 'online-test-question',
         params: {
           questionNumber: 1,
         },

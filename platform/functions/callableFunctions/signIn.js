@@ -9,6 +9,7 @@ module.exports = functions.region('europe-west2').https.onCall(async (data, cont
   // await checkFunctionEnabled();
   if (!checkArguments({
     email: { required: true },
+    testId: { required: false },
   }, data)) {
     throw new functions.https.HttpsError('invalid-argument', 'Please provide valid arguments');
   }

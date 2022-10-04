@@ -31,18 +31,17 @@ Object.keys(filters)
   });
 
 let vueInstance = false;
-auth.onAuthStateChanged( (user) => {
-  store.dispatch('auth/setCurrentUser', user);
-  if (store.getters['auth/isSignedIn']) {
-    if (window.location.pathname.indexOf('/sign-in') === 0) {
-      router.push({ name: 'qualifying-tests' });
+auth.onAuthStateChanged( async (user) => {
+  await store.dispatch('auth/setCurrentUser', user);
+  if (vueInstance) {
+    if (store.getters['auth/isSignedIn']) {
+      if (router.currentRoute && router.currentRoute.name === 'sign-in') {
+        router.push({ name: 'online-tests' });
+      }
+    } else {
+      router.push({ name: 'default' });
     }
   } else {
-    if (window.location.pathname.indexOf('/sign-in') !== 0) {
-      router.push({ name: 'sign-in' });
-    }
-  }
-  if (!vueInstance) {
     vueInstance = new Vue({
       el: '#app',
       render: h => h(App),

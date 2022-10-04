@@ -24,7 +24,7 @@
               <span class="truncated-container moj-task-list__task-name">
                 <span class="truncated">
                   <span>{{ questionIndex + 1 }}. </span>
-                  <RouterLink :to="{ name: `qualifying-test-question`, params: { questionNumber: questionIndex + 1 } }">
+                  <RouterLink :to="{ name: `online-test-question`, params: { questionNumber: questionIndex + 1 } }">
                     {{ question.details }}
                   </RouterLink>
                 </span>
@@ -73,7 +73,7 @@
               @click="saveHistory({ action: 'review', question: questionIndex, scenario: index, txt: question.question });"
             >
               <RouterLink
-                :to="{ name: `qualifying-test-scenario`, params: { scenarioNumber: index + 1, questionNumber: questionIndex + 1 } }"
+                :to="{ name: `online-test-scenario`, params: { scenarioNumber: index + 1, questionNumber: questionIndex + 1 } }"
                 class="moj-task-list__task-name truncated-container"
               >
                 <span class="truncated">
@@ -161,7 +161,7 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', data);
       await this.$store.dispatch('connectionMonitor/stop');
       this.saveHistory({ action: 'modal', txt: 'Submit answers' });
-      this.$router.push({ name: 'qualifying-test-submitted' });
+      this.$router.push({ name: 'online-test-submitted' });
     },
     modalClosed(){
       this.saveHistory({ action: 'modal', txt: 'Cancel' });

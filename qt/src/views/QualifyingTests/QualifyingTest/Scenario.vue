@@ -116,7 +116,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.isComingFromReview = from.name === 'qualifying-test-review';
+      vm.isComingFromReview = from.name === 'online-test-review';
       return true;
     });
   },
@@ -183,12 +183,12 @@ export default {
     nextPage() {
       if ((this.isLastScenario && this.isLastQuestion) || this.isComingFromReview) {
         return {
-          name: 'qualifying-test-review',
+          name: 'online-test-review',
         };
       }
 
       return {
-        name: 'qualifying-test-scenario',
+        name: 'online-test-scenario',
         params: {
           scenarioNumber: this.isLastQuestion ? this.scenarioNumber + 1 : this.scenarioNumber,
           questionNumber: this.isLastQuestion ? 1 : this.questionNumber + 1,
@@ -234,7 +234,7 @@ export default {
   },
   async created() {
     if (this.qualifyingTestResponse.qualifyingTest.type !== QUALIFYING_TEST.TYPE.SCENARIO) {
-      return this.$router.replace({ name: 'qualifying-tests' });
+      return this.$router.replace({ name: 'online-tests' });
     }
     if (this.response && !this.response.started) {
       this.response.started = firebase.firestore.Timestamp.fromDate(new Date());
@@ -311,7 +311,7 @@ export default {
     },
     redirectToList() {
       this.enableScenario = false;
-      this.$router.push({ name: 'qualifying-tests' });
+      this.$router.push({ name: 'online-tests' });
     },
     async saveQuestionSession() {
       const objToSave = this.prepareSaveQuestionSession({});
