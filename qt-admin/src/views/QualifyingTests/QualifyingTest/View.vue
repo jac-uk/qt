@@ -40,6 +40,20 @@
               {{ qualifyingTest.endDate | formatDate('longdatetime') }}
             </td>
           </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">
+              URL
+            </th>
+            <td class="govuk-table__cell" colspan="3">
+              <a
+                :href="`https://qt-develop.judicialappointments.digital/${qualifyingTestId}`"
+                target="_blank"
+                class="govuk-link"
+              >
+                https://qt.judicialappointments.digital/{{ qualifyingTestId }}
+              </a>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
