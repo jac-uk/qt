@@ -2,6 +2,9 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form ref="formRef">
+        <h1 class="govuk-heading-l">
+          Online tests
+        </h1>
         <p class="govuk-body-l">To access your test please provide your email address</p>
 
         <ErrorSummary :errors="errors" />

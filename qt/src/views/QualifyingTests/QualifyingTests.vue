@@ -6,71 +6,60 @@
     />
     <template v-else>
       <div class="govuk-grid-column-two-thirds">
-        <TabsList
-          :tabs="tabs"
-          :active-tab.sync="activeTab"
-        />
-        <div
-          class="govuk-tabs__panel"
-          role="tabpanel"
+        <h1 class="govuk-heading-l">
+          Online tests
+        </h1>
+        <Table
+          data-key="id"
+          :data="getSelectedTableData()"
+          :columns="getSelectedTableColumns()"
         >
-          <h1 class="govuk-heading-l">
-            {{ activeTab | capitalize }}
-          </h1>
-
-          <Table
-            data-key="id"
-            :data="getSelectedTableData()"
-            :columns="getSelectedTableColumns()"
-          >
-            <template #row="{row}">
-              <TableCell>
-                <RouterLink
-                  v-if="activeTab === 'open'"
-                  :to="{ path: `/online-tests/${row.id}/information` }"
-                  :class="`info-btn--qualifying-tests--to--${row.id}`"
-                >
-                  {{ row.qualifyingTest.title }}
-                </RouterLink>
-                <template v-else>
-                  {{ row.qualifyingTest.title }}
-                </template>
-              </TableCell>
-              <TableCell>{{ status(row) | lookup }}</TableCell>
-              <TableCell>
-                <template v-if="activeTab === 'future'">
-                  {{ prettyDate(row.qualifyingTest.startDate) }}
-                </template>
-                <template v-else>
-                  {{ prettyDate(row.qualifyingTest.endDate) }}
-                </template>
-              </TableCell>
-              <TableCell
-                v-if="activeTab === 'past' && showFeedbackColumn"
+          <template #row="{row}">
+            <TableCell>
+              <RouterLink
+                v-if="activeTab === 'open'"
+                :to="{ path: `/online-tests/${row.id}/information` }"
+                :class="`info-btn--qualifying-tests--to--${row.id}`"
               >
-                <a
-                  v-if="row.qualifyingTest.feedbackSurvey"
-                  :href="row.qualifyingTest.feedbackSurvey"
-                  :class="`govuk-link info-btn--qualifying-tests--feedback-${row.id}--click-here`"
-                >
-                  Click here
-                </a>
-                <span
-                  v-else
-                >
-                  ---
-                </span>
-              </TableCell>
-            </template>
-          </Table>
-        </div>
+                {{ row.qualifyingTest.title }}
+              </RouterLink>
+              <template v-else>
+                {{ row.qualifyingTest.title }}
+              </template>
+            </TableCell>
+            <TableCell>{{ status(row) | lookup }}</TableCell>
+            <TableCell>
+              <template v-if="activeTab === 'future'">
+                {{ prettyDate(row.qualifyingTest.startDate) }}
+              </template>
+              <template v-else>
+                {{ prettyDate(row.qualifyingTest.endDate) }}
+              </template>
+            </TableCell>
+            <TableCell
+              v-if="activeTab === 'past' && showFeedbackColumn"
+            >
+              <a
+                v-if="row.qualifyingTest.feedbackSurvey"
+                :href="row.qualifyingTest.feedbackSurvey"
+                :class="`govuk-link info-btn--qualifying-tests--feedback-${row.id}--click-here`"
+              >
+                Click here
+              </a>
+              <span
+                v-else
+              >
+                ---
+              </span>
+            </TableCell>
+          </template>
+        </Table>
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import TabsList from '@/components/Page/TabsList';
 import Table from '@/components/Page/Table/Table';
 import TableCell from '@/components/Page/Table/TableCell';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -79,7 +68,6 @@ import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
-    TabsList,
     Table,
     TableCell,
     LoadingMessage,

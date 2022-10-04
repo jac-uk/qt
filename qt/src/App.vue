@@ -8,7 +8,14 @@
       <header v-if="!fullPageMode" class="govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <h1>Online tests</h1>
+            <img
+              src="@/assets/jac-logo.svg"
+              alt="Judicial Appointments Commission"
+              width="197"
+              height="66"
+              style="text-align: center"
+              class="govuk-!-margin-top-4 govuk-!-margin-bottom-5"
+            >
           </div>
           <div class="govuk-grid-column-one-third text-right">
             <button

@@ -35,7 +35,7 @@ Object.keys(localFilters)
   });
 
 let vueInstance = false;
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
   console.log('auth changed');
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
@@ -46,7 +46,8 @@ auth.onAuthStateChanged((user) => {
   }
 
   // Bind Firebase auth state to the vuex auth state store
-  store.dispatch('auth/setCurrentUser', user);
+  await store.dispatch('auth/setCurrentUser', user);
+
   if (store.getters['auth/isSignedIn']) {
     console.log('is signed in', window.location.pathname);
     if (window.location.pathname == '/sign-in') {
