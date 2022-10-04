@@ -2,19 +2,26 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <form ref="formRef">
-        <h1 class="govuk-heading-l">
-          Online tests
-        </h1>
-        <p class="govuk-body-l">To access your test please provide your email address</p>
+        <p class="govuk-body-l">
+          To access your test please provide the email address you registered with.
+        </p>
 
         <ErrorSummary :errors="errors" />
 
-        <TextField id="email" v-model="formData.email" label="Email address" type="email" required />
+        <TextField
+          id="email"
+          v-model="formData.email"
+          label="Email address"
+          type="email"
+          required
+        />
 
-        <ActionButton type="button" @click.prevent="login">
+        <ActionButton
+          type="button"
+          @click.prevent="login"
+        >
           Continue
         </ActionButton>
-
       </form>
     </div>
   </div>

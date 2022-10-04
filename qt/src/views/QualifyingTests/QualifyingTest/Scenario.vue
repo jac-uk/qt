@@ -104,6 +104,12 @@ export default {
   components: {
     TextareaInput,
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.isComingFromReview = from.name === 'online-test-review';
+      return true;
+    });
+  },
   props: {
     timeIsUp: {
       type: Boolean,
@@ -113,12 +119,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.isComingFromReview = from.name === 'online-test-review';
-      return true;
-    });
   },
   data() {
     const scenarioNumber = this.$route.params.scenarioNumber;

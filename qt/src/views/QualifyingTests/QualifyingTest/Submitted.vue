@@ -22,7 +22,11 @@
         <span v-else>vacancy timeline</span>. -->
         <br>
         You may now
-        <a class="govuk-link" href="javascript:;" @click="signOut">sign out</a>
+        <a
+          class="govuk-link"
+          href="javascript:;"
+          @click="signOut"
+        >sign out</a>
         and close this page or go back to
         <router-link
           class="govuk-link"

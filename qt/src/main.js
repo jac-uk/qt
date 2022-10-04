@@ -39,7 +39,7 @@ auth.onAuthStateChanged( async (user) => {
         router.push({ name: 'online-tests' });
       }
     } else {
-      router.push({ name: 'default' });
+      router.push({ name: 'signed-out' });
     }
   } else {
     vueInstance = new Vue({

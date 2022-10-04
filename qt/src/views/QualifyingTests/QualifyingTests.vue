@@ -6,10 +6,8 @@
     />
     <template v-else>
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">
-          Online tests
-        </h1>
         <Table
+          v-if="hasData"
           data-key="id"
           :data="getSelectedTableData()"
           :columns="getSelectedTableColumns()"
@@ -54,6 +52,9 @@
             </TableCell>
           </template>
         </Table>
+        <p v-else class="govuk-body-l">
+          There are no live tests. All tests have been completed or expired.
+        </p>
       </div>
     </template>
   </div>
@@ -100,6 +101,9 @@ export default {
     qualifyingTestResponses() {
       return this.$store.state.qualifyingTestResponses.records.concat(this.$store.state.qualifyingTestResponses.dryRuns)
         .filter((qt, index, qts) => qts.findIndex(i => i.id === qt.id) === index);
+    },
+    hasData() {
+      return this.openTests.length;
     },
     openTests(){
       const result = this.qualifyingTestResponses.filter(qt => {

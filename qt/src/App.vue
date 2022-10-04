@@ -5,7 +5,10 @@
       :load-failed="loadFailed"
     />
     <template v-else>
-      <header v-if="!fullPageMode" class="govuk-width-container">
+      <header
+        v-if="!fullPageMode"
+        class="govuk-width-container"
+      >
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <img

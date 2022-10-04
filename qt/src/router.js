@@ -4,6 +4,7 @@ import store from '@/store';
 
 import Default from '@/views/Default';
 import SignIn from '@/views/SignIn';
+import SignedOut from '@/views/SignedOut';
 
 // Online Tests
 import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
@@ -115,6 +116,15 @@ const router = new Router({
       meta: {
         requiresAuth: false,
         title: 'Sign In',
+      },
+    },
+    {
+      path: '/signed-out',
+      name: 'signed-out',
+      component: SignedOut,
+      meta: {
+        requiresAuth: false,
+        title: 'Signed Out',
       },
     },
   ],

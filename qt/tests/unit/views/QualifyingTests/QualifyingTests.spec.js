@@ -78,22 +78,15 @@ describe('views/QualifyingTests/QualifyingTests', () => {
         global.Date.now = RealDate;
       });
 
-      describe('Open tab, test not started', () => {
+      describe('lists tests', () => {
 
-        it('renders open tab by default', () => {
-          expect(wrapper.find('h1.govuk-heading-l').text()).toBe('Open');
-        });
-
-        it('status not started', () => {
-          expect(wrapper.vm.status(wrapper.vm.$store.state.qualifyingTestResponses.records[0])).toBe('not-started');
-        });
-
-        it('lists open test as open', () => {
+        it('lists open tests', () => {
           expect(wrapper.vm.openTests.length).toBe(1);
         });
+
       });
 
-      describe('Open tab, test started', () => {
+      describe('opening a test', () => {
         beforeEach(()=>{
           wrapper.vm.$store.state.qualifyingTestResponses.records[0].statusLog.started = started.date;
           wrapper.vm.$store.state.qualifyingTestResponses.records[0].status = started.status;
@@ -111,7 +104,7 @@ describe('views/QualifyingTests/QualifyingTests', () => {
         });
       });
 
-      describe('Open tab, test reset, not restarted', () => {
+      describe('test reset, not restarted', () => {
         beforeEach(()=>{
           wrapper.vm.$store.state.qualifyingTestResponses.records[0].statusLog = {
             ...wrapper.vm.$store.state.qualifyingTestResponses.records[0].statusLog,
@@ -133,7 +126,7 @@ describe('views/QualifyingTests/QualifyingTests', () => {
         });
       });
 
-      describe('Open tab, test reset, restarted', () => {
+      describe('test reset, restarted', () => {
         beforeEach(()=>{
           wrapper.vm.$store.state.qualifyingTestResponses.records[0].statusLog = {
             created: new Date('Jan 01 2020 00:00:00 GMT+0000'),
@@ -158,61 +151,6 @@ describe('views/QualifyingTests/QualifyingTests', () => {
       });
     });
 
-    describe('future tab', () => {
-
-      beforeAll(() => {
-        global.Date.now = jest.fn(() => dateInPast);
-      });
-
-      afterAll(() => {
-        global.Date.now = RealDate;
-      });
-
-      beforeEach(()=>{
-        wrapper.setData({
-          activeTab: 'future',
-        });
-      });
-
-      it('future tab open', () => {
-        expect(wrapper.find('h1.govuk-heading-l').text()).toBe('Future');
-      });
-
-      it('lists open tests', () => {
-        expect(wrapper.vm.futureTests.length).toBe(1);
-      });
-      xit('status', () => {
-        expect(wrapper.vm.status(wrapper.vm.$store.state.qualifyingTestResponses.records[0])).toBe('not-started');
-      });
-    });
-
-    describe('past tab', () => {
-
-      beforeAll(() => {
-        global.Date.now = jest.fn(() => dateInFuture);
-      });
-
-      afterAll(() => {
-        global.Date.now = RealDate;
-      });
-
-      beforeEach(()=>{
-        wrapper.setData({
-          activeTab: 'past',
-        });
-      });
-
-      it('past tab open', () => {
-        expect(wrapper.find('h1.govuk-heading-l').text()).toBe('Past');
-      });
-
-      it('lists open tests', () => {
-        expect(wrapper.vm.closedTests.length).toBe(1);
-      });
-      xit('status', () => {
-        expect(wrapper.vm.status(wrapper.vm.$store.state.qualifyingTestResponses.records[0])).toBe('not-started');
-      });
-    });
   });
 
 });

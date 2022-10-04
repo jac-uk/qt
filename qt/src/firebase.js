@@ -23,7 +23,6 @@ const database = firebase.database();
 const Timestamp = firebase.firestore.Timestamp;
 
 if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULATORS == 'true') {
-  console.log('using local emulators');
   firestore.useEmulator('localhost', 8080);
   functions.useEmulator('localhost', 5001);
   auth.useEmulator('http://localhost:9099');
