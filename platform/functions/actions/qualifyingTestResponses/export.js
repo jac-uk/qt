@@ -76,7 +76,7 @@ const getData = (qualifyingTest, qualifyingTestResponses) => {
     const row = [
       element.id,
       element.application ? element.application.referenceNumber : '',
-      element.candidate.fullName || element.candidate.email,
+      element.participant.fullName || element.participant.email,
       element.duration.testDurationAdjusted,
       element.duration.reasonableAdjustment,
       timeTaken(element),
