@@ -9,50 +9,40 @@
         <Table
           v-if="hasData"
           data-key="id"
-          :data="getSelectedTableData()"
-          :columns="getSelectedTableColumns()"
+          :data="tableData"
+          :columns="tableColumns"
         >
           <template #row="{row}">
             <TableCell>
               <RouterLink
-                v-if="activeTab === 'open'"
+                v-if="isOpenTest(row)"
                 :to="{ path: `/online-tests/${row.id}/information` }"
                 :class="`info-btn--qualifying-tests--to--${row.id}`"
               >
                 {{ row.qualifyingTest.title }}
               </RouterLink>
-              <template v-else>
-                {{ row.qualifyingTest.title }}
-              </template>
+              <strong v-else>{{ row.qualifyingTest.title }}</strong>
+              <br>
+              <span v-if="isFutureTest(row)">Start {{ prettyDate(row.qualifyingTest.startDate) }}<br></span>
+              <span v-else>Deadline {{ prettyDate(row.qualifyingTest.endDate) }}</span>
             </TableCell>
-            <TableCell>{{ status(row) | lookup }}</TableCell>
             <TableCell>
-              <template v-if="activeTab === 'future'">
-                {{ prettyDate(row.qualifyingTest.startDate) }}
-              </template>
-              <template v-else>
-                {{ prettyDate(row.qualifyingTest.endDate) }}
-              </template>
-            </TableCell>
-            <TableCell
-              v-if="activeTab === 'past' && showFeedbackColumn"
-            >
+              {{ status(row) | lookup }}<br>
               <a
-                v-if="row.qualifyingTest.feedbackSurvey"
+                v-if="showSurvey(row)"
                 :href="row.qualifyingTest.feedbackSurvey"
                 :class="`govuk-link info-btn--qualifying-tests--feedback-${row.id}--click-here`"
+                target="_blank"
               >
-                Click here
+                Feedback Survey
               </a>
-              <span
-                v-else
-              >
-                ---
-              </span>
             </TableCell>
           </template>
         </Table>
-        <p v-else class="govuk-body-l">
+        <p
+          v-else
+          class="govuk-body-l"
+        >
           There are no live tests. All tests have been completed or expired.
         </p>
       </div>
@@ -77,20 +67,9 @@ export default {
     return {
       loaded: false,
       loadFailed: false,
-      activeTab: 'open',
-      tabs: [
-        {
-          ref: 'open',
-          title: 'Open',
-        },
-        {
-          ref: 'future',
-          title: 'Future',
-        },
-        {
-          ref: 'past',
-          title: 'Past',
-        },
+      tableColumns: [
+        { title: 'Test' },
+        { title: 'Status' },
       ],
     };
   },
@@ -103,56 +82,14 @@ export default {
         .filter((qt, index, qts) => qts.findIndex(i => i.id === qt.id) === index);
     },
     hasData() {
-      return this.openTests.length;
+      return this.tableData.length;
     },
-    openTests(){
-      const result = this.qualifyingTestResponses.filter(qt => {
-        // status must be activated or started
-        if ([QUALIFYING_TEST.STATUS.ACTIVATED, QUALIFYING_TEST.STATUS.STARTED].indexOf(qt.status) < 0) { return false; }
-
-        // startDate must be earlier than now (TODO take account of serverTimeOffset)
-        if (!(qt.qualifyingTest.startDate && qt.qualifyingTest.startDate.getTime() < Date.now())) { return false; }
-
-        // endDate must be later than now
-        if (!(qt.qualifyingTest.endDate && qt.qualifyingTest.endDate.getTime() > Date.now())) { return false; }
-
-        // if test has started then it must have time left
-        if (qt.status === QUALIFYING_TEST.STATUS.STARTED) {
-          if (!this.isTimeLeft(qt)) { return false; }
-        }
-
-        // all ok
+    tableData(){
+      const yesterday = function(d){ d.setDate(d.getDate() - 1); return d; }(new Date);
+      return this.qualifyingTestResponses.filter(qt => {
+        if (!(qt.qualifyingTest.endDate && qt.qualifyingTest.endDate.getTime() > yesterday)) { return false; }
         return true;
       });
-      return result;
-    },
-    futureTests(){
-      const result = this.qualifyingTestResponses.filter(qt => (
-        (isDateInFuture(qt.qualifyingTest.startDate) || (
-          isDateInFuture(qt.qualifyingTest.endDate) && qt.status === QUALIFYING_TEST.STATUS.CREATED
-        ))
-      ));
-      return result;
-    },
-    closedTests(){
-      const result = this.qualifyingTestResponses.filter(qt => {
-        // startDate must be earlier than now
-        if (!(qt.qualifyingTest.startDate && qt.qualifyingTest.startDate.getTime() < Date.now())) { return false; }
-
-        // if test has not been started or completed then end date must be earlier than now
-        if ([QUALIFYING_TEST.STATUS.STARTED, QUALIFYING_TEST.STATUS.COMPLETED].indexOf(qt.status) < 0) {
-          if (!(qt.qualifyingTest.endDate && qt.qualifyingTest.endDate.getTime() < Date.now())) { return false; }
-        }
-
-        // if test has started then it has run out of time
-        if (qt.status === QUALIFYING_TEST.STATUS.STARTED) {
-          if (this.isTimeLeft(qt)) { return false; }
-        }
-
-        // otherwise all ok
-        return true;
-      });
-      return result;
     },
   },
   async mounted() {
@@ -183,33 +120,16 @@ export default {
       }
       return QUALIFYING_TEST.STATUS.NOT_STARTED;
     },
+    showSurvey(qt) {
+      if (!qt.qualifyingTest.feedbackSurvey) return false;
+      if (qt.status === QUALIFYING_TEST.STATUS.COMPLETED) return true;
+      if (this.isTimeOut(qt.status, qt.statusLog.completed, this.isTimeLeft(qt))) return true;
+      return false;
+    },
     prettyDate(date) {
       const time = formatDate(date, 'time');
       const day = formatDate(date);
       return isToday(date) ? `${time} today` : `${time} on ${day}`;
-    },
-    getSelectedTableData() {
-      switch (this.activeTab){
-      case 'open':
-        return this.openTests;
-      case 'future':
-        return this.futureTests;
-      case 'past':
-        return this.closedTests;
-      default:
-        return [];
-      }
-    },
-    getSelectedTableColumns() {
-      const result = [
-        { title: 'Title' },
-        { title: 'Status' },
-        { title: this.activeTab === 'future' ? 'Start' : 'Deadline' },
-      ];
-      if (this.activeTab === 'past' && this.showFeedbackColumn) {
-        result.push({ title: 'Feedback Survey' });
-      }
-      return result;
     },
     isTimeLeft(qt) {
       return helperTimeLeft(qt) > 0;
@@ -218,18 +138,27 @@ export default {
       const timeout = (testStatus == QUALIFYING_TEST.STATUS.STARTED && logCompleted === null && !isTimeLeft);
       return timeout;
     },
+    isOpenTest(qt) {
+      // status must be activated or started
+      if ([QUALIFYING_TEST.STATUS.ACTIVATED, QUALIFYING_TEST.STATUS.STARTED].indexOf(qt.status) < 0) { return false; }
+
+      // startDate must be earlier than now (TODO take account of serverTimeOffset)
+      if (!(qt.qualifyingTest.startDate && qt.qualifyingTest.startDate.getTime() < Date.now())) { return false; }
+
+      // endDate must be later than now
+      if (!(qt.qualifyingTest.endDate && qt.qualifyingTest.endDate.getTime() > Date.now())) { return false; }
+
+      // if test has started then it must have time left
+      if (qt.status === QUALIFYING_TEST.STATUS.STARTED) {
+        if (!this.isTimeLeft(qt)) { return false; }
+      }
+
+      return true;
+    },
+    isFutureTest(qt) {
+      return isDateInFuture(qt.qualifyingTest.startDate)
+        || (isDateInFuture(qt.qualifyingTest.endDate) && qt.status === QUALIFYING_TEST.STATUS.CREATED);
+    },
   },
 };
 </script>
-
-<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
-.govuk-tabs {
-  margin-bottom: 0;
-}
-.govuk-tabs__panel {
-  margin-bottom: 10px;
-  padding: 20px 20px;
-  border: 1px solid #b1b4b6;
-  border-top: 0;
-}
-</style>
