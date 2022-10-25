@@ -212,15 +212,6 @@
       </ActionButton>
 
       <button
-        v-if="isActivated"
-        :disabled="true"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="btnPause"
-      >
-        Pause
-      </button>
-
-      <button
         v-if="isInitialised || isActivated || isPaused || isCompleted"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnResponses('all')"
@@ -263,7 +254,7 @@
       </ActionButton>
 
       <ActionButton
-        v-if="isActivated || isCompleted"
+        v-if="isActivated"
         type="primary"
         :disabled="isEndDatePassed"
         class="govuk-!-margin-right-3"
@@ -461,10 +452,6 @@ export default {
     },
     async btnGetScores() {
       await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
-    },
-    btnPause() {
-      // eslint-disable-next-line no-console
-      // console.log('Button clicked: PAUSE');
     },
     btnResponses(status) {
       const route = {
