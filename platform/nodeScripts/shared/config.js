@@ -34,5 +34,5 @@ module.exports = {
     },
   },
   STORAGE_URL: process.env.PROJECT_ID + '.appspot.com',
-  SLACK_URL: 'https://hooks.slack.com/services/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',
+  SLACK_URL: '',
 };
