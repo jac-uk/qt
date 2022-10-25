@@ -2,10 +2,10 @@
 
 const config = require('./shared/config');
 const { firebase, app, db } = require('./shared/admin.js');
-const { backupFirestore } = require('../functions/actions/backup/firestore')(config, firebase, db);
+const { backupFirestoreWhenBusy } = require('../functions/actions/backup/firestore')(config, firebase, db);
 
 const main = async () => {
-  return backupFirestore();
+  return backupFirestoreWhenBusy();
 };
 
 main()

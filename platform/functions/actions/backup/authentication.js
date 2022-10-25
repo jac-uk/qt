@@ -41,22 +41,6 @@ module.exports = (config) => {
       return fs.unlinkSync(filePath);
     };
 
-    // Delete all backup files more than 30 days old
-    const purgeBackupHistory = async () => {
-      console.log('Purging backup history...');
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      const [files] = await bucket.getFiles({
-        'prefix': BACKUP_PATH,
-      });
-      files.forEach(file => {
-        if (file.name < `${BACKUP_PATH}/${thirtyDaysAgo.toISOString()}.json`) { // each backup is a file named as a timestamp converted to ISO strings
-          console.log('Deleting ' + file.name);
-          file.delete();
-        }
-      });
-    };
-
     const timestamp = (new Date()).toISOString();
     const fileName = timestamp + '.json';
     const tempFilePath = path.join(os.tmpdir(), fileName);
@@ -65,7 +49,6 @@ module.exports = (config) => {
       await downloadAuthExport(tempFilePath);
       await uploadToStorageBucket(tempFilePath, fileName);
       deleteLocalFile(tempFilePath);
-      await purgeBackupHistory();
     } catch (err) {
       slack.post('ERROR: Authentication backup failed');
       slack.post(err);

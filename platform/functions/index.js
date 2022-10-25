@@ -1,7 +1,8 @@
 
 // Scheduled
-// exports.backupFirestore = require('./scheduledFunctions/backupFirestore');
-// exports.backupAuthentication = require('./scheduledFunctions/backupAuthentication');
+exports.backupFirestore = require('./scheduledFunctions/backupFirestore');
+exports.backupFirestoreWhenBusy = require('./scheduledFunctions/backupFirestoreWhenBusy');
+exports.backupAuthentication = require('./scheduledFunctions/backupAuthentication');
 
 // Background
 exports.onDelete = require('./backgroundFunctions/onDelete');
