@@ -18,6 +18,7 @@
           label="Invited emails"
           hint="Please add one email address per line"
           rows="20"
+          @input="onChangeEmails"
         />
 
         <button class="govuk-button">
@@ -66,6 +67,12 @@ export default {
       this.formatEmails();
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: `${this.routeNamePrefix}-review` });
+    },
+    onChangeEmails() {
+      this.invitedEmailsText = this.invitedEmailsText.replaceAll(',', '\n');
+      this.invitedEmailsText = this.invitedEmailsText.replaceAll(';', '\n');
+      this.invitedEmailsText = this.invitedEmailsText.replaceAll(' ', '');
+      this.invitedEmailsText = this.invitedEmailsText.replaceAll('\n\n', '\n');
     },
     formatEmails() {
       this.qualifyingTest.invitedEmails = [];
