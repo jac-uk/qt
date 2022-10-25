@@ -10,6 +10,12 @@
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
       >{{ qualifyingTest.mode | lookup }}</span>
     </h1>
+    <button
+      class="govuk-button govuk-!-margin-bottom-0 float-right"
+      @click="downloadResponses"
+    >
+      Download responses
+    </button>
     <h2 class="govuk-heading-m">
       {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
     </h2>
@@ -18,21 +24,9 @@
       :data="responses"
       :page-size="50"
       :columns="tableColumns"
-      :custom-search="{
-        placeholder: 'Search candidate names',
-        handler: candidateSearch,
-        field: 'candidate.id',
-      }"
+      search-map="_search"
       @change="getTableData"
     >
-      <template #actions>
-        <button
-          class="govuk-button govuk-!-margin-left-3 float-right"
-          @click="downloadResponses"
-        >
-          Download responses
-        </button>
-      </template>
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
           {{ row.participant.fullName | showAlternative(row.participant.email) }}
