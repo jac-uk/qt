@@ -2,8 +2,8 @@ const functions = require('firebase-functions');
 
 module.exports = {
   PROJECT_ID: functions.config().project.id,
-  QT_URL: 'https://europe-west2-jac-qualifying-tests-develop.cloudfunctions.net/api/v1',
-  QT_KEY: 'JAC12345',
+  QT_URL: `https://europe-west2-${functions.config().project.id}.cloudfunctions.net/api/v1`,
+  QT_KEY: functions.config().qts.key,
   QUALIFYING_TEST: {
     TYPE: {
       SCENARIO: 'scenario',
@@ -36,4 +36,5 @@ module.exports = {
     },
   },
   STORAGE_URL: functions.config().project.id + '.appspot.com',
+  SLACK_URL: functions.config().slack.url,
 };

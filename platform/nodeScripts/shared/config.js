@@ -1,6 +1,6 @@
 module.exports = {
-  PROJECT_ID: process.env.PROJECT_ID,
-  QT_URL: 'https://europe-west2-jac-qualifying-tests-develop.cloudfunctions.net/api/v1',
+  PROJECT_ID: 'jac-qualifying-tests-develop',
+  QT_URL: `https://europe-west2-${process.env.PROJECT_ID}.cloudfunctions.net/api/v1`,
   QT_KEY: 'secret',
   QUALIFYING_TEST: {
     TYPE: {
@@ -19,6 +19,8 @@ module.exports = {
       INITIALISED: 'initialised',
       ACTIVATED: 'activated',
       PAUSED: 'paused',
+      STARTED: 'started',
+      PROGRESS: 'in-progress',
       COMPLETED: 'completed',
     },
   },
@@ -28,7 +30,9 @@ module.exports = {
       ACTIVATED: 'activated',
       STARTED: 'started',
       COMPLETED: 'completed',
+      CANCELLED: 'cancelled',
     },
   },
   STORAGE_URL: process.env.PROJECT_ID + '.appspot.com',
+  SLACK_URL: 'https://hooks.slack.com/services/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',
 };
