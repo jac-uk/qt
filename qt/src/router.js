@@ -149,6 +149,9 @@ router.beforeEach((to, from, next) => {
       return next({ name: 'default' });
     }
   }
+  if (!requiresAuth && isSignedIn) {
+    return next({ name: 'online-tests' });
+  }
   return next();
 });
 
