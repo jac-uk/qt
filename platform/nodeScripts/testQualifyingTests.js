@@ -18,7 +18,7 @@ const main = async () => {
   if (isDeleteExisting) {
     // delete existing responses
     console.log('attempting to delete qualifyingtestresponses for', qualifyingTestId);
-    const qualifyingTestResponses = await getDocuments(db.collection('qualifyingTestResponses').where('qualifyingTest.id', '==', qualifyingTestId));
+    const qualifyingTestResponses = await getDocuments(db.collection('qualifyingTestResponses').where('qualifyingTest.id', '==', qualifyingTestId).select());
     console.log('qualifyingTestResponses', qualifyingTestResponses.length);
     if (qualifyingTestResponses.length) {
       commands = qualifyingTestResponses.map((doc) => {
