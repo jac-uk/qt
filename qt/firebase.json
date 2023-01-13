@@ -53,60 +53,7 @@
       ]
     },
     {
-      "target": "staging-qt-app",
-      "public": "dist",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ],
-      "headers": [
-        {
-          "source": "**",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "max-age=300, s-maxage=3600, public"
-            }
-          ]
-        },
-        {
-          "source": "*",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "max-age=150, s-maxage=1800, public"
-            }
-          ]
-        },
-        {
-          "source": "**/*.@(jpg|jpeg|gif|png|svg)",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "max-age=3600, s-maxage=86400, public"
-            }
-          ]
-        },
-        {
-          "source": "**/*.@(html|css|js)",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "max-age=301, s-maxage=3601, public"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "target": "production-qt-app",
+      "target": "live-qt-app",
       "public": "dist",
       "ignore": [
         "firebase.json",

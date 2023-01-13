@@ -29,11 +29,11 @@ api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
   try {
     const listQualifyingTests = require('../actions/qualifyingTests/listQualifyingTests')(config, firebase, db);
     const result = await listQualifyingTests({ folder: req.query.folder });
-    res
+    return res
       .status(200)
       .send(result);
   } catch (error) {
-    res
+    return res
       .status(500)
       .send(error);
   }
@@ -53,11 +53,11 @@ api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
   try {
     const createQualifyingTest = require('../actions/qualifyingTests/createQualifyingTest')(config, firebase, db);
     const result = await createQualifyingTest(req.body);
-    res
+    return res
       .status(200)
       .send(result);
   } catch (error) {
-    res
+    return res
       .status(500)
       .send(error);
   }
@@ -77,11 +77,11 @@ api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
   try {
     const updateQualifyingTestParticipants = require('../actions/qualifyingTests/updateQualifyingTestParticipants')(config, firebase, db);
     const result = await updateQualifyingTestParticipants(req.body);
-    res
+    return res
       .status(200)
       .send(result);
   } catch (error) {
-    res
+    return res
       .status(500)
       .send(error);
   }
@@ -100,11 +100,11 @@ api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
   try {
     const getQualifyingTestScores = require('../actions/qualifyingTests/getQualifyingTestScores')(config, firebase, db);
     const result = await getQualifyingTestScores({ testId: req.query.testId });
-    res
+    return res
       .status(200)
       .send(result);
   } catch (error) {
-    res
+    return res
       .status(500)
       .send(error);
   }

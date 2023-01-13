@@ -110,21 +110,21 @@ const router = new Router({
       ],
     },
     {
-      path: '/:qualifyingTestId',
-      name: 'sign-in',
-      component: SignIn,
-      meta: {
-        requiresAuth: false,
-        title: 'Sign In',
-      },
-    },
-    {
       path: '/signed-out',
       name: 'signed-out',
       component: SignedOut,
       meta: {
         requiresAuth: false,
         title: 'Signed Out',
+      },
+    },
+    {
+      path: '/:qualifyingTestId',
+      name: 'sign-in',
+      component: SignIn,
+      meta: {
+        requiresAuth: false,
+        title: 'Sign In',
       },
     },
   ],

@@ -1,8 +1,7 @@
 {
   "projects": {
     "develop": "jac-qualifying-tests-develop",
-    "staging": "jac-qualifying-tests-staging",
-    "production": "jac-qualifying-tests-production",
+    "live": "jac-qualifying-tests-live",
     "default": "jac-qualifying-tests-develop"
   },
   "targets": {
@@ -13,17 +12,10 @@
         ]
       }
     },
-    "jac-qualifying-tests-staging": {
+    "jac-qualifying-tests-live": {
       "hosting": {
-        "staging-qt-admin-app": [
-          "jac-qualifying-tests-admin-staging"
-        ]
-      }
-    },
-    "jac-qualifying-tests-production": {
-      "hosting": {
-        "production-qt-admin-app": [
-          "jac-qualifying-tests-admin-production"
+        "live-qt-admin-app": [
+          "jac-qualifying-tests-admin"
         ]
       }
     }

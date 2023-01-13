@@ -16,22 +16,7 @@
       ]
     },
     {
-      "target": "staging-qt-admin-app",
-      "public": "dist",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "production-qt-admin-app",
+      "target": "live-qt-admin-app",
       "public": "dist",
       "ignore": [
         "firebase.json",
