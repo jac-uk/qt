@@ -49,7 +49,7 @@
               colspan="3"
             >
               <a
-                :href="`https://qt-develop.judicialappointments.digital/${qualifyingTestId}`"
+                :href="`https://qt.judicialappointments.digital/${qualifyingTestId}`"
                 target="_blank"
                 class="govuk-link"
               >
