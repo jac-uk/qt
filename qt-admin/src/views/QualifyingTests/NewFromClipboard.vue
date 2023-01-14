@@ -89,8 +89,9 @@ export default {
       if (this.isDryRun) {
         data.mode = QUALIFYING_TEST.MODE.DRY_RUN;
       }
+      if (data.type === 'critical-analysis') { data.type = QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS; }
+      if (data.type === 'situational-judgement') { data.type = QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT; }
       const qualifyingTestId = await this.$store.dispatch('qualifyingTest/create', data);
-
       this.$router.push({
         name: 'qualifying-test-edit',
         params: {
