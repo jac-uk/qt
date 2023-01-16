@@ -31,7 +31,7 @@
             v-for="(column, index) in columns"
             :key="index"
             scope="col"
-            :class="[ 'govuk-table__header', column.class ]"
+            :class="[ 'govuk-table__header', ...column.class ]"
             :aria-sort="columnSortState(column)"
             @click="sortBy(column)"
           >
