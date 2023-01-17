@@ -80,6 +80,10 @@ export default {
     },
   },
   async mounted() {
+    const meta = document.createElement('meta');
+    meta.name = 'version';
+    meta.content = this.$store.getters.appVersion;
+    document.head.appendChild(meta);
     try {
       await this.$store.dispatch('session/load');
       this.loaded = true;
