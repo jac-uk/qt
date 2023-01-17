@@ -28,10 +28,7 @@
           <li
             v-if="numberOfQuestions"
           >
-            This test contains
-            <b style="white-space: pre;">
-              {{ numberOfQuestions }}
-            </b>
+            This test contains <b style="white-space: pre;">{{ numberOfQuestions }}</b>.
           </li>
           <li>
             You have <b>{{ qualifyingTestResponse.duration.testDurationAdjusted }} minutes</b> to complete this test.
