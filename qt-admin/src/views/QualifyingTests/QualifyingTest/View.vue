@@ -269,7 +269,7 @@
 <script>
 import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { EXERCISE_STAGE, QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
@@ -282,7 +282,6 @@ export default {
     return {
       exerciseStage: '',
       candidateStatus: 'all',
-      availableStatuses: null,
     };
   },
   computed: {
@@ -410,22 +409,6 @@ export default {
 
       const returnValue = JSON.stringify(clipboardQT);
       return returnValue;
-    },
-  },
-  watch: {
-    exerciseStage: function (valueNow, valueBefore) {
-      if (valueNow !== valueBefore) {
-        this.availableStatuses = [];
-      }
-      if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
-      }
-      if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
-        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
-      }
-      if (valueNow === EXERCISE_STAGE.SELECTED) {
-        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
-      }
     },
   },
   created() {

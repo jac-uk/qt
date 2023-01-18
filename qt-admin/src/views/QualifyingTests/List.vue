@@ -1,15 +1,33 @@
 <template>
   <div>
-    <RouterLink
-      class="govuk-back-link"
-      :to="{ name: 'folders' }"
-    >
-      Back
-    </RouterLink>
-    <span class="govuk-caption-l">{{ folder.name }}</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
-      Qualifying tests
-    </h1>
+    <div class="govuk-grid-row print-none">
+      <div class="govuk-grid-column-one-half">
+        <RouterLink
+          class="govuk-back-link govuk-!-margin-top-0"
+          :to="{ name: 'folders' }"
+        >
+          Back
+        </RouterLink>
+        <span class="govuk-caption-l">{{ folder.name }}</span>
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+          Qualifying tests
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-half text-right">
+        <button
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnCreateFromClipboard"
+        >
+          Create New from Clipboard
+        </button>
+        <button
+          class="govuk-button govuk-!-margin-right-3"
+          @click="btnCreate"
+        >
+          Create New
+        </button>
+      </div>
+    </div>
 
     <Table
       data-key="id"
@@ -41,27 +59,6 @@
         </TableCell>
       </template>
     </Table>
-
-    <button
-      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-      class="govuk-button govuk-!-margin-right-3"
-      @click="btnCreate"
-    >
-      Create New
-    </button>
-    <button
-      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-      @click="btnCreateFromClipboard"
-    >
-      Create New from Clipboard
-    </button>
-    <div v-else>
-      <Banner
-        :message="warningMessage"
-        status="warning"
-      />
-    </div>
   </div>
 </template>
 
@@ -69,12 +66,10 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { QUALIFYING_TEST } from '@/helpers/constants';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {
   components: {
     Table,
-    Banner,
     TableCell,
   },
   props: {
@@ -99,24 +94,6 @@ export default {
     folder() {
       return this.$store.state.folder.record;
     },
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
-    },
-    warningMessage() {
-      let msg = 'Please add';
-      if (!this.exercise.exercisePhoneNumber) {
-        msg = `${msg} an exercise phone number`;
-      }
-      if (!this.exercise.exercisePhoneNumber && !this.exercise.emailSignatureName) {
-        msg = `${msg} and`;
-      }
-      if (!this.exercise.emailSignatureName) {
-        msg = `${msg} an email signature name`;
-      }
-      msg = `${msg} before creating `;
-      msg += this.tieBreakers ? 'an equal merit tie-breaker' : 'a qualifying test';
-      return msg;
-    },
     qualifyingTests() {
       const qtList = this.$store.state.qualifyingTest.records;
       // For the Tie-breakers page we want to show tests where isTieBreaker == true
@@ -128,9 +105,6 @@ export default {
       return qtList.filter(row => {
         return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
-    },
-    exerciseId() {
-      return this.$route.params.id;
     },
     routeNamePrefix() {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
