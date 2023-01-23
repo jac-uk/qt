@@ -49,11 +49,11 @@
               colspan="3"
             >
               <a
-                :href="`https://qt.judicialappointments.digital/${qualifyingTestId}`"
+                :href="testURL"
                 target="_blank"
                 class="govuk-link"
               >
-                https://qt.judicialappointments.digital/{{ qualifyingTestId }}
+                {{ testURL }}
               </a>
             </td>
           </tr>
@@ -309,6 +309,16 @@ export default {
     qualifyingTest() {
       return this.$store.state.qualifyingTest.record;
     },
+    testURL() {
+      let url = '';
+      if (this.$store.getters.isProduction) {
+        url = 'https://qt.judicialappointments.digital';
+      } else {
+        url = 'https://qt-develop.judicialappointments.digital';
+      }
+      url += `/${this.qualifyingTestId}`;
+      return url;
+    },
     hasParticipants() {
       return this.qualifyingTest && this.qualifyingTest.participants && this.qualifyingTest.participants.length;
     },
@@ -425,16 +435,20 @@ export default {
     },
     async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
+      return true;
     },
     async btnInitialise() {
       const data = { qualifyingTestId: this.qualifyingTestId };
       await functions.httpsCallable('initialiseQualifyingTest')( data );
+      return true;
     },
     async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      return true;
     },
     async btnGetScores() {
       await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      return true;
     },
     btnResponses(status) {
       const route = {
