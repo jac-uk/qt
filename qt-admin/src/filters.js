@@ -65,6 +65,7 @@ const lookup = (value) => {
 
   lookup[`${QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS}`] = 'Critical Analysis';
   lookup[`${QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement';
+  lookup[`${QUALIFYING_TEST.TYPE.SCENARIO}`] = 'Scenario Test';
 
   returnValue = lookup[value];
 

@@ -6,7 +6,7 @@ module.exports = {
   QT_KEY: functions.config().qts.key,
   QUALIFYING_TEST: {
     TYPE: {
-      SCENARIO: 'scenario',
+      SCENARIO: 'scenarioTest',
       CRITICAL_ANALYSIS: 'criticalAnalysis',
       SITUATIONAL_JUDGEMENT: 'situationalJudgement',
     },

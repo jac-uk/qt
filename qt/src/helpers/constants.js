@@ -10,7 +10,7 @@ import {
 
 const QUALIFYING_TEST = {
   TYPE: {
-    SCENARIO: 'scenario',
+    SCENARIO: 'scenarioTest',
     CRITICAL_ANALYSIS: 'criticalAnalysis',
     SITUATIONAL_JUDGEMENT: 'situationalJudgement',
   },

@@ -155,7 +155,7 @@ export default {
       const questions = this.qualifyingTestResponse.testQuestions.questions;
       const plural = questions.length > 1 ? 's' : '';
       let result;
-      if (!(this.qualifyingTestResponse.qualifyingTest.type === 'scenario')) {
+      if (!(this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO)) {
         result = `${questions.length} question${plural}`;
       } else {
         result = `${questions.length} Scenario${plural}:\n`;
