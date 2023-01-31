@@ -30,7 +30,7 @@ const module = {
           'tom.russell@judicialappointments.digital',
           'andrew.isaac@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
-          'lisias.loback@judicialappointments.digital',
+          'drie@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -42,7 +42,7 @@ const module = {
               'tom.russell@judicialappointments.digital',
               'andrew.isaac@judicialappointments.digital',
               'halcyon@judicialappointments.digital',
-              'lisias.loback@judicialappointments.digital',
+              'drie@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
