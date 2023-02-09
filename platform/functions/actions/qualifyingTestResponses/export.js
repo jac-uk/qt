@@ -155,12 +155,10 @@ module.exports = (config, firebase, db) => {
     if (response.statusLog.completed && response.statusLog.started) {
       diff = response.statusLog.completed - response.statusLog.started;
     }
-    const newDate = new Date(diff);
-    const hh = `0${newDate.getUTCHours()}`.slice(-2);
-    const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
-    const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
-    const returnTimeTaken = `${hh}:${mm}:${ss}`;
-    return returnTimeTaken;
+    const date = new Date(null);
+    date.setSeconds(diff);
+    const hhmmssFormat = date.toISOString().substring(11, 19);
+    return hhmmssFormat;
   };
 
   /**
