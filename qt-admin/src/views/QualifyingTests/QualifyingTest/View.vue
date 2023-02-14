@@ -311,7 +311,7 @@ export default {
     },
     testURL() {
       let url = '';
-      if (this.$store.getters.isProduction) {
+      if (this.$store.getters.isLive) {
         url = 'https://qt.judicialappointments.digital';
       } else {
         url = 'https://qt-develop.judicialappointments.digital';

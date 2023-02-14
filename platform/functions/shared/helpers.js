@@ -17,7 +17,6 @@ module.exports = {
   getEarliestDate,
   getLatestDate,
   convertStringToSearchParts,
-  isProduction,
   lookup,
 };
 
@@ -254,11 +253,6 @@ function convertStringToSearchParts(value, delimiter) {
     }
   }
   return search;
-}
-
-function isProduction() {
-  const projectId = firebase.instanceId().app.options.projectId;
-  return projectId.includes('production');
 }
 
 function lookup(config, value) {

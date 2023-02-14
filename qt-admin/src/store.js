@@ -47,16 +47,13 @@ const store = new Vuex.Store({
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';
       }
-      if (projectId.indexOf('-staging') >= 0) {
-        return 'STAGING';
-      }
-      if (projectId.indexOf('-production') >= 0) {
-        return 'PRODUCTION';
+      if (projectId.indexOf('-live') >= 0) {
+        return 'LIVE';
       }
       return '';
     },
-    isProduction: (state, getters) => {
-      return getters.appEnvironment === 'PRODUCTION';
+    isLive: (state, getters) => {
+      return getters.appEnvironment === 'LIVE';
     },
   },
 });
