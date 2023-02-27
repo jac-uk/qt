@@ -22,16 +22,28 @@ module.exports = (config, firebase, db) => {
     if (!qualifyingTest) return { success: false, message: 'Test not found' };
     if (qualifyingTest.status !== config.QUALIFYING_TEST.STATUS.COMPLETED) return { success: false, message: 'Test not completed' };
 
+    // get all test ids (check for mopups)
+    const testIds = [];
+    testIds.push(qualifyingTest.id);
+    const mopupTests = await getDocuments(
+      db.collection('qualifyingTests')
+      .where('mode', '==', 'mop-up')
+      .where('relationship.copiedFrom', '==', qualifyingTest.id)
+    );
+    if (mopupTests) {
+      const incompleteTests = mopupTests.filter(test => test.status !== 'completed');
+      if (incompleteTests.length > 0) return { success: false, message: 'Mop up tests have not been completed' };
+      mopupTests.forEach(test => testIds.push(test.id));
+    }
+
     // get scores (for CA & SJ)
     let scores;
     if ([config.QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS, config.QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT].indexOf(qualifyingTest.type) >= 0) {
       // get test responses
       let qualifyingTestResponsesRef = db.collection('qualifyingTestResponses')
-        .where('qualifyingTest.id', '==', qualifyingTest.id)
+        .where('qualifyingTest.id', 'in', testIds)
         .select('score', 'status', 'participant');
       const qualifyingTestResponses = await getDocuments(qualifyingTestResponsesRef);
-
-      // TODO ensure we include all mopup test responses too
 
       // get scores data
       scores = {};
