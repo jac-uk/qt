@@ -70,6 +70,15 @@
         </button>
       </form>
     </div>
+    <div class="govuk-grid-column-one-third text-right">
+      <button
+        type="button"
+        class="govuk-button govuk-button--secondary"
+        @click="pasteFromClipboard"
+      >
+        Paste from clipboard
+      </button>
+    </div>
   </div>
 </template>
 
@@ -91,13 +100,12 @@ export default {
   },
   extends: Form,
   data(){
-    const exercise = this.$store.getters['exerciseDocument/data']();
     const data = this.$store.getters['qualifyingTest/data']();
 
     const defaults = {
       title: null,
-      startDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'Start') : this.getTimelineDate(exercise, data.type, 'Start')) || null,
-      endDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'End') : this.getTimelineDate(exercise, data.type, 'StarEnd')) || null,
+      startDate: null,
+      endDate: null,
       testDuration: null,
       additionalInstructions: [],
       feedbackSurvey: null,
@@ -106,7 +114,6 @@ export default {
     const qualifyingTest = { ...defaults, ...data };
 
     return {
-      exercise,
       repeatableFields: {
         QTAdditionalInstruction,
       },
@@ -124,10 +131,10 @@ export default {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
     minDate() {
-      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'Start') : null;
+      return null;
     },
     maxDate() {
-      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'End') : null;
+      return null;
     },
   },
   methods: {
@@ -135,42 +142,25 @@ export default {
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: `${this.routeNamePrefix}-question-builder` });
     },
-    getTimelineDate(exercise, qtType, dateType) {
-      if (!exercise.shortlistingMethods) {
-        return;
+    async pasteFromClipboard() {
+      if (navigator && navigator.clipboard && navigator.clipboard.readText) {
+        const clipboardText = await navigator.clipboard.readText();
+        if (clipboardText && clipboardText.includes('testQuestions')) {
+          const {
+            additionalInstructions,
+            feedbackSurvey,
+            maxScore,
+            testDuration,
+            testQuestions,
+          } = JSON.parse(clipboardText);
+          this.qualifyingTest.additionalInstructions = additionalInstructions;
+          this.qualifyingTest.feedbackSurvey = feedbackSurvey;
+          this.qualifyingTest.maxScore = maxScore;
+          this.qualifyingTest.testDuration = testDuration;
+          this.qualifyingTest.testQuestions = testQuestions;
+          await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
+        }
       }
-
-      let fieldName;
-      if (qtType === QUALIFYING_TEST.TYPE.SCENARIO && exercise.shortlistingMethods.includes('scenario-test-qualifying-test')) {
-        fieldName = 'scenarioTest';
-      }
-      if (qtType === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT && exercise.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
-        fieldName = 'situationalJudgementTest';
-      }
-      if (qtType === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS && exercise.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
-        fieldName = 'criticalAnalysisTest';
-      }
-
-      const date = exercise[`${fieldName}Date`];
-      const time = exercise[`${fieldName}${dateType}Time`];
-
-      let datetime;
-      if (date instanceof Date) {
-        datetime = new Date(date.getTime());
-      }
-      if (time instanceof Date) {
-        datetime.setHours(time.getHours());
-        datetime.setMinutes(time.getMinutes());
-      }
-
-      return datetime;
-    },
-    getEMZDate(exercise, dateType) {
-      const date = exercise[`equalMeritSecondStage${dateType}Date`];
-      if (date instanceof Date) {
-        return new Date(date.getTime());
-      }
-      return;
     },
   },
 };
