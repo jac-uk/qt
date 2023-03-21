@@ -45,6 +45,34 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "duration.testDurationAdjusted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "duration.testDurationAdjusted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "participant.email",
           "order": "ASCENDING"
         }
@@ -59,8 +87,36 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "participant.email",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "participant.fullName",
           "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "participant.fullName",
+          "order": "DESCENDING"
         }
       ]
     },
