@@ -51,7 +51,7 @@ module.exports = (config, firebase, db) => {
     return sortedByScoresArr.map(element => {
       const row = [
         element.id,
-        element.application ? element.application.referenceNumber : '',
+        element.participant.ref,
         element.participant.fullName || element.participant.email,
         element.duration.testDurationAdjusted,
         element.duration.reasonableAdjustment,
