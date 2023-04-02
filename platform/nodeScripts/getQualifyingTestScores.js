@@ -8,7 +8,7 @@ const getQualifyingTestScores = require('../functions/actions/qualifyingTests/ge
 const main = async () => {
 
   const result = await getQualifyingTestScores({
-    testId: 'yOoxvzGEx2FSRko04zop',
+    testId: 'uDU98kUdVyDoqVesSHfM',
   });
 
   return result;

@@ -25,12 +25,13 @@ module.exports = (config, firebase, db) => {
     // get all test ids (check for mopups)
     const testIds = [];
     testIds.push(qualifyingTest.id);
-    const mopupTests = await getDocuments(
+    const allMopupTests = await getDocuments(
       db.collection('qualifyingTests')
       .where('mode', '==', 'mop-up')
       .where('relationship.copiedFrom', '==', qualifyingTest.id)
     );
-    if (mopupTests) {
+    if (allMopupTests) {
+      const mopupTests = allMopupTests.filter(test => !(test.relationship.ignoreScores === true));  // exclude ignored tests
       const incompleteTests = mopupTests.filter(test => test.status !== 'completed');
       if (incompleteTests.length > 0) return { success: false, message: 'Mop up tests have not been completed' };
       mopupTests.forEach(test => testIds.push(test.id));
