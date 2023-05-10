@@ -46,7 +46,7 @@
         </template>
       </Countdown>
       <Banner
-        v-if="message"
+        v-if="message && !isCompleted"
         status="information"
       >
         <template>
@@ -121,6 +121,9 @@ export default {
         return this.qualifyingTestResponse.message;
       }
       return '';
+    },
+    isCompleted() {
+      return this.$store.getters['qualifyingTestResponse/isCompleted'];
     },
   },
   watch: {
