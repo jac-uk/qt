@@ -25,6 +25,8 @@
               <br>
               <span v-if="isFutureTest(row)">Start {{ prettyDate(row.qualifyingTest.startDate) }}<br></span>
               <span v-else>Deadline {{ prettyDate(row.qualifyingTest.endDate) }}</span>
+              <br />
+              <span v-if="qualifyingTestMessage(row)">Message: {{ qualifyingTestMessage(row) }}</span>
             </TableCell>
             <TableCell>
               {{ status(row) | lookup }}<br>
@@ -74,9 +76,6 @@ export default {
     };
   },
   computed: {
-    showFeedbackColumn() {
-      return this.closedTests.some((element) => element.qualifyingTest.feedbackSurvey);
-    },
     qualifyingTestResponses() {
       return this.$store.state.qualifyingTestResponses.records.concat(this.$store.state.qualifyingTestResponses.dryRuns)
         .filter((qt, index, qts) => qts.findIndex(i => i.id === qt.id) === index);
@@ -158,6 +157,12 @@ export default {
     isFutureTest(qt) {
       return isDateInFuture(qt.qualifyingTest.startDate)
         || (isDateInFuture(qt.qualifyingTest.endDate) && qt.status === QUALIFYING_TEST.STATUS.CREATED);
+    },
+    qualifyingTestMessage(qtr) {
+      if ('message' in qtr) {
+        return qtr.message;
+      }
+      return '';
     },
   },
 };

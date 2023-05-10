@@ -45,6 +45,14 @@
           </a>
         </template>
       </Countdown>
+      <Banner
+        v-if="message"
+        status="information"
+      >
+        <template>
+          {{ message }}
+        </template>
+      </Banner>
       <Modal
         ref="timeElapsedModalRef"
         title="Time has expired"
@@ -76,12 +84,13 @@ import firebase from '@/firebase';
 import LoadingMessage from '@/components/LoadingMessage';
 import Modal from '@/components/Page/Modal';
 import Countdown from '@/components/QualifyingTest/Countdown';
-
+import Banner from '@/components/Page/Banner';
 export default {
   components: {
     LoadingMessage,
     Modal,
     Countdown,
+    Banner,
   },
   data() {
     return {
@@ -106,6 +115,12 @@ export default {
     },
     isSupportingPage() {
       return ['online-test-information', 'online-test-submitted'].indexOf(this.$route.name) >= 0;
+    },
+    message() {
+      if (this.qualifyingTestResponse && ('message' in this.qualifyingTestResponse)) {
+        return this.qualifyingTestResponse.message;
+      }
+      return '';
     },
   },
   watch: {

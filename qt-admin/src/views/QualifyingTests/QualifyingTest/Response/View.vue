@@ -184,6 +184,19 @@
             </table>
           </dd>
         </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Message
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <EditableMessage
+              getter="qualifyingTestResponses/data"
+              dispatcher="qualifyingTestResponses/update"
+              :message="responseMessage"
+              :record-id="responseId"
+            />
+          </dd>
+        </div>
       </dl>
       <Modal ref="confirmResetModal">
         <div class="container">
@@ -486,6 +499,7 @@ import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import EditableMessage from '@/components/Micro/EditableMessage';
 
 export default {
   components: {
@@ -495,6 +509,7 @@ export default {
     Modal,
     QuestionDuration,
     ActionButton,
+    EditableMessage,
   },
   data() {
     return {
@@ -541,6 +556,9 @@ export default {
     response() {
       const qtList = this.$store.state.qualifyingTestResponses.record;
       return qtList;
+    },
+    responseMessage() {
+      return ('message' in this.response) ? this.response.message : '';
     },
     responses() {
       let responses = [];
