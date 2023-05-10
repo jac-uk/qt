@@ -13,7 +13,7 @@ module.exports = (config, firebase, db) => {
     const msgInDataBefore = 'message' in dataBefore;
     const msgInDataAfter = 'message' in dataAfter;
 
-    const msgRemoved = msgInDataBefore && !msgInDataAfter || dataAfter.message === '';
+    const msgRemoved = msgInDataBefore && !msgInDataAfter || (dataBefore.message !== '' && dataAfter.message === '');
     const msgAdded = !msgInDataBefore && msgInDataAfter;
     const msgUpdated = msgInDataBefore && msgInDataAfter && (dataBefore.message !== dataAfter.message);
 
