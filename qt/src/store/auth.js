@@ -26,6 +26,12 @@ const module = {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
+    getEmail(state) {
+      if (state.currentUser) {
+        return state.currentUser.email;
+      }
+      return null;
+    },
   },
 };
 

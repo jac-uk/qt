@@ -1,7 +1,7 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form ref="formRef">
+      <form ref="formRef" autocomplete="off">
         <p class="govuk-body-l">
           To access your test please provide the email address you registered with.
         </p>
@@ -13,6 +13,7 @@
           v-model="formData.email"
           label="Email address"
           type="email"
+          autocomplete="off"
           required
         />
 
@@ -32,8 +33,7 @@ import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import TextField from '@/components/Form/TextField';
 import { functions, auth } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-
+import ActionButton from '@/components/ActionButton';
 export default {
   components: {
     ErrorSummary,
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     async login() {
-      this.validate();
+      await this.validate();
       if (this.isValid) {
         this.errors = [];
         try {
