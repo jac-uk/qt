@@ -34,9 +34,8 @@
       :class="[inputClass, {'govuk-input--error': hasError}]"
       :type="fieldType"
       :max="numMax"
-      :autocomplete="autocomplete"
-      @change="validate"
-    >
+      :autocomplete="autoComplete"
+    />
   </div>
 </template>
 
@@ -70,6 +69,10 @@ export default {
       default: 'text',
       type: String,
     },
+    autocomplete: {
+      default: '',
+      type: String,
+    },
   },
   computed: {
     text: {
@@ -80,13 +83,18 @@ export default {
         this.$emit('input', val);
       },
     },
-    autocomplete() {
-      switch (this.type) {
-      case 'tel':
-      case 'email':
-        return this.type;
-      default:
-        return false;
+    autoComplete() {
+      if (this.autocomplete === 'off') {
+        return this.autocomplete;
+      }
+      else {
+        switch (this.type) {
+        case 'tel':
+        case 'email':
+          return this.type;
+        default:
+          return false;
+        }
       }
     },
     fieldType() {
