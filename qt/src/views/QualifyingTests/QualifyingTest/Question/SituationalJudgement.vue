@@ -2,7 +2,7 @@
   <fieldset class="govuk-fieldset">
     <RadioGroup
       id="situationalJudgementRadio"
-      v-model="localValue"
+      v-model="value"
       :label="question"
       hint="Please select which of the options below are 'most appropriate' and 'least appropriate'. You can only choose one answer as most appropriate and one answer as least appropriate."
     >
@@ -40,7 +40,7 @@ export default {
     RadioItem,
   },
   props: {
-    value: {
+    modelValue: {
       required: true,
       validator: (value) => (value instanceof Object || value === null || value === undefined),
     },
@@ -53,26 +53,27 @@ export default {
       required: true,
     },
   },
+  emits: ['update:modelValue', 'answered'],
   computed: {
-    localValue: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },
   watch: {
-    'localValue.leastAppropriate': function (value) {
-      if (value === this.localValue.mostAppropriate) {
-        this.localValue.mostAppropriate = null;
+    'value.leastAppropriate': function (value) {
+      if (value === this.value.mostAppropriate) {
+        this.value.mostAppropriate = null;
       }
       this.$emit('answered', { value, type: 'leastAppropriate' });
     },
-    'localValue.mostAppropriate': function (value) {
-      if (value === this.localValue.leastAppropriate) {
-        this.localValue.leastAppropriate = null;
+    'value.mostAppropriate': function (value) {
+      if (value === this.value.leastAppropriate) {
+        this.value.leastAppropriate = null;
       }
       this.$emit('answered', { value, type: 'mostAppropriate' });
     },

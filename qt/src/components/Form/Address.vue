@@ -63,6 +63,7 @@ export default {
       type: Object,
     },
   },
+  emits: ['input'],
   watch: {
     value() {
       this.$emit('input', this.value);

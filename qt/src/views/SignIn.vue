@@ -1,7 +1,10 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form ref="formRef" autocomplete="off">
+      <form
+        ref="formRef"
+        autocomplete="off"
+      >
         <p class="govuk-body-l">
           To access your test please provide the email address you registered with.
         </p>
@@ -61,6 +64,7 @@ export default {
           // request access
           const response = await functions.httpsCallable('signIn')({ email: this.formData.email, testId: this.qualifyingTestId });
           if (response && response.data && response.data.success) {
+
             // sign in with token
             await auth.signInWithCustomToken(response.data.token);
           } else {

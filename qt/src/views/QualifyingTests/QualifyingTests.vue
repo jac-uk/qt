@@ -27,7 +27,7 @@
               <span v-else>Deadline {{ prettyDate(row.qualifyingTest.endDate) }}</span>
             </TableCell>
             <TableCell>
-              {{ status(row) | lookup }}<br>
+              {{ $filters.lookup(status(row)) }}<br>
               <a
                 v-if="showSurvey(row)"
                 :href="row.qualifyingTest.feedbackSurvey"
@@ -103,7 +103,7 @@ export default {
       throw e;
     }
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('qualifyingTestResponses/unbind');
     this.$store.dispatch('qualifyingTestResponses/unbindDryRuns');
   },

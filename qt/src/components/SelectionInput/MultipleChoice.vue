@@ -37,11 +37,12 @@ export default {
     },
     value: {
       type: Array,
-      default: function () { 
-        return new Array(); 
+      default: function () {
+        return new Array();
       },
     },
   },
+  emits: ['input'],
   computed: {
     selected: {
       get() {

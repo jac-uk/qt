@@ -23,7 +23,7 @@
       <div class="govuk-checkboxes__item">
         <input
           :id="id"
-          v-model="localValue"
+          v-model="value"
           class="govuk-checkboxes__input"
           :class="[inputClass, {'govuk-input--error': hasError}]"
           type="checkbox"
@@ -53,7 +53,7 @@ export default {
       default: '',
       type: String,
     },
-    value: {
+    modelValue: {
       default: '',
       type: [String, Number, Boolean],
     },
@@ -63,13 +63,14 @@ export default {
       default: false,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
-    localValue: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
     labelStyle() {

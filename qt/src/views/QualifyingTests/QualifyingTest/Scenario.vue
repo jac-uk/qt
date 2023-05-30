@@ -74,7 +74,7 @@
                   :class="`govuk-heading-m ${index === 0 ? 'open' : 'close'}`"
                   @click.prevent="clickAdditional(index)"
                 >
-                  {{ document.title | showAlternative(`Additional Reading ${index}`) }}
+                  {{ showAlternative(document.title, `Additional Reading ${index}`) }}
                   <button>
                     <img
                       :src="icon(index)"

@@ -32,7 +32,7 @@
         <button
           v-if="canAddRow"
           type="button"
-          :class="`govuk-button govuk-button--secondary float-left`" 
+          :class="`govuk-button govuk-button--secondary float-left`"
           @click.prevent="addRow"
         >
           Add another
@@ -65,6 +65,7 @@ export default {
       type: String,
     },
   },
+  emits: ['input'],
   data() {
     return {
       rows: [],

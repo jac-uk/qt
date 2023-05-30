@@ -159,6 +159,7 @@ export default {
       default: () => [],
     },
   },
+  emits: ['update:selection', 'change'],
   data() {
     return {
       searchTerm: null,

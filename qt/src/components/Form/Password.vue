@@ -23,7 +23,7 @@
 
     <input
       :id="id"
-      v-model="text"
+      v-model="localValue"
       :class="[inputClass, 'govuk-input', 'govuk-!-width-three-quarters', {'govuk-input--error': hasError}]"
       :type="fieldType"
       :autocomplete="type"
@@ -53,7 +53,7 @@ export default {
       default: '',
       type: String,
     },
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -62,6 +62,7 @@ export default {
       type: String,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       showPassword: false,
@@ -75,12 +76,12 @@ export default {
     };
   },
   computed: {
-    text: {
+    localValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
     fieldType() {
@@ -97,11 +98,11 @@ export default {
     },
   },
   mounted() {
-    this.$root.$on('validate', this.handleValidatePassword);
+    this.emitter.on('validate', this.handleValidatePassword);
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     this.setError('');
-    this.$root.$off('validate', this.handleValidatePassword);
+    this.emitter.off('validate', this.handleValidatePassword);
   },
   methods: {
     toggleVisibility() {
@@ -110,7 +111,7 @@ export default {
     handleValidatePassword(event) {
       // don't bother checking if generic validation failed
       // if (!this.hasError) {
-      let value = this.value;
+      let value = this.localValue;
       if (event && event.target) {
         value = event.target.value;
       }

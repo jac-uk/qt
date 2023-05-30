@@ -29,13 +29,13 @@
     />
     <input
       :id="id"
-      v-model="text"
+      v-model="value"
       class="govuk-input"
       :class="[inputClass, {'govuk-input--error': hasError}]"
       :type="fieldType"
       :max="numMax"
       :autocomplete="autoComplete"
-    />
+    >
   </div>
 </template>
 
@@ -61,7 +61,7 @@ export default {
       default: false,
       type: Boolean,
     },
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -74,13 +74,14 @@ export default {
       type: String,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
-    text: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
     autoComplete() {

@@ -14,16 +14,14 @@
       v-if="hint"
       class="govuk-hint"
       v-html="hint"
-    >
-      <!-- eslint-enable -->
-    </span>
+    ></span>
     <FormFieldError
       :id="id"
       :error-message="errorMessage"
     />
     <textarea
       :id="id"
-      v-model="text"
+      v-model="value"
       class="govuk-textarea"
       name="word-count"
       :rows="rows"
@@ -54,7 +52,7 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -72,7 +70,7 @@ export default {
       type: Boolean,
     },
   },
-
+  emits: ['update:modelValue'],
   computed: {
     wordsTooMany() {
       return this.words.length - this.wordLimit;
@@ -89,15 +87,15 @@ export default {
       }
       if (this.wordsTooMany == 0) {
         result = 'You have no words remaining';
-      } 
+      }
       return result;
     },
-    text: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },

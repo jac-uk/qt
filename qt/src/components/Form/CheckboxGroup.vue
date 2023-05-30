@@ -48,6 +48,7 @@ export default {
       validator: (value) => (value instanceof Array || value === null || value === undefined),
     },
   },
+  emits: ['input'],
   computed: {
     inputValue: {
       get() {

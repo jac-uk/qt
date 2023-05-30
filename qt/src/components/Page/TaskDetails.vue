@@ -29,9 +29,9 @@
         <option
           v-for="option in ['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
           :key="option"
-          :value="option | lookup"
+          :value="$filters.lookup(option)"
         >
-          {{ option | lookup }}
+          {{ $filters.lookup(option) }}
         </option>
       </Select>
 
@@ -68,6 +68,7 @@ export default {
       required: false,
     },
   },
+  emits: ['update:tasks', 'update:otherTasks', 'update:taskDetails'],
   data() {
     return {
       localTaskDetails: { ...this.taskDetails },

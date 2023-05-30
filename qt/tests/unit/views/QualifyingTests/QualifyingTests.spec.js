@@ -2,8 +2,6 @@ import QualifyingTests from '@/views/QualifyingTests/QualifyingTests.vue';
 import { createTestSubject } from '../../helpers';
 
 const dateInTest = new Date('Jan 01 2020 09:45:00 GMT+0000');
-const dateInPast = new Date('Jan 01 2019 09:45:00 GMT+0000');
-const dateInFuture = new Date('Jan 01 2021 09:45:00 GMT+0000');
 
 const started = {
   date: new Date('Jan 01 2020 09:30:00 GMT+0000'),

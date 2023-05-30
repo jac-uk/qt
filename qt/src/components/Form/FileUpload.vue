@@ -80,6 +80,7 @@ export default {
       },
     },
   },
+  emits: ['input'],
   data() {
     return {
       file: '',
@@ -154,7 +155,7 @@ export default {
       if (!file) {
         this.setError('File upload failed, please try again');
         return false;
-      } 
+      }
       if (!this.validFileExtension(file.name)) {
         this.setError(`Invalid file type. Choose from: ${this.acceptableExtensions}`);
         return false;

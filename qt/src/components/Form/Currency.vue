@@ -22,7 +22,7 @@
     <span class="moj-label__currency">£</span>
     <input
       :id="id"
-      v-model="currencyInput"
+      v-model="localValue"
       class="govuk-input moj-input__currency govuk-input--width-10"
       type="number"
       @change="validate"
@@ -40,18 +40,19 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
+    modelValue: {
       default: null,
       type: String,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
-    currencyInput: {
+    localValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },
