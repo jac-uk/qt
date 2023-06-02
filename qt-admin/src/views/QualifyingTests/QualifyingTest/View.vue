@@ -3,11 +3,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h1 class="govuk-heading-l">
-        {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+        {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
         <span
           v-if="qualifyingTest.mode"
           class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-        >{{ qualifyingTest.mode | lookup }}</span>
+        >{{ $filters.lookup(qualifyingTest.mode) }}</span>
       </h1>
 
       <table class="govuk-table">
@@ -17,13 +17,13 @@
               Type
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.type | lookup }}
+              {{ $filters.lookup(qualifyingTest.type) }}
             </td>
             <th class="govuk-table__header">
               State
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.status | lookup }}
+              {{ $filters.lookup(qualifyingTest.status) }}
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -31,13 +31,13 @@
               Start Date
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.startDate | formatDate('longdatetime') }}
+              {{ $filters.formatDate(qualifyingTest.startDate, 'longdatetime') }}
             </td>
             <th class="govuk-table__header">
               End Date
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.endDate | formatDate('longdatetime') }}
+              {{ $filters.formatDate(qualifyingTest.endDate, 'longdatetime') }}
             </td>
           </tr>
           <tr class="govuk-table__row">

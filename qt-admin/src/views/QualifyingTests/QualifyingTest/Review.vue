@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
       <span
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-      >{{ qualifyingTest.mode | lookup }}</span>
+      >{{ $filters.lookup(qualifyingTest.mode) }}</span>
     </h1>
 
     <div class="text-right">
@@ -27,7 +27,7 @@
           Type
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.type | lookup }}
+          {{ $filters.lookup(qualifyingTest.type) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -35,7 +35,7 @@
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.status | lookup }}
+          {{ $filters.lookup(qualifyingTest) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -51,7 +51,7 @@
           Start date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.startDate | formatDate('datetime') }}
+          {{ $filters.formatDate(qualifyingTest.startDate, 'datetime') }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -59,7 +59,7 @@
           End date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.endDate | formatDate('datetime') }}
+          {{ $filters.formatDate(qualifyingTest.endDate, 'datetime') }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -224,7 +224,7 @@
             Invited emails
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.invitedEmails | toCSV }}
+            {{ $filters.toCSV(qualifyingTest.invitedEmails) }}
           </dd>
         </div>
       </dl>

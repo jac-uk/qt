@@ -1,5 +1,8 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import {
+  createWebHistory,
+  createRouter
+} from 'vue-router';
+
 import store from '@/store';
 
 import SignIn from '@/views/SignIn';
@@ -23,9 +26,7 @@ import QualifyingTestResponseView from '@/views/QualifyingTests/QualifyingTest/R
 // Error pages
 import PageNotFound from '@/views/Errors/PageNotFound';
 
-Vue.use(Router);
-
-const router = new Router({
+const routes = [{
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -80,7 +81,7 @@ const router = new Router({
           },
         },
         {
-          path: 'qualifying-tests/:qualifyingTestId',
+          path: 'qualifying-tests/:qualifyingTestId/',
           component: QualifyingTest,
           children: [
             {
@@ -138,7 +139,7 @@ const router = new Router({
               },
             },
             {
-              path: 'response/:responseId',
+              path: 'response/:responseId/',
               component: QualifyingTestResponse,
               children: [
                 {
@@ -183,6 +184,11 @@ const router = new Router({
       },
     },
   ],
+}];
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;

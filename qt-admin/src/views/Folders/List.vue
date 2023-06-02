@@ -27,7 +27,7 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.created | formatDate }}
+          {{ $filters.formatDate(row.created) }}
         </TableCell>
         <TableCell class="text-right">
           <button

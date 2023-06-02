@@ -6,7 +6,7 @@
         <routerLink
           :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }"
         >
-          {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+          {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
         </routerLink>
       </h2>
       <h3
@@ -35,7 +35,7 @@
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.status | lookup }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
+            {{ $filters.lookup(response.status) }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
             <button
               v-if="authorisedToPerformAction"
               :disabled="hasActivated"
@@ -61,8 +61,8 @@
             Start date
           </dt>
           <dd class="govuk-summary-list__value">
-            <span v-if="response.statusLog.started">{{ response.statusLog.started | formatDate('datetime') }}</span>
-            <span v-else>{{ qualifyingTest.startDate | formatDate('datetime') }}</span>
+            <span v-if="response.statusLog.started">{{ $filters.formatDate(response.statusLog.started, 'datetime') }}</span>
+            <span v-else>{{ $filters.formatDate(qualifyingTest.startDate, 'datetime') }}</span>
             <div v-if="hasRelatedTests && isEditingTestDate">
               <Select
                 id="moveToTest"
@@ -77,7 +77,7 @@
                   :key="test.id"
                   :value="test.id"
                 >
-                  {{ test.title }} - {{ test.startDate | formatDate('datetime') }}
+                  {{ test.title }} - {{ $filters.formatDate(test.startDate, 'datetime') }}
                 </option>
               </Select>
               <button
@@ -108,7 +108,7 @@
             End date
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.statusLog.completed | formatDate('datetime') }}
+            {{ $filters.formatDate(response.statusLog.completed, 'datetime') }}
           </dd>
         </div>
         <div
@@ -159,7 +159,7 @@
                     :value="response.duration.reasonableAdjustment"
                     field="reasonableAdjustment"
                     :edit-mode="true"
-                    @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
+                    @change-field="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
                   />
                   {{ response.participant.reasonableAdjustmentsDetails }}
                 </td>
@@ -177,7 +177,7 @@
                     field="reasonableAdjustmentsJustification"
                     :edit-mode="true"
                     type="textarea"
-                    @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
+                    @change-field="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
               </tr>
@@ -217,8 +217,8 @@
       </Modal>
       <div v-if="hasStarted">
         <TabsList
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
         />
 
         <div v-if="activeTab === 'questions'">
@@ -419,11 +419,11 @@
                 </tr>
                 <tr>
                   <td>First started question: </td>
-                  <td>{{ responses[index].started | formatDate('datetime') }}</td>
+                  <td>{{ $filters.formatDate(responses[index].started, 'datetime') }}</td>
                 </tr>
                 <tr>
                   <td>Last updated answer: </td>
-                  <td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
+                  <td>{{ $filters.formatDate(lastUpdatedQuestion(index), 'datetime') }}</td>
                 </tr>
                 <tr>
                   <td>Amount of time on question: </td>
@@ -455,7 +455,7 @@
             <table>
               <tr class="log_row">
                 <td class="log_row_time">
-                  {{ log.timestamp | formatDate('datetime') }}
+                  {{ $filters.formatDate(log.timestamp, 'datetime') }}
                 </td>
                 <td class="log_row_date">
                   <span v-if="log.action">{{ log.action }} </span>

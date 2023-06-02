@@ -47,7 +47,7 @@ export default {
   mounted() {
     this.loadPage();
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('qualifyingTest/unbind');
   },
   methods: {

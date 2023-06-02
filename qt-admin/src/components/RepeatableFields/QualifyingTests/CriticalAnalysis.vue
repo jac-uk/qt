@@ -22,6 +22,7 @@ export default {
       default: '',
     },
   },
+  emits: ['input'],
   computed: {
     text: {
       get() {

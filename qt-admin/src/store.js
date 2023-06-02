@@ -1,7 +1,12 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+// import Vue from 'vue';
+// import Vuex from 'vuex';
+// import { vuexfireMutations, firestoreOptions } from 'vuexfire';
+// Vue.use(Vuex);
+// firestoreOptions.wait = true;
+
+import { createStore } from 'vuex';
+
 import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
@@ -17,7 +22,7 @@ import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 import connectionMonitor from '@/store/connectionMonitor';
 
-const store = new Vuex.Store({
+const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
@@ -54,6 +59,9 @@ const store = new Vuex.Store({
     },
     isLive: (state, getters) => {
       return getters.appEnvironment === 'LIVE';
+    },
+    isDevelop: (state, getters) => {
+      return getters.appEnvironment === 'DEVELOP';
     },
   },
 });

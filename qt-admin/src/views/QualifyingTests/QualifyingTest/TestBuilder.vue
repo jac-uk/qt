@@ -4,8 +4,8 @@
       Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
     </h2>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <div class="row">
       <form

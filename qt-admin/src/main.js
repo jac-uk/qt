@@ -1,4 +1,5 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
+
 import App from '@/App';
 import router from '@/router';
 import store from '@/store';
@@ -8,31 +9,13 @@ import * as localFilters from '@/filters';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
+
+import { Vue as VueIntegration } from '@sentry/integrations';
+
 import './styles/main.scss';
 
-if (process.env.NODE_ENV !== 'development') {
-  Sentry.init({
-    dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-    environment: store.getters.appEnvironment.toLowerCase(),
-    release: process.env.PACKAGE_VERSION, // made available in vue.config.js
-    integrations: [new Integrations.Vue({ Vue, attachProps: true })],
-  });
-}
-
-Vue.config.productionTip = false;
-Vue.use( CKEditor );
-
-// Register global filters
-Object.keys(filters)
-  .forEach((filterName) => {
-    Vue.filter(filterName, filters[filterName]);
-  });
-// Register local filters (replace global filters of same name)
-Object.keys(localFilters)
-  .forEach((filterName) => {
-    Vue.filter(filterName, localFilters[filterName]);
-  });
+// Merged filters (localFilters will override filters below in event of naming collisions)
+const allFilters = Object.assign({}, filters, localFilters);
 
 let vueInstance = false;
 auth.onAuthStateChanged(async (user) => {
@@ -48,11 +31,28 @@ auth.onAuthStateChanged(async (user) => {
       }
     }
   } else {
-    vueInstance = new Vue({
-      el: '#app',
-      render: h => h(App),
-      router,
-      store,
-    });
+
+    // Root instance
+    vueInstance = createApp(App)
+      .use(router)
+      .use(store)
+      .use(CKEditor);
+
+    // Bind global filters before mounting
+    vueInstance.config.globalProperties.$filters = allFilters;
+
+    // Root component
+    vueInstance.mount('#app');
+
+    // Initialise Sentry
+    if (process.env.NODE_ENV !== 'development') {
+      Sentry.init({
+        vueInstance,
+        dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
+        environment: store.getters.appEnvironment.toLowerCase(),
+        release: process.env.PACKAGE_VERSION, // made available in vue.config.js
+        integrations: [new VueIntegration({ Vue: vueInstance, attachProps: true })],
+      });
+    }
   }
 });
