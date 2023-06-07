@@ -57,6 +57,21 @@
               </a>
             </td>
           </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">
+              Message
+            </th>
+            <td
+              class="govuk-table__cell"
+              colspan="3"
+            >
+              <EditableMessage
+                getter="qualifyingTest/data"
+                dispatcher="qualifyingTest/save"
+                :message="qualifyingTestMessage"
+              />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -272,11 +287,12 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-
+import EditableMessage from '@/components/Micro/EditableMessage';
 export default {
   components: {
     ActionButton,
     Banner,
+    EditableMessage,
   },
   data() {
     return {
@@ -308,6 +324,9 @@ export default {
     },
     qualifyingTest() {
       return this.$store.state.qualifyingTest.record;
+    },
+    qualifyingTestMessage() {
+      return ('message' in this.qualifyingTest) ? this.qualifyingTest.message : '';
     },
     testURL() {
       let url = '';

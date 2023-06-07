@@ -5,6 +5,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 import { authorisedToPerformAction } from '@/helpers/authUsers';
+import clone from 'clone';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -152,5 +153,14 @@ export default {
   state: {
     records: [],
     record: null,
+  },
+  getters: {
+    id: (state) => {
+      if (state.record === null) return null;
+      return state.record.id;
+    },
+    data: (state) => () => {
+      return clone(state.record);
+    },
   },
 };
