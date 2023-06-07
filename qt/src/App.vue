@@ -21,14 +21,17 @@
             >
           </div>
           <div class="govuk-grid-column-one-third text-right">
-            <button
-              v-if="isSignedIn"
-              class="govuk-button govuk-!-margin-top-4"
-              data-module="govuk-button"
-              @click="signOut"
-            >
-              Sign Out
-            </button>
+            <div class="govuk-!-margin-top-4">
+              <div v-if="userEmail" class="govuk-!-display-inline-block govuk-!-margin-top-2 govuk-!-margin-right-4">{{ userEmail }}</div>
+              <button
+                v-if="isSignedIn"
+                class="govuk-button"
+                data-module="govuk-button"
+                @click="signOut"
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -57,7 +60,6 @@
 // import Footer from '@/components/Page/Footer';
 import LoadingMessage from '@/components/LoadingMessage';
 import { auth } from '@/firebase';
-
 export default {
   name: 'App',
   components: {
@@ -77,6 +79,9 @@ export default {
     },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
+    },
+    userEmail() {
+      return this.$store.getters['auth/getEmail'];
     },
   },
   async mounted() {
