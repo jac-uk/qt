@@ -22,7 +22,12 @@
           </div>
           <div class="govuk-grid-column-one-third text-right">
             <div class="govuk-!-margin-top-4">
-              <div v-if="userEmail" class="govuk-!-display-inline-block govuk-!-margin-top-2 govuk-!-margin-right-4">{{ userEmail }}</div>
+              <div
+                v-if="userEmail"
+                class="govuk-!-display-inline-block govuk-!-margin-top-2 govuk-!-margin-right-4"
+              >
+                {{ userEmail }}
+              </div>
               <button
                 v-if="isSignedIn"
                 class="govuk-button"

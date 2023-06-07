@@ -1,7 +1,10 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form ref="formRef" autocomplete="off">
+      <form
+        ref="formRef"
+        autocomplete="off"
+      >
         <p class="govuk-body-l">
           To access your test please provide the email address you registered with.
         </p>

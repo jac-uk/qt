@@ -35,7 +35,7 @@
       :type="fieldType"
       :max="numMax"
       :autocomplete="autoComplete"
-    />
+    >
   </div>
 </template>
 
