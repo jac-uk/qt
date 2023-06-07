@@ -112,13 +112,6 @@ export default {
       const day = formatDate(qualifyingTest.qualifyingTest.endDate);
       return isToday(qualifyingTest.qualifyingTest.endDate) ? `${time} today` : `${time} on ${day}`;
     },
-    // sameVacancyID(qtr) {
-    //   if (qtr.vacancy && this.$store.state.qualifyingTestResponse.record.vacancy) {
-    //     return qtr.vacancy.id === this.$store.state.qualifyingTestResponse.record.vacancy.id;
-    //   } else {
-    //     return false;
-    //   }
-    // },
     notThisTest(qtr) {
       return qtr.id !== this.$store.state.qualifyingTestResponse.record.id;
     },
