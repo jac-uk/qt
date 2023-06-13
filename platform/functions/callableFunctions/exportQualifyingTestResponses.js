@@ -6,7 +6,10 @@ const { getDocument } = require('../shared/helpers');
 const { logEvent } = require('../actions/logs/logEvent')(firebase, db, auth);
 const { checkFunctionEnabled } = require('../shared/serviceSettings.js')(db);
 
-module.exports = functions.region('europe-west2').https.onCall(async (data, context) => {
+module.exports = functions.runWith({
+  timeoutSeconds: 60,
+  memory: '1GB',
+}).region('europe-west2').https.onCall(async (data, context) => {
   await checkFunctionEnabled();
 
   // authenticate the request

@@ -25,9 +25,11 @@ export default {
     },
     recordId: {
       type: String,
+      default: '',
     },
     message: {
       type: String,
+      default: '',
     },
   },
   methods: {

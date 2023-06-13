@@ -40,9 +40,9 @@ module.exports = (config, firebase) => {
       };
     } else {
       data.participant = {
-        id: null,
-        srcId: inputData.srcId,
-        ref: inputData.ref,
+        id: null, // reserved for user's auth id and is set (via UI) when they start the test
+        srcId: inputData.srcId || '',
+        ref: inputData.ref || '',
         email: inputData.email,
         fullName: inputData.fullName,
         reasonableAdjustments: inputData.adjustments ? true : false,
