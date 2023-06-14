@@ -184,7 +184,10 @@
             </table>
           </dd>
         </div>
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="authorisedToPerformAction"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             Message
           </dt>
