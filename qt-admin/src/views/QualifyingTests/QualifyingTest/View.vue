@@ -57,7 +57,10 @@
               </a>
             </td>
           </tr>
-          <tr class="govuk-table__row">
+          <tr 
+            v-if="authorisedToPerformAction"
+            class="govuk-table__row"
+          >
             <th class="govuk-table__header">
               Message
             </th>
@@ -282,12 +285,13 @@
 </template>
 
 <script>
-import { functions } from '@/firebase';
+import { functions, auth } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import EditableMessage from '@/components/Micro/EditableMessage';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 export default {
   components: {
     ActionButton,
@@ -298,6 +302,7 @@ export default {
     return {
       exerciseStage: '',
       candidateStatus: 'all',
+      authorisedToPerformAction: false,
     };
   },
   computed: {
@@ -436,10 +441,11 @@ export default {
       return returnValue;
     },
   },
-  created() {
+  async created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
       this.$store.dispatch('qualifyingTest/bindQTs', { folderId: this.folderId });
     }
+    this.authorisedToPerformAction = await authorisedToPerformAction(auth.currentUser.email);
   },
   methods: {
     btnEdit() {
