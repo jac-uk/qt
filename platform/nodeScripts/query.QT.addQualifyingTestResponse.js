@@ -7,14 +7,21 @@ const newQualifyingTestResponse = require('../functions/shared/factories/Qualify
 const newQuestionsWithoutSolutions = require('../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
 
 const main = async () => {
-  const qualifyingTestId = 't7cU9RU9FMM7rBZom3M3';
+  const qualifyingTestId = '7MVD83Kvx8gjeiS3RUih';
   const participant = { 
-    fullName: 'Abbey Bevan (TEST)',
-    email: 'abbey.bevan@test.test',
+    fullName: null,
+    email: 'andrew.davidson@citadelchambers.com',
   };
   const qualifyingTest = await getDocument(db.collection('qualifyingTests').doc(qualifyingTestId));
+  if (!qualifyingTest) return false;
+
   const questions = newQuestionsWithoutSolutions(qualifyingTest.testQuestions);
-  const data = newQualifyingTestResponse(qualifyingTest, participant);
+  let data;
+  if (qualifyingTest.mode === 'dry-run') {
+    data = newQualifyingTestResponse(qualifyingTest, participant.email);
+  } else {
+    data = newQualifyingTestResponse(qualifyingTest, participant);
+  }
   data.testQuestions = questions;
   data.qualifyingTest.feedbackSurvey = qualifyingTest.feedbackSurvey;
   data.status = config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED;
@@ -26,6 +33,14 @@ const main = async () => {
     command: 'set',
     ref: db.collection('qualifyingTestResponses').doc(),
     data: data,    
+  });
+  commands.push({
+    command: 'update',
+    ref: qualifyingTest.ref,
+    data: {
+      'counts.initialised': firebase.firestore.FieldValue.increment(1),
+      'counts.activated': firebase.firestore.FieldValue.increment(1),
+    },
   });
   console.log('commands', commands);
   await applyUpdates(db, commands);
