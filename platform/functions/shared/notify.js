@@ -23,8 +23,7 @@ module.exports = (config) => {
         email,
         { personalisation }
       )
-      .then(() => {
-        // console.info(notifyResponse.body);
+      .then((notifyResponse) => {
         return true;
       })
       .catch(err => {
