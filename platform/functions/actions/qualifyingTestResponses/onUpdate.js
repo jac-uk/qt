@@ -41,9 +41,12 @@ module.exports = (config, firebase, db) => {
         // Send email to candidate confirming their test response has been received
         const participantEmail = dataAfter.participant.email;
         const templateId  = '3717496b-69d7-4eab-b6bd-3b7815e4efc6';
+        const testType = ('type' in qualifyingTest && qualifyingTest.type) ? qualifyingTest.type
+          .replace(/([a-z])([A-Z])/g, '$1 $2')  // insert a space between lower & upper & make lowercase
+          .toLowercase() : '';
         const personalisation = {
           testTitle: dataAfter.qualifyingTest.title,
-          completedAt: dataAfter.statusLog.completed,
+          testType: testType,
         };
         sendEmail(participantEmail, templateId, personalisation);
       }
