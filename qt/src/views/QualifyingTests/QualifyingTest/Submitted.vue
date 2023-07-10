@@ -4,7 +4,7 @@
       <h1 class="govuk-panel__title">
         Test Submitted
       </h1>
-      Your test has been submitted and is now complete.
+      Your test has been submitted and is now complete.<br />You will receive an email confirmation of your test submission shortly.
     </div>
 
     <div class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
