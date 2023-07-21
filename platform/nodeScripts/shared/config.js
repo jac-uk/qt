@@ -34,5 +34,5 @@ module.exports = {
     },
   },
   STORAGE_URL: process.env.PROJECT_ID + '.appspot.com',
-  SLACK_URL: '',
+  SLACK_URL: process.env.SLACK_URL,
 };

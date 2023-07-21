@@ -5,8 +5,8 @@ const { firebase, app, db } = require('./shared/admin.js');
 const { getDocument, applyUpdates } = require('../functions/shared/helpers');
 
 const main = async () => {
-  const srcId = 'jLChoRTqoUh4Mhs75qYt';
-  const destId = 'hl15x4QzCgH0UY7nnkZv';
+  const srcId = 'YBdY7Gz7UVJ3pRwo9S70';
+  const destId = 'ClCqYI2zm4DX277ZXtuT';
   const srcDoc = await getDocument(db.collection('qualifyingTestResponses').doc(srcId));
   const destDoc = await getDocument(db.collection('qualifyingTestResponses').doc(destId));
   const commands = [];
