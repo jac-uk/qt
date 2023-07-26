@@ -250,7 +250,7 @@ export default {
     },
     async performFirestoreCheck() {
       try {
-        const doc = await firestore.doc('.info/connected').get();
+        const doc = await firestore.doc('info/connected').get();
         this.checksComplete.firestore = true;
         if (doc.exists) {
           this.isConnectedToFirestore = true;
