@@ -5,6 +5,7 @@ import store from '@/store';
 import Default from '@/views/Default';
 import SignIn from '@/views/SignIn';
 import SignedOut from '@/views/SignedOut';
+import BrowserTest from '@/views/BrowserTest';
 
 // Online Tests
 import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
@@ -24,6 +25,15 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/browser-test',
+      name: 'browser-test',
+      component: BrowserTest,
+      meta: {
+        requiresAuth: false,
+        title: 'Browser Test',
+      },
+    },
     {
       path: '/',
       name: 'default',
