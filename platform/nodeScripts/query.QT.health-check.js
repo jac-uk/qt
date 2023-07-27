@@ -5,14 +5,18 @@ const { firebase, app, db } = require('./shared/admin.js');
 const { getDocuments } = require('../functions/shared/helpers');
 
 const main = async () => {
-  const qualifyingTestId = 't7cU9RU9FMM7rBZom3M3';
+  const qualifyingTestId = 'vRg0rrKJOsKSdeCI3mop';
   const tests = await getDocuments(
     db.collection('qualifyingTestResponses')
     .where('qualifyingTest.id', '==', qualifyingTestId)
-    .select('testQuestions')
+    .select('testQuestions', 'responses')
   );
   const testsWithoutQuestions = tests.filter(test => (!test.testQuestions.questions || test.testQuestions.questions.length == 0));
-  return testsWithoutQuestions;
+  const testsWithoutResponses = tests.filter(test => (!test.responses));
+  return {
+    testsWithoutResponses: testsWithoutResponses.length,
+    testsWithoutQuestions: testsWithoutQuestions.length,
+  };
 };
 
 main()
