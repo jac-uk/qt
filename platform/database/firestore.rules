@@ -66,5 +66,8 @@ service cloud.firestore {
 
     }
 
+    match /info/connected {
+      allow read: if true;
+    }
   }
 }
