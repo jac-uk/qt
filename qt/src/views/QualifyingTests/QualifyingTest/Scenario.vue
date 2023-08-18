@@ -27,18 +27,11 @@
               v-model="response.text"
               :label="`${questionNumber}. ${question.question}`"
               :hint="$options.filters.showHTMLBreaks(question.hint) || 'Answer below:'"
+              :word-limit="wordLimit"
+              :hard-word-limit="true"
               rows="10"
               required
             />
-            <div class="govuk-body">
-              <span>{{ wordsCounter }}</span>
-              <span>/</span>
-              <span>{{ question.wordLimit }}</span>
-              <span> words</span>
-              <div v-if="reachMaxWords">
-                You have reached the limit of <strong>{{ question.wordLimit }}</strong> words for this answer. Please remove some words.
-              </div>
-            </div>
           </div>
 
           <div class="moj-button-menu">
@@ -208,12 +201,15 @@ export default {
       return words;
     },
     reachMaxWords () {
-      const maxWords = this.question.wordLimit;
+      const maxWords = this.wordLimit;
       const reachedMaxWords = this.wordsCounter > maxWords;
       return reachedMaxWords;
     },
     isEmpty () {
       return (this.response && !this.response.text) || (this.response && this.response.text && this.response.text.trim().length === 0);
+    },
+    wordLimit() {
+      return this.question.wordLimit;
     },
   },
   watch: {
