@@ -27,9 +27,7 @@
       class="govuk-textarea"
       name="word-count"
       :rows="rows"
-      @keydown="handleLimit($event)"
       @keyup="handleLimit($event)"
-      @change="validate"
     />
     <div
       v-if="wordLimit"
@@ -111,8 +109,8 @@ export default {
   },
 
   methods: {
-    handleLimit(e){
-      if (this.wordLimit && [8, 46].indexOf(e.keyCode) === -1) {
+    handleLimit(){
+      if (this.wordLimit) {
         this.handleValidate();
         if (this.hardWordLimit) {
           this.enforceHardWordLimit();
