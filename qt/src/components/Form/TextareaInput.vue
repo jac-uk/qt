@@ -27,9 +27,7 @@
       class="govuk-textarea"
       name="word-count"
       :rows="rows"
-      @keydown="handleLimit($event)"
       @keyup="handleLimit($event)"
-      @change="validate"
     />
     <div
       v-if="wordLimit"
@@ -71,8 +69,16 @@ export default {
       default: false,
       type: Boolean,
     },
+    hardWordLimit: {
+      default: false,
+      type: Boolean,
+    },
   },
-
+  data() {
+    return {
+      previousValidText: '',
+    };
+  },
   computed: {
     wordsTooMany() {
       return this.words.length - this.wordLimit;
@@ -85,11 +91,11 @@ export default {
       } else if (Math.floor(this.wordLimit * 0.20) > Math.abs(this.wordsTooMany)) {
         result = `You have ${Math.abs(this.wordsTooMany)} word${plural} remaining`;
       } else {
-        result = `${this.words.length}/${this.wordLimit}`;
+        result = `${this.words.length}/${this.wordLimit} words`;
       }
       if (this.wordsTooMany == 0) {
         result = 'You have no words remaining';
-      } 
+      }
       return result;
     },
     text: {
@@ -103,9 +109,20 @@ export default {
   },
 
   methods: {
-    handleLimit(e){
-      if (this.wordLimit && [8, 46].indexOf(e.keyCode) === -1) {
+    handleLimit(){
+      if (this.wordLimit) {
         this.handleValidate();
+        if (this.hardWordLimit) {
+          this.enforceHardWordLimit();
+        }
+      }
+    },
+    enforceHardWordLimit() {
+      if (this.words.length > this.wordLimit) {
+        this.text = this.previousValidText;
+      }
+      else {
+        this.previousValidText = this.text;
       }
     },
   },
