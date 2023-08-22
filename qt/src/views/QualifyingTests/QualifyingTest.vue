@@ -147,6 +147,12 @@ export default {
   async created() {
     await this.loadQualifyingTestResponse();
   },
+  mounted() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  },
   destroyed() {
     this.$store.dispatch('qualifyingTestResponse/unbind');
   },
@@ -247,6 +253,13 @@ export default {
         }),
       };
       return objToSave;
+    },
+    handleBeforeUnload(event) {
+      if (!this.exitTest) {
+        // Show default browser msg warning user they're closing the tab/window
+        event.preventDefault();
+        event.returnValue = '';
+      }
     },
   },
 };
