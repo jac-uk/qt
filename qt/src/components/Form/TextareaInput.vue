@@ -27,14 +27,13 @@
       class="govuk-textarea"
       name="word-count"
       :rows="rows"
-      @keyup="handleLimit($event)"
     />
     <div
       v-if="wordLimit"
       class="govuk-hint govuk-character-count__message"
     >
       <span
-        :class="wordsTooMany > 0 ? 'govuk-error-message' : ''"
+        :class="wordsTooMany > -2 ? 'govuk-error-message' : ''"
       >
         {{ wordLimitCount }}
       </span>
@@ -74,11 +73,6 @@ export default {
       type: Boolean,
     },
   },
-  data() {
-    return {
-      previousValidText: '',
-    };
-  },
   computed: {
     wordsTooMany() {
       return this.words.length - this.wordLimit;
@@ -107,11 +101,16 @@ export default {
       },
     },
   },
-
+  watch: {
+    text(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.handleLimit();
+      }
+    },
+  },
   methods: {
     handleLimit(){
       if (this.wordLimit) {
-        this.handleValidate();
         if (this.hardWordLimit) {
           this.enforceHardWordLimit();
         }
@@ -119,11 +118,13 @@ export default {
     },
     enforceHardWordLimit() {
       if (this.words.length > this.wordLimit) {
-        this.text = this.previousValidText;
+        this.text = this.getMaxWordsString();
       }
-      else {
-        this.previousValidText = this.text;
-      }
+    },
+    getMaxWordsString() {
+      const chunks = this.text.split(' ');
+      chunks.length = this.wordLimit;
+      return `${chunks.join(' ')} `;
     },
   },
 };
