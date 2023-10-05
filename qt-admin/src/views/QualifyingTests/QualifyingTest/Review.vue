@@ -35,7 +35,7 @@
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ $filters.lookup(qualifyingTest) }}
+          {{ $filters.lookup(qualifyingTest.status) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
