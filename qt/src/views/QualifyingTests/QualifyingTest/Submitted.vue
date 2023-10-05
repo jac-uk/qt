@@ -4,7 +4,7 @@
       <h1 class="govuk-panel__title">
         Test Submitted
       </h1>
-      Your test has been submitted and is now complete.
+      Your test has been submitted and is now complete.<br>You will receive an email confirmation of your test submission shortly.
     </div>
 
     <div class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
@@ -79,7 +79,7 @@
 </template>
 <script>
 import Banner from '@/components/Page/Banner';
-import { isToday, formatDate } from '@/helpers/date';
+import { isToday, formatDate, isDateInFuture } from '@/helpers/date';
 import { QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 import { auth } from '@/firebase';
 
@@ -95,14 +95,11 @@ export default {
       return this.$store.state.qualifyingTestResponses.records;
     },
     upcomingTest() {
-      return this.qualifyingTestResponses.find((qt) => {
-        if (
-          this.notThisTest(qt) &&
-          // this.sameVacancyID(qt) &&
-          this.isReadyToStart(qt)
-        ) {
-          return true;
-        }
+      return this.qualifyingTestResponses.find((qtr) => {
+        return this.notThisTest(qtr) &&
+          // this.sameVacancyID(qtr) &&
+          this.isReadyToStart(qtr) &&
+          this.notExpired(qtr);
       });
     },
   },
@@ -115,18 +112,14 @@ export default {
       const day = formatDate(qualifyingTest.qualifyingTest.endDate);
       return isToday(qualifyingTest.qualifyingTest.endDate) ? `${time} today` : `${time} on ${day}`;
     },
-    // sameVacancyID(qt) {
-    //   if (qt.vacancy && this.$store.state.qualifyingTestResponse.record.vacancy) {
-    //     return qt.vacancy.id === this.$store.state.qualifyingTestResponse.record.vacancy.id;
-    //   } else {
-    //     return false;
-    //   }
-    // },
-    notThisTest(qt) {
-      return qt.id !== this.$store.state.qualifyingTestResponse.record.id;
+    notThisTest(qtr) {
+      return qtr.id !== this.$store.state.qualifyingTestResponse.record.id;
     },
-    isReadyToStart(qt) {
-      return qt.status === QUALIFYING_TEST_RESPONSE.STATUS.ACTIVATED;
+    isReadyToStart(qtr) {
+      return qtr.status === QUALIFYING_TEST_RESPONSE.STATUS.ACTIVATED;
+    },
+    notExpired(qtr) {
+      return isDateInFuture(qtr.qualifyingTest.endDate);
     },
     signOut() {
       auth.signOut();

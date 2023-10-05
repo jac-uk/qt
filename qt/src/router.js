@@ -8,6 +8,7 @@ import store from '@/store';
 import Default from '@/views/Default';
 import SignIn from '@/views/SignIn';
 import SignedOut from '@/views/SignedOut';
+import BrowserTest from '@/views/BrowserTest';
 
 // Online Tests
 import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
@@ -22,6 +23,15 @@ import QualifyingTestSubmitted from '@/views/QualifyingTests/QualifyingTest/Subm
 import NotFound from '@/views/NotFound.vue';
 
 const routes = [
+  {
+    path: '/browser-test',
+    name: 'browser-test',
+    component: BrowserTest,
+    meta: {
+      requiresAuth: false,
+      title: 'Browser Test',
+    },
+  },
   {
     path: '/',
     name: 'default',

@@ -7,6 +7,7 @@ exports.backupAuthentication = require('./scheduledFunctions/backupAuthenticatio
 // Background
 exports.onDelete = require('./backgroundFunctions/onDelete');
 exports.onQualifyingTestResponseUpdate = require('./backgroundFunctions/onQualifyingTestResponseUpdate');
+exports.onQualifyingTestUpdate = require('./backgroundFunctions/onQualifyingTestUpdate');
 
 // Callable
 exports.api = require('./callableFunctions/api');

@@ -1,6 +1,9 @@
 const { applyUpdates } = require('../../shared/helpers');
 
 module.exports = (config, firebase, db) => {
+
+  const { sendEmail } = require('../../shared/notify')(config);
+
   return onUpdate;
 
   /**
@@ -34,6 +37,18 @@ module.exports = (config, firebase, db) => {
         if (dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = increment;
         }
+
+        // Send email to candidate confirming their test response has been received
+        const participantEmail = dataAfter.participant.email;
+        const templateId  = '3717496b-69d7-4eab-b6bd-3b7815e4efc6';
+        const testType = ('type' in dataAfter && dataAfter.type) ? dataAfter.type
+          .replace(/([a-z])([A-Z])/g, '$1 $2')  // insert a space between lower & upper & make lowercase
+          .toLowercase() : '';
+        const personalisation = {
+          testTitle: dataAfter.qualifyingTest.title,
+          testType: testType,
+        };
+        sendEmail(participantEmail, templateId, personalisation);
       }
       if (Object.keys(data).length > 0) {
         await db.doc(`qualifyingTests/${qualifyingTestId}`).update(data);

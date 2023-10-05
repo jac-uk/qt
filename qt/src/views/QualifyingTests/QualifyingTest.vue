@@ -45,6 +45,14 @@
           </a>
         </template>
       </Countdown>
+      <Banner
+        v-if="message && !isCompleted"
+        status="information"
+      >
+        <template>
+          {{ message }}
+        </template>
+      </Banner>
       <Modal
         ref="timeElapsedModalRef"
         title="Time has expired"
@@ -76,12 +84,13 @@ import firebase from '@/firebase';
 import LoadingMessage from '@/components/LoadingMessage';
 import Modal from '@/components/Page/Modal';
 import Countdown from '@/components/QualifyingTest/Countdown';
-
+import Banner from '@/components/Page/Banner';
 export default {
   components: {
     LoadingMessage,
     Modal,
     Countdown,
+    Banner,
   },
   data() {
     return {
@@ -107,6 +116,15 @@ export default {
     isSupportingPage() {
       return ['online-test-information', 'online-test-submitted'].indexOf(this.$route.name) >= 0;
     },
+    message() {
+      if (this.qualifyingTestResponse && ('message' in this.qualifyingTestResponse)) {
+        return this.qualifyingTestResponse.message;
+      }
+      return '';
+    },
+    isCompleted() {
+      return this.$store.getters['qualifyingTestResponse/isCompleted'];
+    },
   },
   watch: {
     qualifyingTestResponse: async function (newVal) {
@@ -128,6 +146,12 @@ export default {
   },
   async created() {
     await this.loadQualifyingTestResponse();
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
   },
   unmounted() {
     this.$store.dispatch('qualifyingTestResponse/unbind');
@@ -229,6 +253,13 @@ export default {
         }),
       };
       return objToSave;
+    },
+    handleBeforeUnload(event) {
+      if (!this.exitTest) {
+        // Show default browser msg warning user they're closing the tab/window
+        event.preventDefault();
+        event.returnValue = '';
+      }
     },
   },
 };

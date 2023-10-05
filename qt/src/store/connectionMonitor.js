@@ -35,13 +35,32 @@ export default {
       }
       database.ref('.info/connected').off();
     },
+    checkConnectedOnce: async (context) => {
+      await database.ref('.info/connected').once('value', (snapshot) => {
+        if (snapshot.val() === true) {
+          context.commit('setConnectedOnce', true);
+        }
+        else {
+          context.commit('setConnectedOnce', false);
+        }
+      });
+    },
   },
   mutations: {
     setStarted(state, started) {
       state.started = started;
     },
+    setConnectedOnce(state, connectedOnce) {
+      state.connectedOnce = connectedOnce;
+    },
+  },
+  getters: {
+    isConnectedOnce: (state) => {
+      return state.connectedOnce;
+    },
   },
   state: {
     started: false,
+    connectedOnce: false,
   },
 };
