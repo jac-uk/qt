@@ -14,6 +14,9 @@ import { Vue as VueIntegration } from '@sentry/integrations';
 
 import './styles/main.scss';
 
+import mitt from 'mitt';
+const emitter = mitt();
+
 // Merged filters (localFilters will override filters below in event of naming collisions)
 const allFilters = Object.assign({}, filters, localFilters);
 
@@ -40,6 +43,9 @@ auth.onAuthStateChanged(async (user) => {
 
     // Bind global filters before mounting
     vueInstance.config.globalProperties.$filters = allFilters;
+
+    // Bind emitter for global events
+    vueInstance.config.globalProperties.emitter = emitter;
 
     // Root component
     vueInstance.mount('#app');
