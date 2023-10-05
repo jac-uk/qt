@@ -50,7 +50,7 @@
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
-              @click="markAsCompleted"
+              :action="markAsCompleted"
             >
               Mark as completed
             </ActionButton>
@@ -224,7 +224,7 @@
             </span>
             <ActionButton
               class="govuk-button govuk-button--warning"
-              @click="confirmReset"
+              :action="confirmReset"
             >
               Reset Test
             </ActionButton>
@@ -709,18 +709,28 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
-    confirmReset() {
+    async confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
-        this.$store.dispatch('qualifyingTestResponses/resetTest');
-        this.$refs['confirmResetModal'].closeModal();
+        try {
+          await this.$store.dispatch('qualifyingTestResponses/resetTest');
+          this.$refs['confirmResetModal'].closeModal();
+          return true;
+        } catch (_) {
+          return false;
+        }
       }
     },
     resetTest() {
       this.$refs['confirmResetModal'].openModal();
     },
-    markAsCompleted() {
+    async markAsCompleted() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
-        this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
+        try {
+          await this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
+          return true;
+        } catch (_) {
+          return false;
+        }
       }
     },
     actionReasonableAdjustment(obj, duration, id) {
