@@ -8,7 +8,7 @@
   />
 </template>
 <script>
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
 export default {
   name: 'EditableMessage',
   components: {

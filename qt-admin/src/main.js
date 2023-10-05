@@ -8,9 +8,7 @@ import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import * as Sentry from '@sentry/browser';
-
-import { Vue as VueIntegration } from '@sentry/integrations';
+import * as Sentry from '@sentry/vue';
 
 import './styles/main.scss';
 
@@ -51,13 +49,17 @@ auth.onAuthStateChanged(async (user) => {
     vueInstance.mount('#app');
 
     // Initialise Sentry
-    if (process.env.NODE_ENV !== 'development') {
+    if (import.meta.env.NODE_ENV !== 'development') {
       Sentry.init({
-        vueInstance,
+        app: vueInstance,
         dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
         environment: store.getters.appEnvironment.toLowerCase(),
-        release: process.env.PACKAGE_VERSION, // made available in vue.config.js
-        integrations: [new VueIntegration({ Vue: vueInstance, attachProps: true })],
+        release: import.meta.env.PACKAGE_VERSION, // made available in vue.config.js
+        integrations: [
+          new Sentry.BrowserTracing({
+            routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+          }),
+        ],
       });
     }
   }

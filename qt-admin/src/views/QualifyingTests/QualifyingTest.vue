@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 export default {
   components: {
     LoadingMessage,

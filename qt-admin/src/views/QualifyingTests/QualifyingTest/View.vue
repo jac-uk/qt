@@ -286,11 +286,11 @@
 
 <script>
 import { functions, auth } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import EditableMessage from '@/components/Micro/EditableMessage';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 export default {
   components: {
