@@ -4,7 +4,7 @@
     :value="message"
     field="message"
     :edit-mode="true"
-    @changeField="setMessage"
+    @change-field="setMessage"
   />
 </template>
 <script>
