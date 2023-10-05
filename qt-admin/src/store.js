@@ -1,13 +1,4 @@
-// import Vue from 'vue';
-// import Vuex from 'vuex';
-// import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-// Vue.use(Vuex);
-// firestoreOptions.wait = true;
-
 import { createStore } from 'vuex';
-
-import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-firestoreOptions.wait = true;
 
 // Vuex modules
 import auth from '@/store/auth';
@@ -39,9 +30,7 @@ const store = createStore({
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',
   },
-  mutations: {
-    ...vuexfireMutations,
-  },
+  mutations: {},
   actions: {},
   getters: {
     appVersion: (state) => {

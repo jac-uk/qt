@@ -1,6 +1,6 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { QUALIFYING_TEST } from '@/helpers/constants';
@@ -66,6 +66,11 @@ export default {
     },
     delete: async ({ state }) => {
       await collection.doc(state.record.id).delete();
+    },
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
   state: {

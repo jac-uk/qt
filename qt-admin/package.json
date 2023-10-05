@@ -42,7 +42,6 @@
     "vue-router": "^4.1.6",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2",
-    "vuexfire": "^3.2.5",
     "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
