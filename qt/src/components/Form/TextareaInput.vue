@@ -21,7 +21,7 @@
     />
     <textarea
       :id="id"
-      v-model="value"
+      v-model="text"
       class="govuk-textarea"
       name="word-count"
       :rows="rows"
@@ -91,7 +91,7 @@ export default {
       }
       return result;
     },
-    value: {
+    text: {
       get() {
         return this.modelValue;
       },

@@ -16,7 +16,7 @@
       >
         <div class="govuk-grid-column-one-half govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-9">
           <!-- eslint-disable -->
-          <p v-html="$options.filters.showHTMLBreaks(qualifyingTestResponse.testQuestions.introduction)" />
+          <p v-html="$filters.showHTMLBreaks(qualifyingTestResponse.testQuestions.introduction)" />
           <!-- eslint-enable -->
           <div
             class="govuk-character-count"
@@ -26,7 +26,7 @@
               id="scenario-question"
               v-model="response.text"
               :label="`${questionNumber}. ${question.question}`"
-              :hint="$options.filters.showHTMLBreaks(question.hint) || 'Answer below:'"
+              :hint="$filters.showHTMLBreaks(question.hint) || 'Answer below:'"
               :word-limit="wordLimit"
               :hard-word-limit="true"
               rows="10"
@@ -67,7 +67,7 @@
                   :class="`govuk-heading-m ${index === 0 ? 'open' : 'close'}`"
                   @click.prevent="clickAdditional(index)"
                 >
-                  {{ showAlternative(document.title, `Additional Reading ${index}`) }}
+                  {{ $filters.showAlternative(document.title, `Additional Reading ${index}`) }}
                   <button>
                     <img
                       :src="icon(index)"

@@ -55,8 +55,8 @@ export default {
       checkErrors: false,
       regex: {
         // eslint-disable-next-line
-        email: /^\w+([\.\+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$/,
-        tel: /^\+?[\d() -]+/,
+        email: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        tel: /(^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?#(\d{4}|\d{3}))?$)|(^\+?[1-9]\d{1,14}$)/,
       },
     };
   },
@@ -65,7 +65,7 @@ export default {
       return this.errorMessage ? true :  false;
     },
     // words() {
-    //   const value = this.value;
+    //   const value = this.modelValue;
     //   const result = value ? value : '';
     //   return [].concat(...result
     //     //.split(/[^a-z'-]/i) //split into array at every occurance of a character which is NOT: a-z or ' or -
@@ -81,7 +81,7 @@ export default {
     //     })); // flatten array
     // },
     words() {
-      const value = this.value;
+      const value = this.modelValue;
       const result = value ? value : '';
       return [].concat(...result
         .split(/\s+|\n+/) //split into array at every occurance of whitespace
@@ -113,7 +113,7 @@ export default {
     validate(event) {
       this.setError('');
       if (this.checkErrors) {
-        let value = this.value;
+        let value = this.modelValue;
         if (event && event.target) {
           value = event.target.value;
         }
@@ -164,7 +164,7 @@ export default {
           }
         }
 
-        if (this.wordLimit && this.value) {
+        if (this.wordLimit && this.modelValue) {
           if (this.words.length > this.wordLimit) {
             this.setError(`Answer must be ${this.wordLimit} words or fewer`);
           } else {
