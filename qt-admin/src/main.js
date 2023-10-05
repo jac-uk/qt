@@ -22,11 +22,11 @@ auth.onAuthStateChanged(async (user) => {
   await store.dispatch('auth/setCurrentUser', user);
   if (vueInstance) {
     if (store.getters['auth/isSignedIn']) {
-      if (router.currentRoute && router.currentRoute.name === 'sign-in') {
+      if (router.currentRoute && router.currentRoute.value.name === 'sign-in') {
         router.push('/');
       }
     } else {
-      if (router.currentRoute && router.currentRoute.name !== 'sign-in') {
+      if (router.currentRoute && router.currentRoute.value.name !== 'sign-in') {
         router.push({ name: 'sign-in' });
       }
     }
