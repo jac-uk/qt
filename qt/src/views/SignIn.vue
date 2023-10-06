@@ -22,7 +22,7 @@
 
         <ActionButton
           type="button"
-          @click.prevent="login"
+          :action="login"
         >
           Continue
         </ActionButton>

@@ -23,7 +23,7 @@
       <div class="govuk-checkboxes__item">
         <input
           :id="id"
-          v-model="value"
+          v-model="localValue"
           class="govuk-checkboxes__input"
           :class="[inputClass, {'govuk-input--error': hasError}]"
           type="checkbox"
@@ -65,7 +65,7 @@ export default {
   },
   emits: ['update:modelValue'],
   computed: {
-    value: {
+    localValue: {
       get() {
         return this.modelValue;
       },

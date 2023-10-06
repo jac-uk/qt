@@ -6,7 +6,7 @@
   >
     <fieldset
       class="govuk-fieldset"
-      :aria-describedby="hint ? hintId : false"
+      :aria-describedby="hint ? hintId : null"
     >
       <legend
         v-if="label"
@@ -43,19 +43,19 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
+    modelValue: {
       required: true,
       validator: (value) => (value instanceof Array || value === null || value === undefined),
     },
   },
-  emits: ['input'],
+  emits: ['update:modelValue'],
   computed: {
     inputValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
-      set(value) {
-        this.$emit('input', value);
+      set(val) {
+        this.$emit('update:modelValue', val);
       },
     },
     hintId() {
@@ -63,8 +63,9 @@ export default {
     },
   },
   created() {
-    if (!(this.value instanceof Array)) {
-      this.$emit('input', []);
+    if (!(this.inputValue instanceof Array)) {
+      //this.$emit('input', []);
+      this.$emit('update:modelValue', []);
     }
   },
 };

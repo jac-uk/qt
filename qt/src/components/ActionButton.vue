@@ -45,6 +45,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    action: {
+      type: Function,
+      default: () => {},
+    },
   },
   data: () => ({
     isLoading: false,
@@ -65,7 +69,8 @@ export default {
     async handleClick(e) {
       try {
         this.isLoading = true;
-        const result = await this.$attrs.click(e);
+        const result = await this.action(e);
+
         if (result) {
           this.resetDelayed('isSuccess');
         } else {
