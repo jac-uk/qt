@@ -32,11 +32,11 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
+import Form from '@/components/Form/Form.vue';
+import ErrorSummary from '@/components/Form/ErrorSummary.vue';
+import TextField from '@/components/Form/TextField.vue';
 import { functions, auth } from '@/firebase';
-import ActionButton from '@/components/ActionButton';
+import ActionButton from '@/components/ActionButton.vue';
 export default {
   components: {
     ErrorSummary,

@@ -2,7 +2,7 @@
   "root": true,
   "env": {
     "node": true,
-    "es6": true,
+    "es2022": true,
     "jest": true
   },
   "extends": [
@@ -67,10 +67,6 @@
     "vue/multi-word-component-names": "off",
     "vue/no-reserved-component-names": "off",
     "no-empty": "warn"
-  },
-  "parserOptions": {
-    "parser": "@babel/eslint-parser",
-    "ecmaVersion": 2020
   },
   "overrides": [
     {

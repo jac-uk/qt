@@ -81,10 +81,10 @@
 </template>
 <script>
 import firebase from '@/firebase';
-import LoadingMessage from '@/components/LoadingMessage';
-import Modal from '@/components/Page/Modal';
-import Countdown from '@/components/QualifyingTest/Countdown';
-import Banner from '@/components/Page/Banner';
+import LoadingMessage from '@/components/LoadingMessage.vue';
+import Modal from '@/components/Page/Modal.vue';
+import Countdown from '@/components/QualifyingTest/Countdown.vue';
+import Banner from '@/components/Page/Banner.vue';
 export default {
   components: {
     LoadingMessage,

@@ -88,7 +88,7 @@
 
 <script>
 import firebase from '@/firebase';
-import TextareaInput from '@/components/Form/TextareaInput';
+import TextareaInput from '@/components/Form/TextareaInput.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import plusIcon from '@/assets/plus.png';
 import minusIcon from '@/assets/minus.png';

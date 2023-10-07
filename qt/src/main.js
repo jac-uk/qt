@@ -1,12 +1,15 @@
 import { createApp } from 'vue';
 
-import App from '@/App';
+import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import * as filters from '@/filters';
 import { auth } from '@/firebase';
 
 import mitt from 'mitt';
+import VueDOMPurifyHTML from 'vue-dompurify-html';
+
+import './styles/main.scss';
 
 /**
  * Mitt is used to replace the event bus, which is no longer supported in Vue3.
@@ -31,7 +34,8 @@ auth.onAuthStateChanged( async (user) => {
     // Root instance
     vueInstance = createApp(App)
       .use(router)
-      .use(store);
+      .use(store)
+      .use(VueDOMPurifyHTML);
 
     // Bind global filters before mounting
     vueInstance.config.globalProperties.$filters = filters;

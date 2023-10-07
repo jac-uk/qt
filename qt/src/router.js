@@ -5,19 +5,19 @@ import {
 
 import store from '@/store';
 
-import Default from '@/views/Default';
-import SignIn from '@/views/SignIn';
-import SignedOut from '@/views/SignedOut';
-import BrowserTest from '@/views/BrowserTest';
+import Default from '@/views/Default.vue';
+import SignIn from '@/views/SignIn.vue';
+import SignedOut from '@/views/SignedOut.vue';
+import BrowserTest from '@/views/BrowserTest.vue';
 
 // Online Tests
-import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
-import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
-import QualifyingTestInformation from '@/views/QualifyingTests/QualifyingTest/Information';
-import QualifyingTestQuestion from '@/views/QualifyingTests/QualifyingTest/Question';
-import QualifyingTestScenario from '@/views/QualifyingTests/QualifyingTest/Scenario';
-import QualifyingTestReview from '@/views/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestSubmitted from '@/views/QualifyingTests/QualifyingTest/Submitted';
+import QualifyingTests from '@/views/QualifyingTests/QualifyingTests.vue';
+import QualifyingTest from '@/views/QualifyingTests/QualifyingTest.vue';
+import QualifyingTestInformation from '@/views/QualifyingTests/QualifyingTest/Information.vue';
+import QualifyingTestQuestion from '@/views/QualifyingTests/QualifyingTest/Question.vue';
+import QualifyingTestScenario from '@/views/QualifyingTests/QualifyingTest/Scenario.vue';
+import QualifyingTestReview from '@/views/QualifyingTests/QualifyingTest/Review.vue';
+import QualifyingTestSubmitted from '@/views/QualifyingTests/QualifyingTest/Submitted.vue';
 
 // Error pages
 import NotFound from '@/views/NotFound.vue';
@@ -138,7 +138,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

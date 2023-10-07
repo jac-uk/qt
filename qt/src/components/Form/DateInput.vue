@@ -100,8 +100,8 @@
 import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 import { validateYear } from '@/helpers/date';
 import zeroPad from '@/helpers/Form/zeroPad';
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   components: {

@@ -12,7 +12,7 @@ import session from '@/store/session';
 
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: process.env.NODE_ENV !== 'production',
+  strict: import.meta.env.NODE_ENV !== 'production',
   modules: {
     auth,
     qualifyingTestResponse,
@@ -22,8 +22,8 @@ const store = createStore({
     session,
   },
   state: {
-    packageVersion: process.env.PACKAGE_VERSION || '0',
-    env: process.env.NODE_ENV,
+    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
+    env: import.meta.env.NODE_ENV,
   },
   mutations: {
     ...vuexfireMutations,
