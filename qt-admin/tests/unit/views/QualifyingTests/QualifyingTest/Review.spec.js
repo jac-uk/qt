@@ -1,5 +1,6 @@
 import Review from '@/views/QualifyingTests/QualifyingTest/Review.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
+import { describe, it, expect } from 'vitest';
+import { createTestSubject } from '../../../helpers';
 
 const mockCandidate = {
   fullName: 'Mock Name',
@@ -102,7 +103,7 @@ const mockQualifyingTestResponses = {
   ],
 };
 
-xdescribe('@/QualifyingTests/QualifyingTest/Review', () => {
+describe('@/QualifyingTests/QualifyingTest/Review', () => {
 
   describe('component instance', () => {
     let wrapper;

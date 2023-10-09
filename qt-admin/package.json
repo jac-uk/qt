@@ -13,7 +13,7 @@
     "live:build": "vite build --mode live",
     "develop:deploy": "vite build --mode develop; firebase deploy --only hosting:develop-qt-admin-app -P develop",
     "live:deploy": "vite build --mode live; firebase deploy --only hosting:live-qt-admin-app -P live",
-    "test": "vite test:unit",
+    "test": "vitest --mode develop ",
     "test:unit": "vite test:unit",
     "test-ci": "vite test:unit --ci --runInBand --silent --forceExit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
@@ -55,11 +55,13 @@
     "eslint-plugin-vue": "^9.17.0",
     "firebase": "^8.10.1",
     "firebase-mock": "^2.3.2",
+    "jsdom": "^22.1.0",
     "postcss": "^8.4.31",
     "process": "^0.11.10",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": "v16.15.1",
