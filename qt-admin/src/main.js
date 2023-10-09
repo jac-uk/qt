@@ -7,7 +7,6 @@ import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 
-import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/vue';
 
 import './styles/main.scss';
@@ -36,8 +35,7 @@ auth.onAuthStateChanged(async (user) => {
     // Root instance
     vueInstance = createApp(App)
       .use(router)
-      .use(store)
-      .use(CKEditor);
+      .use(store);
 
     // Bind global filters before mounting
     vueInstance.config.globalProperties.$filters = allFilters;
