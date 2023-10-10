@@ -50,7 +50,7 @@
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
-              @click="markAsCompleted"
+              :action="markAsCompleted"
             >
               Mark as completed
             </ActionButton>
@@ -224,7 +224,7 @@
             </span>
             <ActionButton
               class="govuk-button govuk-button--warning"
-              @click="confirmReset"
+              :action="confirmReset"
             >
               Reset Test
             </ActionButton>
@@ -495,14 +495,14 @@
 <script>
 import { auth } from '@/firebase';
 import { QUALIFYING_TEST } from '@/helpers/constants';
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import QuestionDuration from '@/components/Micro/QuestionDuration';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import QuestionDuration from '@/components/Micro/QuestionDuration.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import EditableMessage from '@/components/Micro/EditableMessage';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import EditableMessage from '@/components/Micro/EditableMessage.vue';
 
 export default {
   components: {
@@ -709,18 +709,28 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
-    confirmReset() {
+    async confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
-        this.$store.dispatch('qualifyingTestResponses/resetTest');
-        this.$refs['confirmResetModal'].closeModal();
+        try {
+          await this.$store.dispatch('qualifyingTestResponses/resetTest');
+          this.$refs['confirmResetModal'].closeModal();
+          return true;
+        } catch (_) {
+          return false;
+        }
       }
     },
     resetTest() {
       this.$refs['confirmResetModal'].openModal();
     },
-    markAsCompleted() {
+    async markAsCompleted() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
-        this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
+        try {
+          await this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
+          return true;
+        } catch (_) {
+          return false;
+        }
       }
     },
     actionReasonableAdjustment(obj, duration, id) {

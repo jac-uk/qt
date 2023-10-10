@@ -1,6 +1,7 @@
+import { describe, it, expect } from 'vitest';
 import auth from '@/store/auth';
 
-xdescribe('store/auth', () => {
+describe('store/auth', () => {
   const mutations = auth.mutations;
   const actions = auth.actions;
   const getters = auth.getters;
@@ -30,7 +31,7 @@ xdescribe('store/auth', () => {
 
     beforeEach(() => {
       context = {
-        commit: jest.fn(),
+        commit: vi.fn(),
         getters,
         state,
       };
@@ -49,13 +50,18 @@ xdescribe('store/auth', () => {
         it('runs setCurrentUser mutation with data from the user object', () => {
           const user = {
             uid: 'abc123',
-            email: 'test@test.com',
-            something: 'test',
+            email: 'test@judicialappointments.gov.uk',
+            displayName: 'Test',
+            emailVerified: true,
+            role: 'superadmin'
           };
 
           const expectedState = {
             uid: 'abc123',
-            email: 'test@test.com',
+            email: 'test@judicialappointments.gov.uk',
+            displayName: 'Test',
+            emailVerified: true,
+            role: 'superadmin'
           };
 
           actions.setCurrentUser(context, user);

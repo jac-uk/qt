@@ -172,7 +172,7 @@
             type="primary"
             :disabled="!isDryRunCandidates"
             class="govuk-!-margin-right-3"
-            @click="btnInitialise"
+            :action="btnInitialise"
           >
             Create dry run tests
           </ActionButton>
@@ -188,7 +188,7 @@
           <ActionButton
             type="primary"
             class="govuk-!-margin-right-3"
-            @click="btnInitialise"
+            :action="btnInitialise"
           >
             Create mop up tests
           </ActionButton>
@@ -199,7 +199,7 @@
               type="primary"
               :disabled="!hasParticipants"
               class="govuk-!-margin-right-3"
-              @click="btnInitialise"
+              :action="btnInitialise"
             >
               Create {{ qualifyingTest.participants.length }} tests
             </ActionButton>
@@ -224,7 +224,7 @@
         :disabled="!isUserAdded || !canOpenTests"
         type="primary"
         class="govuk-!-margin-right-3"
-        @click="btnActivate"
+        :action="btnActivate"
       >
         Open tests
       </ActionButton>
@@ -266,7 +266,7 @@
         type="secondary"
         :disabled="true"
         class="govuk-!-margin-right-3"
-        @click="btnSendInvites"
+        :action="btnSendInvites"
       >
         Send invites
       </ActionButton>
@@ -276,7 +276,7 @@
         type="primary"
         :disabled="isEndDatePassed"
         class="govuk-!-margin-right-3"
-        @click="btnGetScores"
+        :action="btnGetScores"
       >
         Close & Score
       </ActionButton>
@@ -286,11 +286,11 @@
 
 <script>
 import { functions, auth } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import EditableMessage from '@/components/Micro/EditableMessage';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 export default {
   components: {

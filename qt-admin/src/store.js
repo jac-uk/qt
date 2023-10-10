@@ -1,13 +1,4 @@
-// import Vue from 'vue';
-// import Vuex from 'vuex';
-// import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-// Vue.use(Vuex);
-// firestoreOptions.wait = true;
-
 import { createStore } from 'vuex';
-
-import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-firestoreOptions.wait = true;
 
 // Vuex modules
 import auth from '@/store/auth';
@@ -24,7 +15,7 @@ import connectionMonitor from '@/store/connectionMonitor';
 
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: process.env.NODE_ENV !== 'production',
+  strict: import.meta.env.NODE_ENV !== 'production',
   modules: {
     auth,
     services,
@@ -37,18 +28,16 @@ const store = createStore({
     connectionMonitor,
   },
   state: {
-    packageVersion: process.env.PACKAGE_VERSION || '0',
+    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
-  mutations: {
-    ...vuexfireMutations,
-  },
+  mutations: {},
   actions: {},
   getters: {
     appVersion: (state) => {
       return state.packageVersion;
     },
     appEnvironment: () => {
-      const projectId = process.env.VUE_APP_FIREBASE_PROJECT_ID;
+      const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';
       }
