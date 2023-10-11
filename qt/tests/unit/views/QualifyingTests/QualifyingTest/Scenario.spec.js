@@ -1,16 +1,20 @@
 import Scenario from '@/views/QualifyingTests/QualifyingTest/Scenario.vue';
-import { createTestSubject } from '../../../helpers';
+import { mount } from '@vue/test-utils';
 
-xdescribe('views/QualifyingTests/QualifyingTest/Scenario', () => {
+describe.skip('views/QualifyingTests/QualifyingTest/Scenario', () => {
   let wrapper;
   beforeEach(()=>{
-    wrapper = createTestSubject(Scenario, {
-      mocks: {},
-      stubs: ['RouterView'],
+    wrapper = mount(Scenario, {
+      shallow: true,
+      global: {
+        stubs: ['RouterView'],
+      },
     });
+
   });
   it('renders the component', () => {
-    expect(wrapper.exists()).toBe(true);
+    //expect(wrapper.exists()).toBe(true);
+    expect(wrapper.hasClass('jac-scenario')).toBe(true);
   });
 });
 

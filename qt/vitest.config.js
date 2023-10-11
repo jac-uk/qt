@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import Vue from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue';
 
 const path = require('path');
 
@@ -9,7 +9,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  plugins: [Vue()],
+  plugins: [vue()],
   test: {
     globals: true,
     environment: 'jsdom',
