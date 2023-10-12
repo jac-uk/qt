@@ -2,9 +2,7 @@
   <div
     class="govuk-grid-row"
   >
-    <div
-      class="govuk-grid-column-two-thirds"
-    >
+    <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">
         {{ qualifyingTestResponse.qualifyingTest.title }}
       </h1>
