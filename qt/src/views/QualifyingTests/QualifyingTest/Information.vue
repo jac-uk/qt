@@ -40,15 +40,13 @@
             v-for="(scenario, index) in qualifyingTestResponse.testQuestions.questions"
             :key="index"
           >
-            <li
+            <div
             v-for="(question, i) in qualifyingTestResponse.testQuestions.questions[index].options"
             :key="i"
             >
-              {{ `Scenario ${index+1}, Question ${i+1}: ${question.wordLimit}-word limit` }}
-            </li>
+              {{ `Scenario ${index+1}, Question ${i+1}: ${('marks' in question ? question.marks + " marks" : '')} ${question.wordLimit}-word limit` }}
+            </div>
           </div>
-
-          <br>
           <li>
             You have <b>{{ qualifyingTestResponse.duration.testDurationAdjusted }} minutes</b> to complete this test.
             <span v-if="extraTime"> This includes <b>{{ extraTimeAmount }} minutes</b> of reasonable adjustment time.</span>
@@ -283,11 +281,10 @@ export default {
           result += ` Scenario ${index + 1} with ${question.options.length} question${question.options.length > 1 ? 's' : ''}`;
           if (!(index + 1 === questions.length)){
             result += ', ';
-          } else {
-            result += '.';
           }
         });
       }
+      result += '.';
       return result;
     },
     additionalInstructions() {

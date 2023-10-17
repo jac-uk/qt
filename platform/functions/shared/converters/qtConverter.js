@@ -31,6 +31,7 @@ module.exports = () => {
         const answer = _.get(qtr, `responses.${sidx}.responsesForScenario.${qidx}.text`, '');
         addField(qData, `Question ${qidx + 1}`, q.question);
         addField(qData, 'Words/Word Limit', answer.split(' ').length + '/' + _.get(q, 'wordLimit', ' N/A'));
+        addField(qData, 'Marks', answer.split(' ').length + '/' + _.get(q, 'marks', ' N/A'));
         addField(qData, 'Answer:', '');
 
         html.addTable(qData);
