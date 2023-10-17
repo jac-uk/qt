@@ -35,9 +35,7 @@
                 {{ numberOfQuestions }}
               </b>
             </span>
-            <br>
           </li>
-          <br>
           <li>
             You have <b>{{ qualifyingTestResponse.duration.testDurationAdjusted }} minutes</b> to complete this test.
             <span v-if="extraTime"> This includes <b>{{ extraTimeAmount }} minutes</b> of reasonable adjustment time.</span>
