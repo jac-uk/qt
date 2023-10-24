@@ -55,6 +55,9 @@
           <li>
             Your answers will be saved as you progress, but you will be able to edit them at the end before you submit your test, assuming you still have time remaining.
           </li>
+          <li>
+            If you run out of time, we will submit whatever answers you have completed up until that point.
+          </li>
         </ul>
 
         <h2 class="govuk-heading-m">
