@@ -23,7 +23,7 @@
     <input
       :id="id"
       v-model="currencyInput"
-      class="govuk-input moj-input__currency govuk-input--width-10"
+      class="govuk-input moj-input__currency govuk-!-width-one-third"
       type="number"
       @change="validate"
     >
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   components: {
@@ -40,18 +40,19 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
-      default: null,
+    modelValue: {
+      default: '',
       type: String,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
     currencyInput: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },

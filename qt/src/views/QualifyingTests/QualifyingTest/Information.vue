@@ -2,7 +2,9 @@
   <div
     class="govuk-grid-row"
   >
-    <div class="govuk-grid-column-two-thirds">
+    <div
+      class="govuk-grid-column-two-thirds"
+    >
       <h1 class="govuk-heading-l">
         {{ qualifyingTestResponse.qualifyingTest.title }}
       </h1>
@@ -138,7 +140,7 @@
           </fieldset>
         </form>
       </template>
-      <template v-else-if="qualifyingTestResponse">
+      <template v-else-if="qualifyingTestResponse.qualifyingTest.type === 'criticalAnalysis' || 'situationalJudgement'">
         <ErrorSummary :errors="errors" />
 
         <h2 class="govuk-heading-m">
@@ -147,9 +149,14 @@
 
         <ul class="govuk-list govuk-list--bullet">
           <li
-            v-if="numberOfQuestions"
+          v-if="numberOfQuestions"
           >
-            This test contains <b style="white-space: pre;">{{ numberOfQuestions }}</b>.
+            <span>
+              This test contains
+              <b style="white-space: pre;">
+                {{ numberOfQuestions }}
+              </b>
+            </span>
           </li>
           <li>
             You have <b>{{ qualifyingTestResponse.duration.testDurationAdjusted }} minutes</b> to complete this test.
@@ -159,36 +166,37 @@
             You must submit your test by <b>{{ endTime }}</b>.
           </li>
           <li>
-            Make sure you've got a stable internet connection before you start.
-          </li>
-          <li>
-            Once you have started the test, do not open the test on a second device.
-          </li>
-          <li>
-            Your answers will be saved as you go through the test, but you can still edit them at the end before you submit your test.
+            Ensure your internet connection is stable <strong> before you start the test.</strong>
           </li>
           <li>
             If you experience any technical issues please contact the helpdesk.
+          </li>
+          <li>
+            Once you have started the test, <strong> do not open the test on a second device.</strong>
+          </li>
+          <li>
+            Your answers will be saved as you progress, but you will be able to edit them at the end before you submit your test, assuming you still have time remaining.
           </li>
           <li>
             If you run out of time, we will submit whatever answers you have completed up until that point.
           </li>
         </ul>
 
-        <template v-if="hasAdditionalInstructions">
-          <h2 class="govuk-heading-m">
-            Additional instructions
-          </h2>
-
+        <h2 class="govuk-heading-m">
+          Additional instructions
+        </h2>
           <ul class="govuk-list govuk-list--bullet">
-            <li
-              v-for="(instruction, index) in additionalInstructions"
-              :key="index"
+            <template
+              v-if="hasAdditionalInstructions"
             >
-              {{ instruction.text }}
-            </li>
+              <li
+                v-for="(instruction, index) in additionalInstructions"
+                :key="index"
+              >
+                {{ instruction.text }}
+              </li>
+            </template>
           </ul>
-        </template>
 
         <form
           ref="formRef"
@@ -236,11 +244,11 @@
 </template>
 <script>
 import firebase from '@/firebase';
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import Checkbox from '@/components/Form/Checkbox';
-import StartButton from '@/components/Page/StartButton';
-import Banner from '@/components/Page/Banner';
+import Form from '@/components/Form/Form.vue';
+import ErrorSummary from '@/components/Form/ErrorSummary.vue';
+import Checkbox from '@/components/Form/Checkbox.vue';
+import StartButton from '@/components/Page/StartButton.vue';
+import Banner from '@/components/Page/Banner.vue';
 import { isToday, formatDate } from '@/helpers/date';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 

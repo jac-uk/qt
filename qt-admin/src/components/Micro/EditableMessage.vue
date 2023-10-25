@@ -4,11 +4,11 @@
     :value="message"
     field="message"
     :edit-mode="true"
-    @changeField="setMessage"
+    @change-field="setMessage"
   />
 </template>
 <script>
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
 export default {
   name: 'EditableMessage',
   components: {

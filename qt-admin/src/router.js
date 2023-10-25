@@ -1,5 +1,8 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import {
+  createWebHistory,
+  createRouter
+} from 'vue-router';
+
 import store from '@/store';
 
 import SignIn from '@/views/SignIn';
@@ -23,166 +26,164 @@ import QualifyingTestResponseView from '@/views/QualifyingTests/QualifyingTest/R
 // Error pages
 import PageNotFound from '@/views/Errors/PageNotFound';
 
-Vue.use(Router);
-
-const router = new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '*',
-      redirect: '/folders',
+const routes = [
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'folders' },
+  },
+  {
+    path: '/folders',
+    component: Folders,
+    name: 'folders',
+    meta: {
+      requiresAuth: true,
+      title: 'Folders',
     },
-    {
-      path: '/folders',
-      component: Folders,
-      name: 'folders',
-      meta: {
-        requiresAuth: true,
-        title: 'Folders',
+  },
+  {
+    path: '/folder/:folderId/',
+    component: Folder,
+    children: [
+      {
+        path: 'qualifying-tests',
+        component: QualifyingTests,
+        props: {
+          tieBreakers: false,
+        },
+        name: 'qualifying-tests',
+        meta: {
+          requiresAuth: true,
+          title: 'Qualifying Tests',
+        },
       },
-    },
-    {
-      path: '/folder/:folderId',
-      component: Folder,
-      children: [
-        {
-          path: 'qualifying-tests',
-          component: QualifyingTests,
-          props: {
-            tieBreakers: false,
-          },
-          name: 'qualifying-tests',
-          meta: {
-            requiresAuth: true,
-            title: 'Qualifying Tests',
-          },
+      {
+        path: 'qualifying-tests/new',
+        component: QualifyingTestNew,
+        props: {
+          isTieBreaker: false,
         },
-        {
-          path: 'qualifying-tests/new',
-          component: QualifyingTestNew,
-          props: {
-            isTieBreaker: false,
-          },
-          name: 'qualifying-test-new',
-          meta: {
-            requiresAuth: true,
-            title: 'Create Qualifying Test',
-          },
+        name: 'qualifying-test-new',
+        meta: {
+          requiresAuth: true,
+          title: 'Create Qualifying Test',
         },
-        {
-          path: 'qualifying-tests/new-from-clipboard',
-          component: QualifyingTestNewFromClipboard,
-          name: 'qualifying-test-new-from-clipboard',
-          meta: {
-            requiresAuth: true,
-            title: 'Create Qualifying Test from Clipboard',
-          },
+      },
+      {
+        path: 'qualifying-tests/new-from-clipboard',
+        component: QualifyingTestNewFromClipboard,
+        name: 'qualifying-test-new-from-clipboard',
+        meta: {
+          requiresAuth: true,
+          title: 'Create Qualifying Test from Clipboard',
         },
-        {
-          path: 'qualifying-tests/:qualifyingTestId',
-          component: QualifyingTest,
-          children: [
-            {
-              path: '',
-              component: QualifyingTestView,
-              name: 'qualifying-test-view',
-              meta: {
-                requiresAuth: true,
-                title: 'Qualifying Test',
-              },
+      },
+      {
+        path: 'qualifying-tests/:qualifyingTestId/',
+        component: QualifyingTest,
+        children: [
+          {
+            path: '',
+            component: QualifyingTestView,
+            name: 'qualifying-test-view',
+            meta: {
+              requiresAuth: true,
+              title: 'Qualifying Test',
             },
-            {
-              path: 'edit',
-              component: QualifyingTestEdit,
-              name: 'qualifying-test-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Qualifying Test',
-              },
+          },
+          {
+            path: 'edit',
+            component: QualifyingTestEdit,
+            name: 'qualifying-test-edit',
+            meta: {
+              requiresAuth: true,
+              title: 'Edit Qualifying Test',
             },
-            {
-              path: 'build',
-              component: QualifyingTestQuestionBuilder,
-              name: 'qualifying-test-question-builder',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Questions | Qualifying Test',
-              },
+          },
+          {
+            path: 'build',
+            component: QualifyingTestQuestionBuilder,
+            name: 'qualifying-test-question-builder',
+            meta: {
+              requiresAuth: true,
+              title: 'Edit Questions | Qualifying Test',
             },
-            {
-              path: 'dry-run',
-              component: QualifyingTestDryRun,
-              name: 'qualifying-test-dry-run',
-              meta: {
-                requiresAuth: true,
-                title: 'Dry Run | Qualifying Test',
-              },
+          },
+          {
+            path: 'dry-run',
+            component: QualifyingTestDryRun,
+            name: 'qualifying-test-dry-run',
+            meta: {
+              requiresAuth: true,
+              title: 'Dry Run | Qualifying Test',
             },
-            {
-              path: 'review',
-              component: QualifyingTestReview,
-              name: 'qualifying-test-review',
-              meta: {
-                requiresAuth: true,
-                title: 'Review | Qualifying Test',
-              },
+          },
+          {
+            path: 'review',
+            component: QualifyingTestReview,
+            name: 'qualifying-test-review',
+            meta: {
+              requiresAuth: true,
+              title: 'Review | Qualifying Test',
             },
-            {
-              path: 'responses/:status',
-              component: QualifyingTestResponses,
-              name: 'qualifying-test-responses',
-              meta: {
-                requiresAuth: true,
-                title: 'Responses | Qualifying Test',
-              },
+          },
+          {
+            path: 'responses/:status',
+            component: QualifyingTestResponses,
+            name: 'qualifying-test-responses',
+            meta: {
+              requiresAuth: true,
+              title: 'Responses | Qualifying Test',
             },
-            {
-              path: 'response/:responseId',
-              component: QualifyingTestResponse,
-              children: [
-                {
-                  path: '',
-                  component: QualifyingTestResponseView,
-                  name: 'qualifying-test-response-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Response | Qualifying Test',
-                  },
+          },
+          {
+            path: 'response/:responseId/',
+            component: QualifyingTestResponse,
+            children: [
+              {
+                path: '',
+                component: QualifyingTestResponseView,
+                name: 'qualifying-test-response-view',
+                meta: {
+                  requiresAuth: true,
+                  title: 'Response | Qualifying Test',
                 },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: '/errors/page-not-found',
-      name: 'page-not-found',
-      component: PageNotFound,
-      meta: {
-        requiresAuth: true,
-        title: 'Page Not Found',
+              },
+            ],
+          },
+        ],
       },
+    ],
+  },
+  {
+    path: '/errors/page-not-found',
+    name: 'page-not-found',
+    component: PageNotFound,
+    meta: {
+      requiresAuth: true,
+      title: 'Page Not Found',
     },
-    {
-      path: '/sign-in',
-      name: 'sign-in',
-      component: SignIn,
-      meta: {
-        requiresAuth: false,
-        title: 'Sign In',
-      },
+  },
+  {
+    path: '/sign-in',
+    name: 'sign-in',
+    component: SignIn,
+    meta: {
+      requiresAuth: false,
+      title: 'Sign In',
+    },
+    beforeEnter: (to, from, next) => {
+      const isSignedIn = store.getters['auth/isSignedIn'];
+      if (isSignedIn) {
+        return next({ name: 'folders' });
+      }
+      return next();
+    },
+  },
+];
 
-      beforeEnter: (to, from, next) => {
-        const isSignedIn = store.getters['auth/isSignedIn'];
-        if (isSignedIn) {
-          return next({ name: 'folders' });
-        }
-        return next();
-      },
-    },
-  ],
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;

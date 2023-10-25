@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import auth from '@/store/auth';
 
 describe('store/auth', () => {
@@ -15,8 +16,15 @@ describe('store/auth', () => {
   describe('mutations', () => {
 
     describe('setCurrentUser', () => {
+
       it('sets currentUser in the state', () => {
-        const data = { uid: '12345', email: 'test@test.com' };
+        //const data = { uid: '12345', email: 'test@test.com' };
+        const data = {
+          email: 'test@judicialappointments.gov.uk',
+          displayName: 'Test',
+          emailVerified: true,
+          role: 'superadmin',
+        };
         mutations.setCurrentUser(state, data);
         expect(state.currentUser).toBe(data);
       });
@@ -30,7 +38,8 @@ describe('store/auth', () => {
 
     beforeEach(() => {
       context = {
-        commit: jest.fn(),
+        //commit: jest.fn(),
+        commit: vi.fn(),
         getters,
         state,
       };

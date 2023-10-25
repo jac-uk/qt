@@ -1,3 +1,4 @@
+//import { describe, it, expect, vi } from 'vitest';
 import * as filters from '@/filters';
 
 describe('global filters', () => {
@@ -5,7 +6,8 @@ describe('global filters', () => {
   describe('capitalize', () => {
     it('empty if no value supplied', () => {
       const result = filters.capitalize();
-      expect(result).toBeEmpty();
+      //expect(result).toBeEmpty();
+      expect(result).toEqual('');
     });
     it('first letter capitalized', () => {
       const myString = 'the first letter should be capitalized';
@@ -20,7 +22,8 @@ describe('global filters', () => {
 
       it('convert numbers to string', () => {
         const result = filters.capitalize(myNumber);
-        expect(result).toBeString();
+        //expect(result).toBeString();
+        expect(result).toBeTypeOf('string');
       });
       it('Do not capitalize the first number character', () => {
         const result = filters.capitalize(myNumber);
@@ -34,7 +37,8 @@ describe('global filters', () => {
 
       it('convert Arrays to string', () => {
         const result = filters.capitalize(myArray);
-        expect(result).toBeString();
+        //expect(result).toBeString();
+        expect(result).toBeTypeOf('string');
       });
       it('capitalize the first letter of Array', () => {
         const result = filters.capitalize(myArray);
@@ -47,7 +51,8 @@ describe('global filters', () => {
 
       it('convert Objects to string', () => {
         const result = filters.capitalize(myObj);
-        expect(result).toBeString();
+        //expect(result).toBeString();
+        expect(result).toBeTypeOf('string');
       });
     });
   });
@@ -55,7 +60,8 @@ describe('global filters', () => {
   describe('hyphenize', () => {
     it('empty if no value supplied', () => {
       const result = filters.hyphenize();
-      expect(result).toBeEmpty();
+      //expect(result).toBeEmpty();
+      expect(result).toEqual('');
     });
 
     it('returns a string if called with a boolean', () => {
@@ -63,7 +69,8 @@ describe('global filters', () => {
       const myValreturn = 'true';
 
       const result = filters.hyphenize(myVal);
-      expect(result).toBeString();
+      //expect(result).toBeString();
+      expect(result).toBeTypeOf('string');
       expect(result).toBe(myValreturn);
     });
 
@@ -82,7 +89,8 @@ describe('global filters', () => {
 
       it('convert numbers to string', () => {
         const result = filters.hyphenize(myNumber);
-        expect(result).toBeString();
+        //expect(result).toBeString();
+        expect(result).toBeTypeOf('string');
       });
       it('Hyphenate the numbers in strings', () => {
         const myNumber = '12 345 6789';
@@ -97,7 +105,8 @@ describe('global filters', () => {
 
       it('to be empty', () => {
         const result = filters.hyphenize(myArray);
-        expect(result).toBeEmpty();
+        //expect(result).toBeEmpty();
+        expect(result).toEqual('');
       });
     });
 
@@ -105,7 +114,8 @@ describe('global filters', () => {
       const myObj = { one: 'one', two: 'two', three: 'three' };
       it('to be empty', () => {
         const result = filters.hyphenize(myObj);
-        expect(result).toBeEmpty();
+         //expect(result).toBeEmpty();
+        expect(result).toEqual('');
       });
     });
   });
@@ -119,7 +129,7 @@ describe('global filters', () => {
 
     describe('called with a Date argument', () => {
 
-      xit('returns a full formatted date if a value was supplied', () => {
+      it.skip('returns a full formatted date if a value was supplied', () => {
         const date = new Date();
 
         const result = filters.formatDate(date);

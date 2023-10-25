@@ -2,7 +2,7 @@
   <fieldset class="govuk-fieldset">
     <RadioGroup
       id="criticalAnalysisRadio"
-      v-model="localValue"
+      v-model="value"
       :label="question"
       hint="Choose one option."
     >
@@ -16,8 +16,8 @@
   </fieldset>
 </template>
 <script>
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
+import RadioGroup from '@/components/Form/RadioGroup.vue';
+import RadioItem from '@/components/Form/RadioItem.vue';
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
     RadioItem,
   },
   props: {
-    value: {
+    modelValue: {
       required: true,
       validator: (value) => (value >= 0 || value === null || value === undefined),
     },
@@ -38,13 +38,14 @@ export default {
       required: true,
     },
   },
+  emits: ['update:modelValue', 'answered'],
   computed: {
-    localValue: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
         // this.$emit('answered');
         if (val !== this.value && this.value !== null && this.value !== undefined) {
           this.$emit('answered', { value: val, type: '' });

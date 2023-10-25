@@ -7,7 +7,7 @@
       <ul
         class="govuk-tabs__list"
       >
-        <li 
+        <li
           v-for="tab in tabs"
           :key="tab.title"
           :class="{'govuk-tabs__list-item--selected': isActive(tab) }"
@@ -43,7 +43,7 @@ export default {
       default: '',
     },
   },
-
+  emits: ['update:activeTab'],
   data() {
     return {
       currentTab: this.activeTab,
@@ -59,7 +59,7 @@ export default {
       return this.activeTab === tab.ref;
     },
     hyphenization(value) {
-      return hyphenize(value); 
+      return hyphenize(value);
     },
   },
 };

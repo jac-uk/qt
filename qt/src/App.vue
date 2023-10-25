@@ -61,9 +61,9 @@
 </template>
 
 <script>
-// import Header from '@/components/Page/Header';
-// import Footer from '@/components/Page/Footer';
-import LoadingMessage from '@/components/LoadingMessage';
+// import Header from '@/components/Page/Header.vue';
+// import Footer from '@/components/Page/Footer.vue';
+import LoadingMessage from '@/components/LoadingMessage.vue';
 import { auth } from '@/firebase';
 export default {
   name: 'App',

@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     v-show="modalOpen"
     class="modal-mask"
   >
@@ -58,6 +58,7 @@ export default {
       default: 'Please Confirm',
     },
   },
+  emits: ['closed', 'confirmed'],
   data(){
     return {
       modalOpen: false,
@@ -67,17 +68,17 @@ export default {
     openModal() {
       this.modalOpen = true;
       document.body.style.overflow = 'hidden';
-    },          
+    },
     closeModal() {
       this.modalOpen = false;
       this.$emit('closed');
       document.body.style.overflow = '';
-    },          
+    },
     confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
-    },          
+    },
   },
 };
 </script>
@@ -95,7 +96,7 @@ export default {
     transform: translate(-50%, -50%);
     border: solid 2px #b1b4b6;
     background-color: #ffffff;
-    @include mobile-view { 
+    @include mobile-view {
       width: 100%;
       min-height: 100%;
     }

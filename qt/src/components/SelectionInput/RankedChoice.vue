@@ -20,7 +20,7 @@
       >
         {{ answer.answer }}
       </label>
-      <select 
+      <select
         v-if="selected.indexOf(answer.answer) >= 0"
         v-model="ranking[answer.answer]"
         class="govuk-select"
@@ -33,7 +33,7 @@
         >
           {{ score }}
         </option>
-      </select>      
+      </select>
     </div>
   </div>
 </template>
@@ -52,11 +52,12 @@ export default {
     },
     value: {
       type: Array,
-      default: function () { 
-        return new Array(); 
+      default: function () {
+        return new Array();
       },
     },
   },
+  emits: ['input'],
   data() {
     return {
       selected: [],
@@ -94,7 +95,7 @@ export default {
       });
       this.$emit('input', this.selected);
     },
-  },  
+  },
 };
 
 </script>

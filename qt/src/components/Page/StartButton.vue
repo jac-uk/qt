@@ -30,6 +30,7 @@ export default {
       default: '',
     },
   },
+  emits: ['click'],
   computed: {
     buttonStyle() {
       return `govuk-button govuk-button--start info-btn--start-button--start-now-or-continue ${this.requiredStyle}`;

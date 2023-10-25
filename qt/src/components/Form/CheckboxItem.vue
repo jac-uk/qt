@@ -7,7 +7,7 @@
         class="govuk-checkboxes__input"
         type="checkbox"
         :value="value"
-        :aria-describedby="hint ? hintId : false"
+        :aria-describedby="hint ? hintId : null"
       >
       <label
         class="govuk-label govuk-checkboxes__label"
@@ -39,6 +39,7 @@ export default {
   name: 'CheckboxItem',
   props: {
     label: {
+      default: '',
       required: true,
       type: String,
     },
@@ -63,14 +64,14 @@ export default {
     hintId() {
       return `${this.$parent.id}__${index}__hint`;
     },
-    showConditionalContent() {      
+    showConditionalContent() {
       return this.hasConditionalContent && this.isChecked;
     },
     isChecked() {
       return this.$parent.inputValue.indexOf(this.value) !== -1;
     },
   },
-  beforeCreate() {
+  created() {
     if (this.$parent.$options.name !== 'CheckboxGroup') {
       throw new Error('CheckboxItem component can only be used inside a CheckboxGroup component');
     }

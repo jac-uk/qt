@@ -6,7 +6,7 @@
   >
     <fieldset
       class="govuk-fieldset"
-      :aria-describedby="hint ? hintId : false"
+      :aria-describedby="hint ? hintId : null"
     >
       <legend
         v-if="label"
@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   name: 'CheckboxGroup',
@@ -43,18 +43,19 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
+    modelValue: {
       required: true,
       validator: (value) => (value instanceof Array || value === null || value === undefined),
     },
   },
+  emits: ['update:modelValue'],
   computed: {
     inputValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
-      set(value) {
-        this.$emit('input', value);
+      set(val) {
+        this.$emit('update:modelValue', val);
       },
     },
     hintId() {
@@ -62,8 +63,9 @@ export default {
     },
   },
   created() {
-    if (!(this.value instanceof Array)) {
-      this.$emit('input', []);
+    if (!(this.inputValue instanceof Array)) {
+      //this.$emit('input', []);
+      this.$emit('update:modelValue', []);
     }
   },
 };

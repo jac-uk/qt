@@ -71,11 +71,11 @@
 </template>
 
 <script>
-import RadioGroup from '@/components/Form/RadioGroup';
-import Checkbox from '@/components/Form/Checkbox';
-import RadioItem from '@/components/Form/RadioItem';
-import DateInput from '@/components/Form/DateInput';
-import TextareaInput from '@/components/Form/TextareaInput';
+import RadioGroup from '@/components/Form/RadioGroup.vue';
+import Checkbox from '@/components/Form/Checkbox.vue';
+import RadioItem from '@/components/Form/RadioItem.vue';
+import DateInput from '@/components/Form/DateInput.vue';
+import TextareaInput from '@/components/Form/TextareaInput.vue';
 
 export default {
   name: 'Qualification',

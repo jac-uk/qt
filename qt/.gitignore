@@ -31,3 +31,5 @@ yarn-error.log*
 /coverage
 env.staging.local
 env.production.local
+
+**/.DS_Store

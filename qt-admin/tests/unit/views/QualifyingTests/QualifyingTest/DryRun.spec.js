@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import DryRun from '@/views/QualifyingTests/QualifyingTest/DryRun.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
@@ -64,7 +65,7 @@ describe('DryRun.vue', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.spyOn(wrapper.vm, 'save');
+      const mockSave = vi.spyOn(wrapper.vm, 'save');
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);
       mockSave.mockRestore();

@@ -1,143 +1,145 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import {
+  createWebHistory,
+  createRouter
+} from 'vue-router';
+
 import store from '@/store';
 
-import Default from '@/views/Default';
-import SignIn from '@/views/SignIn';
-import SignedOut from '@/views/SignedOut';
-import BrowserTest from '@/views/BrowserTest';
+import Default from '@/views/Default.vue';
+import SignIn from '@/views/SignIn.vue';
+import SignedOut from '@/views/SignedOut.vue';
+import BrowserTest from '@/views/BrowserTest.vue';
 
 // Online Tests
-import QualifyingTests from '@/views/QualifyingTests/QualifyingTests';
-import QualifyingTest from '@/views/QualifyingTests/QualifyingTest';
-import QualifyingTestInformation from '@/views/QualifyingTests/QualifyingTest/Information';
-import QualifyingTestQuestion from '@/views/QualifyingTests/QualifyingTest/Question';
-import QualifyingTestScenario from '@/views/QualifyingTests/QualifyingTest/Scenario';
-import QualifyingTestReview from '@/views/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestSubmitted from '@/views/QualifyingTests/QualifyingTest/Submitted';
+import QualifyingTests from '@/views/QualifyingTests/QualifyingTests.vue';
+import QualifyingTest from '@/views/QualifyingTests/QualifyingTest.vue';
+import QualifyingTestInformation from '@/views/QualifyingTests/QualifyingTest/Information.vue';
+import QualifyingTestQuestion from '@/views/QualifyingTests/QualifyingTest/Question.vue';
+import QualifyingTestScenario from '@/views/QualifyingTests/QualifyingTest/Scenario.vue';
+import QualifyingTestReview from '@/views/QualifyingTests/QualifyingTest/Review.vue';
+import QualifyingTestSubmitted from '@/views/QualifyingTests/QualifyingTest/Submitted.vue';
 
 // Error pages
 import NotFound from '@/views/NotFound.vue';
 
-Vue.use(Router);
+const routes = [
+  {
+    path: '/browser-test',
+    name: 'browser-test',
+    component: BrowserTest,
+    meta: {
+      requiresAuth: false,
+      title: 'Browser Test',
+    },
+  },
+  {
+    path: '/',
+    name: 'default',
+    component: Default,
+    meta: {
+      requiresAuth: false,
+      title: 'Online Tests',
+    },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound,
+    meta: {
+      requiresAuth: false,
+      title: 'Error',
+    },
+  },
+  {
+    path: '/online-tests',
+    component: QualifyingTests,
+    name: 'online-tests',
+    meta: {
+      requiresAuth: true,
+      title: 'Online Tests | List',
+    },
+  },
+  {
+    path: '/online-tests/:qualifyingTestId/',
+    component: QualifyingTest,
+    children: [
+      {
+        path: '',
+        redirect: 'information',
+      },
+      {
+        path: 'information',
+        component: QualifyingTestInformation,
+        name: 'online-test-information',
+        meta: {
+          requiresAuth: true,
+          title: 'Online Test | Information',
+        },
+      },
+      {
+        path: 'question/:questionNumber',
+        component: QualifyingTestQuestion,
+        name: 'online-test-question',
+        meta: {
+          requiresAuth: true,
+          title: 'Online Test | Question',
+          fullPageMode: true,
+        },
+      },
+      {
+        path: 'scenario/:scenarioNumber/:questionNumber',
+        component: QualifyingTestScenario,
+        name: 'online-test-scenario',
+        meta: {
+          requiresAuth: true,
+          title: 'Online Test | Scenario',
+          fullPageMode: true,
+        },
+      },
+      {
+        path: 'review',
+        component: QualifyingTestReview,
+        name: 'online-test-review',
+        meta: {
+          requiresAuth: true,
+          title: 'Online Test | Review',
+          fullPageMode: true,
+        },
+      },
+      {
+        path: 'submitted',
+        component: QualifyingTestSubmitted,
+        name: 'online-test-submitted',
+        meta: {
+          requiresAuth: true,
+          title: 'Online Test | Submitted',
+        },
+      },
+    ],
+  },
+  {
+    path: '/signed-out',
+    name: 'signed-out',
+    component: SignedOut,
+    meta: {
+      requiresAuth: false,
+      title: 'Signed Out',
+    },
+  },
+  {
+    path: '/:qualifyingTestId',
+    name: 'sign-in',
+    component: SignIn,
+    meta: {
+      requiresAuth: false,
+      title: 'Sign In',
+    },
+  },
+];
 
-const router = new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/browser-test',
-      name: 'browser-test',
-      component: BrowserTest,
-      meta: {
-        requiresAuth: false,
-        title: 'Browser Test',
-      },
-    },
-    {
-      path: '/',
-      name: 'default',
-      component: Default,
-      meta: {
-        requiresAuth: false,
-        title: 'Online Tests',
-      },
-    },
-    {
-      path: '*',
-      component: NotFound,
-      name: 'not-found',
-      meta: {
-        requiresAuth: false,
-        title: 'Error',
-      },
-    },
-    {
-      path: '/online-tests',
-      component: QualifyingTests,
-      name: 'online-tests',
-      meta: {
-        requiresAuth: true,
-        title: 'Online Tests | List',
-      },
-    },
-    {
-      path: '/online-tests/:qualifyingTestId',
-      component: QualifyingTest,
-      children: [
-        {
-          path: '/',
-          redirect: 'information',
-        },
-        {
-          path: 'information',
-          component: QualifyingTestInformation,
-          name: 'online-test-information',
-          meta: {
-            requiresAuth: true,
-            title: 'Online Test | Information',
-          },
-        },
-        {
-          path: 'question/:questionNumber',
-          component: QualifyingTestQuestion,
-          name: 'online-test-question',
-          meta: {
-            requiresAuth: true,
-            title: 'Online Test | Question',
-            fullPageMode: true,
-          },
-        },
-        {
-          path: 'scenario/:scenarioNumber/:questionNumber',
-          component: QualifyingTestScenario,
-          name: 'online-test-scenario',
-          meta: {
-            requiresAuth: true,
-            title: 'Online Test | Scenario',
-            fullPageMode: true,
-          },
-        },
-        {
-          path: 'review',
-          component: QualifyingTestReview,
-          name: 'online-test-review',
-          meta: {
-            requiresAuth: true,
-            title: 'Online Test | Review',
-            fullPageMode: true,
-          },
-        },
-        {
-          path: 'submitted',
-          component: QualifyingTestSubmitted,
-          name: 'online-test-submitted',
-          meta: {
-            requiresAuth: true,
-            title: 'Online Test | Submitted',
-          },
-        },
-      ],
-    },
-    {
-      path: '/signed-out',
-      name: 'signed-out',
-      component: SignedOut,
-      meta: {
-        requiresAuth: false,
-        title: 'Signed Out',
-      },
-    },
-    {
-      path: '/:qualifyingTestId',
-      name: 'sign-in',
-      component: SignIn,
-      meta: {
-        requiresAuth: false,
-        title: 'Sign In',
-      },
-    },
-  ],
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
