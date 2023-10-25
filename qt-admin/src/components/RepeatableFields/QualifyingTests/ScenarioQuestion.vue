@@ -17,6 +17,12 @@
       type="number"
       :label="`${label} ${1 + index} - word limit`"
     />
+    <TextField
+      :id="`scenarioquestion_marks_${id}_${index}`"
+      v-model="row.marks"
+      type="number"
+      :label="`${label} ${1 + index} - marks`"
+    />
     <slot name="removeButton" />
   </div>
 </template>

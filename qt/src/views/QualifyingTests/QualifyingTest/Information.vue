@@ -1,6 +1,6 @@
 <template>
   <div
-  class="govuk-grid-row"
+    class="govuk-grid-row"
   >
     <div
       class="govuk-grid-column-two-thirds"
@@ -18,6 +18,128 @@
         </template>
       </Banner>
 
+      <template v-else-if="qualifyingTestResponse.qualifyingTest.type === 'scenarioTest'">
+        <ErrorSummary :errors="errors" />
+
+        <h2 class="govuk-heading-m">
+          Important information
+        </h2>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li
+            v-if="numberOfQuestions"
+          >
+            <span>
+              This test contains
+              <b style="white-space: pre;">
+                {{ numberOfQuestions }}
+              </b>
+            </span>
+            <br>
+          </li>
+
+          <div
+            v-for="(scenario, index) in qualifyingTestResponse.testQuestions.questions"
+            :key="index"
+          >
+            <div
+            v-for="(question, i) in qualifyingTestResponse.testQuestions.questions[index].options"
+            :key="i"
+            >
+              {{ `Scenario ${index+1}, Question ${i+1}: ${('marks' in question ? question.marks + " marks" : '')} ${question.wordLimit}-word limit` }}
+            </div>
+          </div>
+          <li>
+            You have <b>{{ qualifyingTestResponse.duration.testDurationAdjusted }} minutes</b> to complete this test.
+            <span v-if="extraTime"> This includes <b>{{ extraTimeAmount }} minutes</b> of reasonable adjustment time.</span>
+          </li>
+          <li>
+            You must submit your test by <b>{{ endTime }}</b>.
+          </li>
+          <li>
+            Ensure your internet connection is stable <strong> before you start the test.</strong>
+          </li>
+          <li>
+            If you experience any technical issues please contact the helpdesk.
+          </li>
+          <li>
+            Once you have started the test, <strong> do not open the test on a second device.</strong>
+          </li>
+          <li>
+            Your answers will be saved as you progress, but you will be able to edit them at the end before you submit your test, assuming you still have time remaining.
+          </li>
+          <li>
+            If you run out of time, we will submit whatever answers you have completed up until that point
+          </li>
+        </ul>
+
+        <h2 class="govuk-heading-m">
+          Additional instructions
+          </h2>
+
+          <ul
+            class="govuk-list govuk-list--bullet"
+          >
+          <li>
+            You must answer the questions, giving your full reasoning and referring to the relevant parts of the legislation, rules and other information provided to you both in the pre-reading and the test
+          </li>
+          <li>
+            The scenario test has been designed to test the following competencies: Exercising Judgement, Possessing and Building Knowledge, Assimilating and Clarifying Information, Working and Communicating with Others and Managing Work Efficiently
+          </li>
+
+            <template
+              v-if="hasAdditionalInstructions"
+            >
+              <li
+                v-for="(instruction, index) in additionalInstructions"
+                :key="index"
+              >
+                {{ instruction.text }}
+              </li>
+            </template>
+          </ul>
+
+        <form
+          ref="formRef"
+          @submit.prevent="onSubmit"
+        >
+          <Banner
+            v-if="qtNotActivatedYet"
+            status="information"
+          >
+            <template>
+              This online test is not open yet.
+            </template>
+          </Banner>
+
+          <fieldset
+            v-else
+            class="govuk-fieldset"
+          >
+            <template v-if="!hasStarted">
+              <Checkbox
+                id="confirm-checkbox"
+                ref="confirm-checkbox"
+                v-model="confirmationChecked"
+                name="confirm-checkbox"
+                required
+                :messages="{'required': 'Please confirm you agree'}"
+              >
+                <b>I confirm I will keep this test confidential and not share scenarios or questions at any point during or after the selection exercise.</b>
+              </Checkbox>
+
+              <StartButton
+                :disabled="!confirmationChecked"
+              >
+                Start now
+              </StartButton>
+            </template>
+            <StartButton v-else>
+              Continue
+            </StartButton>
+          </fieldset>
+        </form>
+      </template>
       <template v-else-if="qualifyingTestResponse.qualifyingTest.type === 'criticalAnalysis' || 'situationalJudgement'">
         <ErrorSummary :errors="errors" />
 
@@ -165,16 +287,15 @@ export default {
       if (!(this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO)) {
         result = `${questions.length} question${plural}`;
       } else {
-        result = `${questions.length} Scenario${plural}:\n`;
+        result = `${questions.length} Scenario${plural}:`;
         questions.forEach((question, index) => {
           result += ` Scenario ${index + 1} with ${question.options.length} question${question.options.length > 1 ? 's' : ''}`;
           if (!(index + 1 === questions.length)){
-            result += ',\n';
-          } else {
-            result += '.';
+            result += ', ';
           }
         });
       }
+      result += '.';
       return result;
     },
     additionalInstructions() {
