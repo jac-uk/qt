@@ -15,7 +15,7 @@
       <span
         v-if="status === 'open'"
       >
-        Time left: {{ minutes | zeroPad }}:{{ seconds | zeroPad }}.
+        Time left: {{ zeroPad(minutes) }}:{{ zeroPad(seconds) }}.
       </span>
     </strong>
   </div>
@@ -26,14 +26,6 @@ const second = 1000;
 const minute = 60 * second;
 
 export default {
-  filters: {
-    zeroPad(value) {
-      if (typeof value === 'number') {
-        return value.toString().padStart(2, '0');
-      }
-      return value;
-    },
-  },
   props: {
     countdownLength: {
       type: Number,
@@ -74,6 +66,12 @@ export default {
     }, second);
   },
   methods: {
+    zeroPad(value) {
+      if (typeof value === 'number') {
+        return value.toString().padStart(2, '0');
+      }
+      return value;
+    },
     tick(start, end) {
       const now = new Date().getTime();
 

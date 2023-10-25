@@ -4,11 +4,11 @@
       class="govuk-heading-l govuk-!-margin-bottom-4"
       @click="goToQualifyingTest"
     >
-      {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
       <span
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-      >{{ qualifyingTest.mode | lookup }}</span>
+      >{{ $filters.lookup(qualifyingTest.mode) }}</span>
     </h1>
     <button
       class="govuk-button govuk-!-margin-bottom-0 float-right"
@@ -17,7 +17,7 @@
       Download responses
     </button>
     <h2 class="govuk-heading-m">
-      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
+      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ $filters.lookup(searchStatus) }}
     </h2>
     <Table
       data-key="id"
@@ -29,10 +29,10 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.participant.fullName | showAlternative(row.participant.email) }}
+          {{ $filters.showAlternative(row.participant.fullName, row.participant.email) }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.status | lookup }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
+          {{ $filters.lookup(row.status) }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ formatTimeLimit(row.duration.testDurationAdjusted) }}
@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import * as filters from '@jac-uk/jac-kit/filters/filters';

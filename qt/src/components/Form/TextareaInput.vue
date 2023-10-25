@@ -14,9 +14,7 @@
       v-if="hint"
       class="govuk-hint"
       v-html="hint"
-    >
-      <!-- eslint-enable -->
-    </span>
+    ></span>
     <FormFieldError
       :id="id"
       :error-message="errorMessage"
@@ -42,8 +40,8 @@
 </template>
 
 <script>
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   components: {
@@ -51,7 +49,7 @@ export default {
   },
   extends: FormField,
   props: {
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -73,6 +71,7 @@ export default {
       type: Boolean,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
     wordsTooMany() {
       return this.words.length - this.wordLimit;
@@ -94,10 +93,10 @@ export default {
     },
     text: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },

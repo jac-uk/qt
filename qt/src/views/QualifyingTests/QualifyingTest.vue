@@ -81,10 +81,10 @@
 </template>
 <script>
 import firebase from '@/firebase';
-import LoadingMessage from '@/components/LoadingMessage';
-import Modal from '@/components/Page/Modal';
-import Countdown from '@/components/QualifyingTest/Countdown';
-import Banner from '@/components/Page/Banner';
+import LoadingMessage from '@/components/LoadingMessage.vue';
+import Modal from '@/components/Page/Modal.vue';
+import Countdown from '@/components/QualifyingTest/Countdown.vue';
+import Banner from '@/components/Page/Banner.vue';
 export default {
   components: {
     LoadingMessage,
@@ -150,10 +150,10 @@ export default {
   mounted() {
     window.addEventListener('beforeunload', this.handleBeforeUnload);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('qualifyingTestResponse/unbind');
   },
   methods: {

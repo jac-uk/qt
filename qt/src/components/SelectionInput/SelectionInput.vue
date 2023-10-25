@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-form-group">
-    <fieldset 
+    <fieldset
       class="govuk-fieldset"
       :aria-describedby="`${id}-hint`"
     >
@@ -35,20 +35,20 @@
         :answers="answers"
       />
     </fieldset>
-  </div>  
+  </div>
 </template>
 
 <script>
-import SingleChoice from '@/components/SelectionInput/SingleChoice';
-import MultipleChoice from '@/components/SelectionInput/MultipleChoice';
-import RankedChoice from '@/components/SelectionInput/RankedChoice';
+import SingleChoice from '@/components/SelectionInput/SingleChoice.vue';
+import MultipleChoice from '@/components/SelectionInput/MultipleChoice.vue';
+import RankedChoice from '@/components/SelectionInput/RankedChoice.vue';
 
 export default {
   components: {
     SingleChoice,
     MultipleChoice,
     RankedChoice,
-  },  
+  },
   props: {
     id: {
       type: String,
@@ -72,6 +72,7 @@ export default {
       default: null,
     },
   },
+  emits: ['input'],
   computed: {
     selected: {
       get() {

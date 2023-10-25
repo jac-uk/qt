@@ -22,12 +22,12 @@
           <span
             v-if="hours"
           >
-            {{ hours | zeroPad }}:
+            {{ zeroPad(hours) }}:
           </span>
           <span
             style="margin-right: 5px;"
           >
-            {{ minutes | zeroPad }}:{{ seconds | zeroPad }}
+            {{ zeroPad(minutes) }}:{{ zeroPad(seconds) }}
           </span>
           <svg
             v-if="bckClass"
@@ -57,14 +57,6 @@ const second = 1000;
 const minute = 60 * second;
 
 export default {
-  filters: {
-    zeroPad(value) {
-      if (typeof value === 'number') {
-        return value.toString().padStart(2, '0');
-      }
-      return value;
-    },
-  },
   props: {
     startTime: {
       type: Date,
@@ -92,6 +84,7 @@ export default {
       default: 1,
     },
   },
+  emits: ['change'],
   data: function() {
     return {
       showCountdown: true,
@@ -138,12 +131,18 @@ export default {
     this.end = end.getTime();
     this.startCountdown();
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener('blur', this.onBlur);
     window.removeEventListener('focus', this.onFocus);
     this.endCountdown();
   },
   methods: {
+    zeroPad(value) {
+      if (typeof value === 'number') {
+        return value.toString().padStart(2, '0');
+      }
+      return value;
+    },
     onFocus() {
       this.$emit('change', { action: 'refresh' });
       this.resumeCountdown();

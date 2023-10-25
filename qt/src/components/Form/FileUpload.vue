@@ -48,8 +48,8 @@
 <script>
 import firebase from '@firebase/app';
 import '@firebase/storage';
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   components: {
@@ -62,7 +62,7 @@ export default {
       required: true,
       default: '',
     },
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -80,6 +80,7 @@ export default {
       },
     },
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       file: '',
@@ -90,14 +91,16 @@ export default {
   },
   computed: {
     haveFile() {
-      return this.value ? true : false;
+      return this.modelValue ? true : false;
     },
     fileName: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        if (val) {
+          this.$emit('update:modelValue', val);
+        }
       },
     },
   },
@@ -154,7 +157,7 @@ export default {
       if (!file) {
         this.setError('File upload failed, please try again');
         return false;
-      } 
+      }
       if (!this.validFileExtension(file.name)) {
         this.setError(`Invalid file type. Choose from: ${this.acceptableExtensions}`);
         return false;

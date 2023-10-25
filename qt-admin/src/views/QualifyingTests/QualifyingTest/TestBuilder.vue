@@ -4,8 +4,8 @@
       Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
     </h2>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <div class="row">
       <form
@@ -52,11 +52,11 @@
   </div>
 </template>
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {

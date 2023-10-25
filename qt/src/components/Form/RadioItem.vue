@@ -19,7 +19,7 @@
         type="radio"
         :name="inputName"
         :value="value"
-        :aria-describedby="hint ? hintId : false"
+        :aria-describedby="hint ? hintId : null"
       >
       <label
         class="govuk-label govuk-radios__label"
@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     hyphenization(value) {
-      return hyphenize(value); 
+      return hyphenize(value);
     },
   },
 };

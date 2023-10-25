@@ -29,7 +29,7 @@
               <span v-if="qualifyingTestMessage(row)">Message: {{ qualifyingTestMessage(row) }}</span>
             </TableCell>
             <TableCell>
-              {{ status(row) | lookup }}<br>
+              {{ $filters.lookup(status(row)) }}<br>
               <a
                 v-if="showSurvey(row)"
                 :href="row.qualifyingTest.feedbackSurvey"
@@ -53,9 +53,9 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import LoadingMessage from '@/components/LoadingMessage';
+import Table from '@/components/Page/Table/Table.vue';
+import TableCell from '@/components/Page/Table/TableCell.vue';
+import LoadingMessage from '@/components/LoadingMessage.vue';
 import { isToday, isDateInFuture, formatDate, helperTimeLeft } from '@/helpers/date';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
@@ -102,7 +102,7 @@ export default {
       throw e;
     }
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('qualifyingTestResponses/unbind');
     this.$store.dispatch('qualifyingTestResponses/unbindDryRuns');
   },

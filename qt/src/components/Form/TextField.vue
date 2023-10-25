@@ -29,7 +29,7 @@
     />
     <input
       :id="id"
-      v-model="text"
+      v-model="value"
       class="govuk-input"
       :class="[inputClass, {'govuk-input--error': hasError}]"
       :type="fieldType"
@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import FormField from '@/components/Form/FormField';
-import FormFieldError from '@/components/Form/FormFieldError';
+import FormField from '@/components/Form/FormField.vue';
+import FormFieldError from '@/components/Form/FormFieldError.vue';
 
 export default {
   components: {
@@ -61,7 +61,7 @@ export default {
       default: false,
       type: Boolean,
     },
-    value: {
+    modelValue: {
       default: '',
       type: String,
     },
@@ -74,13 +74,14 @@ export default {
       type: String,
     },
   },
+  emits: ['update:modelValue'],
   computed: {
-    text: {
+    value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
     autoComplete() {

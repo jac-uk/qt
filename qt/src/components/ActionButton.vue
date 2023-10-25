@@ -1,9 +1,10 @@
 <template>
   <button
+    v-bind="$attrs"
     class="govuk-button jac-actionbutton"
     :class="computedClasses"
     :disabled="isLoading || disabled"
-    v-on="listeners"
+    @click="handleClick"
   >
     <span
       v-if="isLoading"
@@ -31,7 +32,6 @@
 </template>
 <script>
 export default {
-  inheritAttrs: false,
   props: {
     timeout: {
       type: Number,
@@ -45,6 +45,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    action: {
+      type: Function,
+      default: () => {},
+    },
   },
   data: () => ({
     isLoading: false,
@@ -52,12 +56,6 @@ export default {
     isSuccess: false,
   }),
   computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-        click: this.handleClick,
-      };
-    },
     computedClasses() {
       return {
         'jac-actionbutton--warning': this.hasError,
@@ -71,7 +69,8 @@ export default {
     async handleClick(e) {
       try {
         this.isLoading = true;
-        const result = await this.$listeners.click(e);
+        const result = await this.action(e);
+
         if (result) {
           this.resetDelayed('isSuccess');
         } else {
