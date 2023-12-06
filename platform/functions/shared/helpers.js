@@ -18,6 +18,7 @@ module.exports = {
   getLatestDate,
   convertStringToSearchParts,
   lookup,
+  replaceCharacters,
 };
 
 async function getDocument(query) {
@@ -267,4 +268,29 @@ function lookup(config, value) {
     returnValue = value;
   }
   return returnValue;
+}
+
+/**
+ * Replace characters in a string according to a map
+ * @param String str 
+ * @param String characterMap 
+ * @returns 
+ */
+function replaceCharacters(inputString, characterMap) {
+  // Convert the inputString to an array of characters
+  const inputArray = inputString.split('');
+
+  // Iterate through each character in the array
+  for (let i = 0; i < inputArray.length; i++) {
+    const char = inputArray[i];
+    
+    // Check if the character exists in the charMap
+    if (Object.prototype.hasOwnProperty.call(characterMap, char)) {
+      // Replace the character with its corresponding value from charMap
+      inputArray[i] = characterMap[char];
+    }
+  }
+
+  // Convert the modified array back to a string and return it
+  return inputArray.join('');
 }
