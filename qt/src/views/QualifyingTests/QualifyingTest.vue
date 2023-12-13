@@ -33,7 +33,21 @@
             </a>
           </span>
         </template>
+
         <template
+          #right-slot
+        >
+          <a
+            v-if="showSkip"
+            id="skip-link"
+            href=""
+            @click.prevent="btnSkip"
+          >
+            ❯ Skip
+          </a>
+        </template>
+        <!--
+          <template
           #right-slot
         >
           <a
@@ -44,6 +58,7 @@
             Exit Test
           </a>
         </template>
+      -->
       </Countdown>
       <Banner
         v-if="message && !isCompleted"
@@ -106,6 +121,9 @@ export default {
   computed: {
     showPrevious() {
       return this.$route.params.questionNumber > 1;
+    },
+    showSkip() {
+      return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
     },
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
@@ -180,6 +198,11 @@ export default {
     },
     btnPrevious() {
       this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
+    },
+    btnSkip() {
+      this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+      const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
+      this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
     },
     redirectToList() {
       this.$router.replace({ name: 'online-tests' });
@@ -272,11 +295,18 @@ export default {
   }
 
   #previous-link::after{
-    content: 'Question';
+    content: 'question';
+  }
+
+  #skip-link::after{
+    content: ' to the next question';
   }
 
   @include mobile-view {
     #previous-link::after{
+      content: '';
+    }
+    #skip-link::after{
       content: '';
     }
   }

@@ -4,8 +4,8 @@
     class="countdown"
     :class="bckClass"
   >
-    <div class="govuk-!-padding-2 govuk-width-container">
-      <div class="text-left">
+    <div class="govuk-!-padding-2 govuk-grid-row govuk-width-container">
+      <div class="text-left govuk-grid-column-one-third">
         <div
           class="header-background clearfix"
           style="display: flex;"
@@ -15,7 +15,7 @@
           />
         </div>
       </div>
-      <div class="text-center">
+      <div class="text-center govuk-grid-column-one-third">
         <span
           id="time-remaining"
         >
@@ -43,7 +43,7 @@
           </svg>
         </span>
       </div>
-      <div class="text-right">
+      <div class="text-right govuk-grid-column-one-third">
         <slot
           name="right-slot"
         />
