@@ -29,7 +29,7 @@
               :class="`govuk-link countdown-link info-btn--qualifying-tests--previous-question-${infoClass()}`"
               @click.prevent="btnPrevious"
             >
-              ❮ Previous
+              ❮
             </a>
           </span>
         </template>
@@ -40,10 +40,11 @@
           <a
             v-if="showSkip"
             id="skip-link"
+            :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
             href=""
             @click.prevent="btnSkip"
           >
-            ❯ Skip
+            ❯
           </a>
         </template>
         <!--
@@ -295,18 +296,18 @@ export default {
   }
 
   #previous-link::after{
-    content: 'question';
+    content: 'Previous question';
   }
 
-  #skip-link::after{
-    content: ' to the next question';
+  #skip-link::before{
+    content: 'Skip to the next question';
   }
 
   @include mobile-view {
     #previous-link::after{
       content: '';
     }
-    #skip-link::after{
+    #skip-link::before{
       content: '';
     }
   }
