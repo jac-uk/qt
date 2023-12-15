@@ -36,7 +36,7 @@
               type="button"
               @click="skip"
             >
-              Skip
+              Skip to next question
             </button>
             <button
               :class="`moj-button-menu__item govuk-button info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
@@ -165,6 +165,9 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    window.scrollTo(0, 0);
   },
   async created() {
     if (this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {

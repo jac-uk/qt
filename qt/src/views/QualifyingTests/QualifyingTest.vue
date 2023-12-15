@@ -29,11 +29,26 @@
               :class="`govuk-link countdown-link info-btn--qualifying-tests--previous-question-${infoClass()}`"
               @click.prevent="btnPrevious"
             >
-              ❮ Previous
+              ❮
             </a>
           </span>
         </template>
+
         <template
+          #right-slot
+        >
+          <a
+            v-if="showSkip"
+            id="skip-link"
+            :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
+            href=""
+            @click.prevent="btnSkip"
+          >
+            ❯
+          </a>
+        </template>
+        <!--
+          <template
           #right-slot
         >
           <a
@@ -44,6 +59,7 @@
             Exit Test
           </a>
         </template>
+      -->
       </Countdown>
       <Banner
         v-if="message && !isCompleted"
@@ -106,6 +122,9 @@ export default {
   computed: {
     showPrevious() {
       return this.$route.params.questionNumber > 1;
+    },
+    showSkip() {
+      return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
     },
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
@@ -180,6 +199,11 @@ export default {
     },
     btnPrevious() {
       this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
+    },
+    btnSkip() {
+      this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+      const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
+      this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
     },
     redirectToList() {
       this.$router.replace({ name: 'online-tests' });
@@ -272,11 +296,18 @@ export default {
   }
 
   #previous-link::after{
-    content: 'Question';
+    content: 'Previous question';
+  }
+
+  #skip-link::before{
+    content: 'Skip to the next question';
   }
 
   @include mobile-view {
     #previous-link::after{
+      content: '';
+    }
+    #skip-link::before{
       content: '';
     }
   }

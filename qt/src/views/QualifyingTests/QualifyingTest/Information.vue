@@ -43,8 +43,8 @@
             :key="index"
           >
             <div
-            v-for="(question, i) in qualifyingTestResponse.testQuestions.questions[index].options"
-            :key="i"
+              v-for="(question, i) in qualifyingTestResponse.testQuestions.questions[index].options"
+              :key="i"
             >
               {{ `Scenario ${index+1}, Question ${i+1}: ${('marks' in question ? question.marks + " marks" : '')} ${question.wordLimit}-word limit` }}
             </div>
@@ -75,11 +75,11 @@
 
         <h2 class="govuk-heading-m">
           Additional instructions
-          </h2>
+        </h2>
 
-          <ul
-            class="govuk-list govuk-list--bullet"
-          >
+        <ul
+          class="govuk-list govuk-list--bullet"
+        >
           <li>
             You must answer the questions, giving your full reasoning and referring to the relevant parts of the legislation, rules and other information provided to you both in the pre-reading and the test
           </li>
@@ -87,17 +87,17 @@
             The scenario test has been designed to test the following competencies: Exercising Judgement, Possessing and Building Knowledge, Assimilating and Clarifying Information, Working and Communicating with Others and Managing Work Efficiently
           </li>
 
-            <template
-              v-if="hasAdditionalInstructions"
+          <template
+            v-if="hasAdditionalInstructions"
+          >
+            <li
+              v-for="(instruction, index) in additionalInstructions"
+              :key="index"
             >
-              <li
-                v-for="(instruction, index) in additionalInstructions"
-                :key="index"
-              >
-                {{ instruction.text }}
-              </li>
-            </template>
-          </ul>
+              {{ instruction.text }}
+            </li>
+          </template>
+        </ul>
 
         <form
           ref="formRef"
@@ -140,6 +140,7 @@
           </fieldset>
         </form>
       </template>
+
       <template v-else-if="qualifyingTestResponse.qualifyingTest.type === 'criticalAnalysis' || 'situationalJudgement'">
         <ErrorSummary :errors="errors" />
 
@@ -149,7 +150,7 @@
 
         <ul class="govuk-list govuk-list--bullet">
           <li
-          v-if="numberOfQuestions"
+            v-if="numberOfQuestions"
           >
             <span>
               This test contains
@@ -180,23 +181,26 @@
           <li>
             If you run out of time, we will submit whatever answers you have completed up until that point.
           </li>
+          <li>
+            If you switch to a different application or a different tab of your browser once you have started the test, the timer will continue to count down in the background.
+          </li>
         </ul>
 
         <h2 class="govuk-heading-m">
           Additional instructions
         </h2>
-          <ul class="govuk-list govuk-list--bullet">
-            <template
-              v-if="hasAdditionalInstructions"
+        <ul class="govuk-list govuk-list--bullet">
+          <template
+            v-if="hasAdditionalInstructions"
+          >
+            <li
+              v-for="(instruction, index) in additionalInstructions"
+              :key="index"
             >
-              <li
-                v-for="(instruction, index) in additionalInstructions"
-                :key="index"
-              >
-                {{ instruction.text }}
-              </li>
-            </template>
-          </ul>
+              {{ instruction.text }}
+            </li>
+          </template>
+        </ul>
 
         <form
           ref="formRef"
