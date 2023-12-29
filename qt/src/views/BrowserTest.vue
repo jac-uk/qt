@@ -138,7 +138,7 @@
               <span class="moj-badge moj-badge--green">CHECK</span>
             </dd>
           </template>
-          <template v-if="hasIP">
+          <template v-else-if="hasIP">
             <dd class="govuk-summary-list__value">
               Your IP address is accessible
             </dd>
