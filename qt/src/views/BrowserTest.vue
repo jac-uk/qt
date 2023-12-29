@@ -1,25 +1,14 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <template v-if="allChecksComplete">
-        <div
-          v-if="passesBrowserTests"
-          class="govuk-panel govuk-panel--confirmation"
-        >
-          <h1 class="govuk-panel__title">
-            Browser Test Passed
-          </h1>
-        </div>
-        <div
-          v-else
-          class="govuk-panel govuk-panel--confirmation"
-          style="background-color: #d4351c;"
-        >
-          <h1 class="govuk-panel__title">
-            Browser Test Failed
-          </h1>
-        </div>
-      </template>
+      <div
+        class="govuk-panel govuk-panel--confirmation"
+        :style="bannerStyle"
+      >
+        <h1 class="govuk-panel__title">
+          {{ bannerText }}
+        </h1>
+      </div>
 
       <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
@@ -221,6 +210,24 @@ export default {
     },
     passesBrowserTests() {
       return this.hasIP && this.isConnectedToRTDB && this.isConnectedToFirestore && this.isModernBrowser;
+    },
+    bannerText() {
+      if (this.allChecksComplete) {
+        if (this.passesBrowserTests) {
+          return 'Browser Test Passed';
+        }
+        return 'Browser Test Failed';
+      }
+      return 'Browser Test';
+    },
+    bannerStyle() {
+      if (this.allChecksComplete) {
+        if (this.passesBrowserTests) {
+          return '';
+        }
+        return 'background-color: #d4351c;';
+      }
+      return 'background-color: #753880;';
     },
   },
   async created() {
