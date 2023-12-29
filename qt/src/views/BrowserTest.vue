@@ -162,7 +162,8 @@
 
 <script>
 import { firestore } from '@/firebase';
-import { getIPAddress } from '@/helpers/browser';
+import { getIPAddress, getBrowserDetect } from '@/helpers/browser';
+
 export default {
   name: 'BrowserTest',
   data () {
@@ -182,26 +183,29 @@ export default {
         && this.checksComplete.ip
         && this.checksComplete.rtdb;
     },
+    browserDetect() {
+      return getBrowserDetect();
+    },
     isChrome() {
-      return this.$browserDetect.isChrome;
+      return this.browserDetect.isChrome;
     },
     isFirefox() {
-      return this.$browserDetect.isFirefox;
+      return this.browserDetect.isFirefox;
     },
     isSafari() {
-      return this.$browserDetect.isSafari;
+      return this.browserDetect.isSafari;
     },
     isEdge() {
-      return this.$browserDetect.isEdge;
+      return this.browserDetect.isEdge;
     },
     browserName() {
-      return this.$browserDetect.meta.name;
+      return this.browserDetect.meta.name;
     },
     browserVersion() {
-      return this.$browserDetect.meta.version;
+      return this.browserDetect.meta.version;
     },
     userAgent() {
-      return this.$browserDetect.meta.ua;
+      return this.browserDetect.meta.ua;
     },
     isModernBrowser() {
       return this.isChrome && this.browserVersion >= 87 ||
