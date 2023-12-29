@@ -47,6 +47,7 @@ module.exports = (config, firebase, db) => {
         const personalisation = {
           testTitle: dataAfter.qualifyingTest.title,
           testType: testType,
+          feedbackSurvey: dataAfter.qualifyingTest.feedbackSurvey,
         };
         sendEmail(participantEmail, templateId, personalisation);
       }
