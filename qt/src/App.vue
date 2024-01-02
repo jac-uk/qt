@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <LoadingMessage
-      v-if="loaded === false"
+      v-if="loaded === false && !isLoadingMessageDisabled"
       :load-failed="loadFailed"
     />
     <template v-else>
@@ -87,6 +87,9 @@ export default {
     },
     userEmail() {
       return this.$store.getters['auth/getEmail'];
+    },
+    isLoadingMessageDisabled() {
+      return window.location.pathname.startsWith('/browser-test');
     },
   },
   async mounted() {
