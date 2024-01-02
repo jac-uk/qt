@@ -1,25 +1,14 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <template v-if="allChecksComplete">
-        <div
-          v-if="passesBrowserTests"
-          class="govuk-panel govuk-panel--confirmation"
-        >
-          <h1 class="govuk-panel__title">
-            Browser Test Passed
-          </h1>
-        </div>
-        <div
-          v-else
-          class="govuk-panel govuk-panel--confirmation"
-          style="background-color: #d4351c;"
-        >
-          <h1 class="govuk-panel__title">
-            Browser Test Failed
-          </h1>
-        </div>
-      </template>
+      <div
+        class="govuk-panel govuk-panel--confirmation"
+        :style="bannerStyle"
+      >
+        <h1 class="govuk-panel__title">
+          {{ bannerText }}
+        </h1>
+      </div>
 
       <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
@@ -138,7 +127,7 @@
               <span class="moj-badge moj-badge--green">CHECK</span>
             </dd>
           </template>
-          <template v-if="hasIP">
+          <template v-else-if="hasIP">
             <dd class="govuk-summary-list__value">
               Your IP address is accessible
             </dd>
@@ -162,7 +151,8 @@
 
 <script>
 import { firestore } from '@/firebase';
-import { getIPAddress } from '@/helpers/browser';
+import { getIPAddress, getBrowserDetect } from '@/helpers/browser';
+
 export default {
   name: 'BrowserTest',
   data () {
@@ -182,26 +172,29 @@ export default {
         && this.checksComplete.ip
         && this.checksComplete.rtdb;
     },
+    browserDetect() {
+      return getBrowserDetect();
+    },
     isChrome() {
-      return this.$browserDetect.isChrome;
+      return this.browserDetect.isChrome;
     },
     isFirefox() {
-      return this.$browserDetect.isFirefox;
+      return this.browserDetect.isFirefox;
     },
     isSafari() {
-      return this.$browserDetect.isSafari;
+      return this.browserDetect.isSafari;
     },
     isEdge() {
-      return this.$browserDetect.isEdge;
+      return this.browserDetect.isEdge;
     },
     browserName() {
-      return this.$browserDetect.meta.name;
+      return this.browserDetect.meta.name;
     },
     browserVersion() {
-      return this.$browserDetect.meta.version;
+      return this.browserDetect.meta.version;
     },
     userAgent() {
-      return this.$browserDetect.meta.ua;
+      return this.browserDetect.meta.ua;
     },
     isModernBrowser() {
       return this.isChrome && this.browserVersion >= 87 ||
@@ -218,16 +211,37 @@ export default {
     passesBrowserTests() {
       return this.hasIP && this.isConnectedToRTDB && this.isConnectedToFirestore && this.isModernBrowser;
     },
+    bannerText() {
+      if (this.allChecksComplete) {
+        if (this.passesBrowserTests) {
+          return 'Browser Test Passed';
+        }
+        return 'Browser Test Failed';
+      }
+      return 'Browser Test';
+    },
+    bannerStyle() {
+      if (this.allChecksComplete) {
+        if (this.passesBrowserTests) {
+          return '';
+        }
+        return 'background-color: #d4351c;';
+      }
+      return 'background-color: #753880;';
+    },
   },
   async created() {
-    // Check RTDB connection
-    this.performRTDBCheck();
+    // add a delay to prevent the page from flashing
+    setTimeout(() => {
+      // Check RTDB connection
+      this.performRTDBCheck();
 
-    // Check IP
-    this.performIPCheck();
+      // Check IP
+      this.performIPCheck();
 
-    // Check Firestore connection
-    this.performFirestoreCheck();
+      // Check Firestore connection
+      this.performFirestoreCheck();
+    }, 2000);
   },
   methods: {
     async performIPCheck() {
