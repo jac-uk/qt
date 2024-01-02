@@ -231,14 +231,17 @@ export default {
     },
   },
   async created() {
-    // Check RTDB connection
-    this.performRTDBCheck();
+    // add a delay to prevent the page from flashing
+    setTimeout(() => {
+      // Check RTDB connection
+      this.performRTDBCheck();
 
-    // Check IP
-    this.performIPCheck();
+      // Check IP
+      this.performIPCheck();
 
-    // Check Firestore connection
-    this.performFirestoreCheck();
+      // Check Firestore connection
+      this.performFirestoreCheck();
+    }, 2000);
   },
   methods: {
     async performIPCheck() {
