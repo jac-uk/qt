@@ -70,7 +70,24 @@ const getBrowserDetect = () => {
   return browserObj;
 };
 
+// Check if web worker is supported
+const isWebWorkerSupported = () => {
+  return typeof Worker !== 'undefined';
+};
+
+// Create a worker script from a function
+// ref: https://medium.com/@adithyaviswam/overcoming-browser-throttling-of-setinterval-executions-45387853a826
+const createWorkerScript = (workerCode) => {
+  let code = workerCode.toString();
+  code = code.substring(code.indexOf('{') + 1, code.lastIndexOf('}'));
+  const blob = new Blob([code], { type: 'application/javascript' });
+  const workerScript = URL.createObjectURL(blob);
+  return workerScript;
+};
+
 export {
   getIPAddress,
   getBrowserDetect,
+  isWebWorkerSupported,
+  createWorkerScript,
 };

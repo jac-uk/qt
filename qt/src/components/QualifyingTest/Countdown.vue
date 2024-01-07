@@ -53,6 +53,9 @@
 </template>
 
 <script>
+import countdownWorkerScript from '@/workers/countdown';
+import { isWebWorkerSupported } from '@/helpers/browser';
+
 const second = 1000;
 const minute = 60 * second;
 
@@ -87,7 +90,7 @@ export default {
   emits: ['change'],
   data: function() {
     return {
-      showCountdown: true,
+      showCountdown: false,
       start: '',
       end: '',
       interval: '',
@@ -99,8 +102,7 @@ export default {
       saveCounter: 0,
       saveSeconds: 5,
       ticksPerSecond: 1,
-      started: false,
-      paused: false,
+      countdownWorker: null,
     };
   },
   watch: {
@@ -111,7 +113,6 @@ export default {
     },
   },
   created() {
-    window.addEventListener('blur', this.onBlur);
     window.addEventListener('focus', this.onFocus);
 
     const start = new Date(this.startTime);
@@ -129,10 +130,14 @@ export default {
 
     this.start = start.getTime();
     this.end = end.getTime();
-    this.startCountdown();
+
+    // use web worker to implement countdown
+    if (isWebWorkerSupported()) {
+      this.prepareWebWorker();
+      this.startCountdown();
+    }
   },
   unmounted() {
-    window.removeEventListener('blur', this.onBlur);
     window.removeEventListener('focus', this.onFocus);
     this.endCountdown();
   },
@@ -147,76 +152,58 @@ export default {
       this.$emit('change', { action: 'refresh' });
       this.resumeCountdown();
     },
-    onBlur() {
-      this.pauseCountdown();
-    },
-    startCountdown() {
-      if (!this.started) {
-        this.started = true;
-        this.updateClock();
-        this.tick();
-      }
-    },
-    endCountdown() {
-      this.started = false;
-      this.showCountdown = false;
-    },
-    pauseCountdown() {
-      this.paused = true;
-    },
-    resumeCountdown() {  // turns the pause off after short delay. Gives refresh action a chance to happen.
-      setTimeout(
-        () => {
-          this.paused = false;
-        },
-        (second / this.ticksPerSecond)
-      );
-    },
-    tick() {
-      if (this.started) {
-        setTimeout(
-          () => {
-            this.updateClock();
-            this.tick();
-          },
-          (second / this.ticksPerSecond)
-        );
-      }
-    },
-    updateClock() {
-      if (this.started) {
-        this.saveCounter++;
-        if (this.saveCounter === this.saveSeconds * this.ticksPerSecond) {
+    prepareWebWorker() {
+      this.countdownWorker = new Worker(countdownWorkerScript);
+      this.countdownWorker.onmessage = (e) => {
+        if (e.data.action === 'autoSave') {
           this.$emit('change', { action: 'autoSave' });
-          this.saveCounter = 0;
-        }
-        if (this.saveCounter === (2 * this.ticksPerSecond)) { // clean the autoSaver 2s after it is set to true
+        } else if (e.data.action === 'cleanAutoSave') {
           this.$emit('change', { action: 'cleanAutoSave' });
-        }
-
-        const currentLocalTime = new Date().getTime();
-        const now = currentLocalTime + this.serverTimeOffset;
-        const timeRemaining = this.end - now;
-        if (timeRemaining > 0) {
-          if (!this.paused) {
-            this.hours = Math.floor((timeRemaining % (24 * 60 * minute)) / (60 * minute));
-            this.minutes = Math.floor((timeRemaining % (60 * minute)) / (minute));
-            this.seconds = Math.floor((timeRemaining % (minute)) / 1000);
-            if (this.hours < 1) {
-              this.bckClass = '';
-              if (this.minutes < this.warning) {
-                this.bckClass = 'warning';
-              }
-              if (this.minutes < this.alert) {
-                this.bckClass = 'alert';
-              }
-            }
-          }
-        } else {
+        } else if (e.data.action === 'ended') {
           this.$emit('change', { action: 'ended' });
           this.endCountdown();
+        } else if (e.data.action === 'update') {
+          const timeRemaining = e.data.payload.timeRemaining;
+          this.hours = Math.floor((timeRemaining % (24 * 60 * minute)) / (60 * minute));
+          this.minutes = Math.floor((timeRemaining % (60 * minute)) / (minute));
+          this.seconds = Math.floor((timeRemaining % (minute)) / 1000);
+          if (this.hours < 1) {
+            this.bckClass = '';
+            if (this.minutes < this.warning) {
+              this.bckClass = 'warning';
+            }
+            if (this.minutes < this.alert) {
+              this.bckClass = 'alert';
+            }
+          }
         }
-      }
+      };
+    },
+    startWebWorker() {
+      this.countdownWorker.postMessage({
+        action: 'start',
+        payload: {
+          saveSeconds: this.saveSeconds,
+          ticksPerSecond: this.ticksPerSecond,
+          end: this.end,
+          serverTimeOffset: this.serverTimeOffset,
+        },
+      });
+    },
+    endWebWorker() {
+      // ensure the web worker is terminated
+      this.countdownWorker.terminate();
+    },
+    startCountdown() {
+      this.startWebWorker();
+      this.showCountdown = true;
+    },
+    endCountdown() {
+      this.endWebWorker();
+      this.showCountdown = false;
+    },
+    resumeCountdown() {
+      this.startWebWorker();
     },
   },
 };
