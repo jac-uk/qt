@@ -1,13 +1,14 @@
 import { createWorkerScript } from '@/helpers/browser';
 
 const workerCode = () => {
-  let countdown;          // setInterval reference
+  let countdown;             // setInterval reference
   const second = 1000;
-  let saveCounter = 0;    // counter for autoSave
-  let saveSeconds = 5;    // autoSave every 5 seconds
+  let saveCounter = 0;       // counter for autoSave
+  let saveSeconds = 5;       // autoSave every 5 seconds
   let ticksPerSecond = 1;
-  let end;                // end time in milliseconds
-  let serverTimeOffset;   // server time offset in milliseconds
+  let end;                   // end time in milliseconds
+  let serverTimeOffset;      // server time offset in milliseconds
+  let previousTimeRemaining; // previous time remaining in milliseconds
 
   const getTimeRemaining = () => {
     const currentLocalTime = new Date().getTime();
@@ -29,6 +30,7 @@ const workerCode = () => {
     serverTimeOffset = payload.serverTimeOffset;
 
     const timeRemaining = getTimeRemaining();
+    previousTimeRemaining = timeRemaining;
     postMessage({ action: 'update', payload: { timeRemaining } });
 
     countdown = setInterval(() => {
@@ -41,7 +43,14 @@ const workerCode = () => {
         postMessage({ action: 'cleanAutoSave' });
       }
 
-      const timeRemaining = getTimeRemaining();
+      let timeRemaining = getTimeRemaining();
+      const diff = Math.abs(previousTimeRemaining - timeRemaining);
+      // check if time remaining has changed by more than 2 seconds to avoid local time changes
+      if (diff > second * 2) {
+        timeRemaining = previousTimeRemaining - second;
+        postMessage({ action: 'refresh' });
+      }
+      previousTimeRemaining = timeRemaining;
       postMessage({ action: 'update', payload: { timeRemaining } });
 
       if (timeRemaining <= 0) {

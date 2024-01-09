@@ -162,6 +162,8 @@ export default {
         } else if (e.data.action === 'ended') {
           this.$emit('change', { action: 'ended' });
           this.endCountdown();
+        } else if (e.data.action === 'refresh') {
+          this.$emit('change', { action: 'refresh' });
         } else if (e.data.action === 'update') {
           const timeRemaining = e.data.payload.timeRemaining;
           this.hours = Math.floor((timeRemaining % (24 * 60 * minute)) / (60 * minute));
