@@ -47,6 +47,7 @@ const workerCode = () => {
       const diff = Math.abs(previousTimeRemaining - timeRemaining);
       // check if time remaining has changed by more than 2 seconds to avoid local time changes
       if (diff > second * 2) {
+        // adjust current time remaining based on previous value
         timeRemaining = previousTimeRemaining - second;
         postMessage({ action: 'refresh' });
       }
