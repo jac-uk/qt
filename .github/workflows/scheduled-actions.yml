@@ -4,9 +4,17 @@ on:
     - cron: "22 8 * * *"
 
 jobs:
-  dependency_check:
+  dependency_check_qt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Dependency Check
+        working-directory: ./qt
+        run: npm audit --omit=dev
+  dependency_check_qt_admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency Check
+        working-directory: ./qt-admin
         run: npm audit --omit=dev
