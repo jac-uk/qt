@@ -28,7 +28,6 @@ const module = {
         } else if ([
           'warren.searle@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
-          'andrew.isaac@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'drie@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
@@ -40,7 +39,7 @@ const module = {
             [
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
-              'andrew.isaac@judicialappointments.digital',
+              'nick.addy@judicialappointments.gov.uk',
               'halcyon@judicialappointments.digital',
               'drie@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)

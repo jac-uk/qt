@@ -1,7 +1,7 @@
 const authorisedUsers = [
   'warren.searle@judicialappointments.digital',
   'tom.russell@judicialappointments.digital',
-  'andrew.isaac@judicialappointments.digital',
+  'nick.addy@judicialappointments.gov.uk',
   'halcyon@judicialappointments.digital',
   'drie@judicialappointments.digital',
 ];
