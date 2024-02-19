@@ -65,9 +65,7 @@
         v-if="message && !isCompleted"
         status="information"
       >
-        <template>
-          {{ message }}
-        </template>
+        {{ message }}
       </Banner>
       <Modal
         ref="timeElapsedModalRef"
