@@ -26,7 +26,7 @@
               <span v-if="isFutureTest(row)">Start {{ prettyDate(row.qualifyingTest.startDate) }}<br></span>
               <span v-else>Deadline {{ prettyDate(row.qualifyingTest.endDate) }}</span>
               <br>
-              <span v-if="qualifyingTestMessage(row)">Message: {{ qualifyingTestMessage(row) }}</span>
+              <span v-if="qualifyingTestMessage(row.qualifyingTest)">Message: {{ qualifyingTestMessage(row.qualifyingTest) }}</span>
             </TableCell>
             <TableCell>
               {{ $filters.lookup(status(row)) }}<br>

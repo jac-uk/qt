@@ -53,6 +53,11 @@ module.exports = (config, firebase) => {
     // add search map
     data._search = getSearchMap([data.participant.email, data.participant.fullName]);
 
+    // Add message if set
+    if ('message' in qualifyingTest) {
+      data.message = qualifyingTest.message;
+    }
+
     return data;
   }
 };
