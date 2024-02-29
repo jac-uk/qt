@@ -206,12 +206,12 @@
           class="govuk-link"
           :to="{name: `${routeNamePrefix}-dry-run`}"
         >
-          Update dry run details
+          Update mock assessment details
         </router-link>
       </div>
 
       <h2 class="govuk-heading-m">
-        Dry run details
+        Mock assessment details
       </h2>
 
       <dl class="govuk-summary-list">

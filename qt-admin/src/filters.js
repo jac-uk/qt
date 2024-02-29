@@ -60,6 +60,7 @@ const lookup = (value) => {
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
     'online-only': 'Yes - online resources only',
 
+    'dry-run': 'Mock assessment',
     // 'xxx': 'xxx',
   };
 

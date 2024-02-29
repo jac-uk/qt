@@ -82,7 +82,7 @@ export default {
 
     return {
       qualifyingTest: qualifyingTest,
-      isDryRun: true, // all tests created on QT Platform are considered dry runs. Main tests are created via API integration
+      isDryRun: true, // all tests created on QT Platform are considered mock assessments. Main tests are created via API integration
     };
   },
   computed: {

@@ -114,7 +114,7 @@ const routes = [
             name: 'qualifying-test-dry-run',
             meta: {
               requiresAuth: true,
-              title: 'Dry Run | Qualifying Test',
+              title: 'Mock Assessment | Qualifying Test',
             },
           },
           {
