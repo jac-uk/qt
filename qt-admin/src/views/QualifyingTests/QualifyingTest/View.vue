@@ -57,7 +57,7 @@
               </a>
             </td>
           </tr>
-          <tr 
+          <tr
             v-if="authorisedToPerformAction"
             class="govuk-table__row"
           >
@@ -174,7 +174,7 @@
             class="govuk-!-margin-right-3"
             :action="btnInitialise"
           >
-            Create dry run tests
+            Create mock assessment tests
           </ActionButton>
           <router-link
             v-if="!isDryRunCandidates"

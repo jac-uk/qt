@@ -3,7 +3,7 @@
     <div class="govuk-grid-column-two-thirds">
       <form @submit.prevent="validateAndSave">
         <h2 class="govuk-heading-l">
-          Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} dry run details
+          Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} mock assessment details
         </h2>
 
         <ErrorSummary
