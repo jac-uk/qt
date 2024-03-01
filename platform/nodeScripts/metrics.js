@@ -5,7 +5,8 @@ const { app, db } = require('./shared/admin.js');
 
 const main = async () => {
   const stats = {};
-  const startDate = new Date(2022,7,1);
+  const oneMonthAgo = new Date(new Date().setMonth(new Date().getMonth() - 1));
+  const startDate = oneMonthAgo;
   const qualifyingTests = await db.collection('qualifyingTests').where('startDate', '>=', startDate).where('status', '==', 'completed').select().get();
   stats.qualifyingTests = qualifyingTests.docs.length;
   const qualifyingTestResponses = await db.collection('qualifyingTestResponses').where('qualifyingTest.startDate', '>=', startDate).where('status', '==', 'completed').select().get();
