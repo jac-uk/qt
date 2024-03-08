@@ -76,9 +76,8 @@ export default {
         name: exercise.name,
       },
     };
-    const data = this.$store.getters['qualifyingTest/data']();
 
-    const qualifyingTest = { ...defaults, ...data };
+    const qualifyingTest = { ...defaults };
 
     return {
       qualifyingTest: qualifyingTest,
