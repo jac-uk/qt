@@ -151,6 +151,7 @@
 
 <script>
 import { firestore } from '@/firebase';
+import { doc, getDoc } from '@firebase/firestore';
 import { getIPAddress, getBrowserDetect } from '@/helpers/browser';
 
 export default {
@@ -264,9 +265,9 @@ export default {
     },
     async performFirestoreCheck() {
       try {
-        const doc = await firestore.doc('info/connected').get();
+        const docSnapshot = await getDoc(doc(firestore, 'info/connected'));
         this.checksComplete.firestore = true;
-        if (doc.exists) {
+        if (docSnapshot.exists()) {
           this.isConnectedToFirestore = true;
         }
       }

@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-import firebase from '@/firebase';
+import { Timestamp, arrayUnion } from '@firebase/firestore';
 import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
@@ -269,9 +269,9 @@ export default {
     prepareSaveHistory(data) {
       const date = new Date();
       const objToSave = {
-        history: firebase.firestore.FieldValue.arrayUnion({
+        history: arrayUnion({
           ...data,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
         }),
       };
       return objToSave;

@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import '@firebase/storage';
+import { ref, getDownloadURL, uploadBytes } from '@firebase/storage';
+import { storage } from '@/firebase';
 import FormField from '@/components/Form/FormField.vue';
 import FormFieldError from '@/components/Form/FormFieldError.vue';
 
@@ -169,10 +169,10 @@ export default {
 
       this.isUploading = true;
       const fileName = this.generateFileName(file.name);
-      const uploadRef = firebase.storage().ref(`${this.path}/${fileName}`);
+      const uploadRef = ref(storage, `${this.path}/${fileName}`);
 
       try {
-        const fileUploaded = await uploadRef.put(file);
+        const fileUploaded = await uploadBytes(uploadRef, file);
         if (fileUploaded && fileUploaded.state === 'success') {
           this.isReplacing = false;
           this.fileName = fileName;
@@ -195,11 +195,11 @@ export default {
       if (!fileName) {
         return false;
       }
-      const fileRef = firebase.storage().ref(`${this.path}/${fileName}`);
+      const fileRef = ref(storage, `${this.path}/${fileName}`);
 
       // Check if file exists in storage
       try {
-        const downloadUrl = await fileRef.getDownloadURL();
+        const downloadUrl = await getDownloadURL(fileRef);
 
         if (typeof downloadUrl === 'string' && downloadUrl.length) {
           return true;

@@ -51,7 +51,8 @@
   </div>
 </template>
 <script>
-import firebase from '@/firebase';
+import { Timestamp, arrayUnion } from '@firebase/firestore';
+
 import CriticalAnalysis from '@/views/QualifyingTests/QualifyingTest/Question/CriticalAnalysis.vue';
 import SituationalJudgement from '@/views/QualifyingTests/QualifyingTest/Question/SituationalJudgement.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
@@ -174,7 +175,7 @@ export default {
       return this.$router.replace({ name: 'online-tests' });
     }
     if (!this.response.started) {
-      this.response.started = firebase.firestore.Timestamp.fromDate(new Date());
+      this.response.started = Timestamp.fromDate(new Date());
       const data = {
         responses: this.responses,
       };
@@ -183,7 +184,7 @@ export default {
     if (this.qualifyingTestResponse._unlockPreviousAnswers !== true) {
       this.questionStartedOnPreviousTest();
     }
-    this.questionSessionStart = firebase.firestore.Timestamp.now();
+    this.questionSessionStart = Timestamp.now();
   },
   methods: {
     async skip() {
@@ -195,7 +196,7 @@ export default {
       if (isCompleted) {
         const historyToSave = this.prepareSaveHistory({ action: 'save', txt: 'Save and continue' });
         const sessionToSave = this.prepareSaveQuestionSession();
-        this.response.completed = firebase.firestore.Timestamp.fromDate(new Date());
+        this.response.completed = Timestamp.fromDate(new Date());
         data = {
           ...historyToSave,
           ...sessionToSave,
@@ -235,9 +236,9 @@ export default {
     prepareSaveHistory(data) {
       const date = new Date();
       const objToSave = {
-        history: firebase.firestore.FieldValue.arrayUnion({
+        history: arrayUnion({
           ...data,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
           location: `question ${this.questionNumber}`,
           question: this.questionNumber - 1,
         }),
@@ -247,11 +248,11 @@ export default {
     prepareSaveQuestionSession() {
       const date = new Date();
       const objToSave = {
-        questionSession: firebase.firestore.FieldValue.arrayUnion({
+        questionSession: arrayUnion({
           start: this.questionSessionStart,
-          end: firebase.firestore.Timestamp.fromDate(date),
+          end: Timestamp.fromDate(date),
           question: this.questionNumber - 1,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
         }),
       };
       return objToSave;

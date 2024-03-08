@@ -124,7 +124,9 @@
 </template>
 
 <script>
-import firebase from '@/firebase';
+
+import { Timestamp, serverTimestamp } from '@firebase/firestore';
+
 import Modal from '@/components/Page/Modal.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
@@ -156,7 +158,7 @@ export default {
     async modalConfirmed(){
       const data = {
         status: QUALIFYING_TEST.STATUS.COMPLETED,
-        'statusLog.completed': firebase.firestore.FieldValue.serverTimestamp(),
+        'statusLog.completed': serverTimestamp(),
       };
       await this.$store.dispatch('qualifyingTestResponse/save', data);
       await this.$store.dispatch('connectionMonitor/stop');
@@ -174,12 +176,12 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
     },
     prepareSaveHistory(data) {
-      const timeNow = firebase.firestore.FieldValue.serverTimestamp();
+      const timeNow = serverTimestamp();
       const date = new Date();
       const objToSave = {
-        history: firebase.firestore.FieldValue.arrayUnion({
+        history: arrayUnion({
           ...data,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
           utcOffset: date.getTimezoneOffset(),
         }),
         lastUpdated: timeNow,

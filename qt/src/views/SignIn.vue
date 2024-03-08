@@ -36,6 +36,7 @@ import Form from '@/components/Form/Form.vue';
 import ErrorSummary from '@/components/Form/ErrorSummary.vue';
 import TextField from '@/components/Form/TextField.vue';
 import { functions, auth } from '@/firebase';
+import { httpsCallable } from '@firebase/functions';
 import ActionButton from '@/components/ActionButton.vue';
 export default {
   components: {
@@ -62,7 +63,7 @@ export default {
         this.errors = [];
         try {
           // request access
-          const response = await functions.httpsCallable('signIn')({ email: this.formData.email, testId: this.qualifyingTestId });
+          const response = await httpsCallable(functions, 'signIn')({ email: this.formData.email, testId: this.qualifyingTestId });
           if (response && response.data && response.data.success) {
 
             // sign in with token

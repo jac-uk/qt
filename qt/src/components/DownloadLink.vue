@@ -15,8 +15,9 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import '@firebase/storage';
+import { storage } from '@/firebase';
+import { ref, getDownloadURL } from '@firebase/storage';
+
 export default {
   props: {
     fileName: {
@@ -55,10 +56,10 @@ export default {
   },
   methods: {
     async getDownloadURL() {
-      const fileRef = firebase.storage().ref(`exercise/${this.exerciseId}/${this.fileName}`);
+      const fileRef = ref(storage, `exercise/${this.exerciseId}/${this.fileName}`);
 
       try {
-        const downloadUrl = await fileRef.getDownloadURL();
+        const downloadUrl = await getDownloadURL(fileRef);
 
         if (typeof downloadUrl === 'string' && downloadUrl.length) {
           return downloadUrl;
