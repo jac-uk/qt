@@ -1,7 +1,7 @@
 import { firestore } from '@/firebase';
 import { collection, where, query, limit } from '@firebase/firestore';
 
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 
 const collectionRef = collection(firestore, 'qualifyingTestResponses');

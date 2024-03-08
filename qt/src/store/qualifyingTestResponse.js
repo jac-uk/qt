@@ -1,6 +1,6 @@
 import { firestore, auth } from '@/firebase';
 // TODO: KO JACvuexfire
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import { doc, collection, serverTimestamp, Timestamp, updateDoc } from '@firebase/firestore';
 import clone from 'clone';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
