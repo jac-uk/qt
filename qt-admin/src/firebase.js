@@ -1,4 +1,8 @@
-import firebase from 'firebase/app';
+import { initializeApp } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+
 import 'firebase/app-check';
 import 'firebase/functions';
 import 'firebase/firestore';
@@ -16,15 +20,20 @@ const config = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const functions = firebase.initializeApp(config).functions('europe-west2');
-const firestore = firebase.firestore();
-const auth = firebase.auth();
+/**
+ * Module API
+ * @see https://firebase.google.com/docs/reference/js
+ */
+const app = initializeApp(config);
+const functions = getFunctions(app, 'europe-west2');
+const firestore = getFirestore(app);
+const auth = getAuth(app);
 
 if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
-  firestore.useEmulator('localhost', 8080);
-  functions.useEmulator('localhost', 5001);
-  auth.useEmulator('http://localhost:9099');
+  connectFirestoreEmulator(firestore, 'localhost', 8080);
+  connectFunctionsEmulator(functions ,'localhost', 5001);
+  connectAuthEmulator(auth, 'http://localhost:9099');
 }
 
 export { firestore, auth, functions };
-export default firebase;
+export default app;

@@ -1,7 +1,8 @@
 /**
  * Here we use Realtime Database to monitor user's connection
  */
-import firebase from '@firebase/app';
+import { TIMESTAMP } from '@firebase/firestore';
+import { ref as dbRef } from '@firebase/database';
 import { database, auth } from '@/firebase';
 
 let lastSessionPath = '';
@@ -15,28 +16,29 @@ export default {
       }
       const userId = auth.currentUser.uid;
       const userStatusPath = `/${ref}/userStatus/${userId}`;
-      const userStatusDatabaseRef = database.ref(userStatusPath);
-      await database.ref('.info/connected').on('value', (snapshot) => {
+      const userStatusDatabaseRef = dbRef(database, userStatusPath);
+      // TODO:
+      await dbRef(database, '.info/connected').on('value', (snapshot) => {
         if (snapshot.val() == false) {
           return;
         }
         context.commit('setStarted', true);
         const sessionRef = userStatusDatabaseRef.push();
         lastSessionPath = `${userStatusPath}/${sessionRef.key}`;
-        sessionRef.child('offline').onDisconnect().set(firebase.database.ServerValue.TIMESTAMP).then(() => {
-          sessionRef.child('online').set(firebase.database.ServerValue.TIMESTAMP);
+        sessionRef.child('offline').onDisconnect().set(TIMESTAMP).then(() => {
+          sessionRef.child('online').set(TIMESTAMP);
         });
       });
     },
     stop: async (context) => {
       context.commit('setStarted', false);
       if (lastSessionPath) {
-        database.ref(lastSessionPath).child('offline').set(firebase.database.ServerValue.TIMESTAMP);
+        dbRef(database, lastSessionPath).child('offline').set(TIMESTAMP);
       }
-      database.ref('.info/connected').off();
+      dbRef(database, '.info/connected').off();
     },
     checkConnectedOnce: async (context) => {
-      await database.ref('.info/connected').once('value', (snapshot) => {
+      await dbRef(database, '.info/connected').once('value', (snapshot) => {
         if (snapshot.val() === true) {
           context.commit('setConnectedOnce', true);
         }
