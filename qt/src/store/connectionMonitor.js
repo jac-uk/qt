@@ -9,12 +9,12 @@ let lastSessionPath = '';
 export default {
   namespaced: true,
   actions: {
-    start: async (context, ref) => {
+    start: async (context, refId) => {
       if (context.state.started) {
         return;
       }
       const userId = auth.currentUser.uid;
-      const userStatusPath = `/${ref}/userStatus/${userId}`;
+      const userStatusPath = `/${refId}/userStatus/${userId}`;
       const userStatusDatabaseRef = ref(database, userStatusPath);
       await onValue(ref(database, '.info/connected'), (snapshot) => {
         if (snapshot.val() == false) {
