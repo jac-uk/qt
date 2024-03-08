@@ -1,9 +1,8 @@
 /**
  * Here we use Realtime Database to monitor user's connection
  */
-import { TIMESTAMP } from '@firebase/firestore';
-import { ref, onValue, push } from '@firebase/database';
-import { database, auth, child ,onDisconnect, set, off, get } from '@/firebase';
+import { child ,onDisconnect, set, off, get, ref, onValue, push, serverTimestamp } from '@firebase/database';
+import { database, auth } from '@/firebase';
 
 let lastSessionPath = '';
 
@@ -24,15 +23,15 @@ export default {
         context.commit('setStarted', true);
         const sessionRef = push(userStatusDatabaseRef);
         lastSessionPath = `${userStatusPath}/${sessionRef.key}`;
-        onDisconnect(child(sessionRef, 'offline')).set(TIMESTAMP).then(() => {
-          set(child(sessionRef, 'online'), TIMESTAMP);
+        onDisconnect(child(sessionRef, 'offline')).set(serverTimestamp()).then(() => {
+          set(child(sessionRef, 'online'), serverTimestamp());
         });
       });
     },
     stop: async (context) => {
       context.commit('setStarted', false);
       if (lastSessionPath) {
-        await set(child(ref(database, lastSessionPath), 'offline'), TIMESTAMP);
+        await set(child(ref(database, lastSessionPath), 'offline'), serverTimestamp());
       }
       off(ref(database, '.info/connected'));
     },
