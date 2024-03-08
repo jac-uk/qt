@@ -24,7 +24,7 @@
       :data="responses"
       :page-size="50"
       :columns="tableColumns"
-      search-map="_search"
+      :search-map="searchMapConfig"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -79,6 +79,13 @@ export default {
 
     return {
       tableColumns: tableColumns,
+      searchMapConfig: {
+        title: 'Search responses',
+        tooltip: {
+          visible: ['Name'],
+          hidden: [],
+        },
+      },
     };
   },
   computed: {
