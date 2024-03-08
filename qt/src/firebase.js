@@ -2,9 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { connectFirestoreEmulator, getFirestore, Timestamp } from 'firebase/firestore';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { connectStorageEmulator, getStorage } from 'firebase/storage';
 import { connectDatabaseEmulator, getDatabase } from 'firebase/database';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
