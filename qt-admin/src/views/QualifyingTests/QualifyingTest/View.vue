@@ -292,6 +292,8 @@ import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { httpsCallable } from '@firebase/functions';
+
 export default {
   components: {
     ActionButton,
@@ -455,20 +457,20 @@ export default {
       this.$router.push({ name: `${this.routeNamePrefix}-review`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     async btnSendInvites() {
-      await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
+      await httpsCallable(functions, 'sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
       return true;
     },
     async btnInitialise() {
       const data = { qualifyingTestId: this.qualifyingTestId };
-      await functions.httpsCallable('initialiseQualifyingTest')( data );
+      await httpsCallable(functions, 'initialiseQualifyingTest')( data );
       return true;
     },
     async btnActivate() {
-      await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      await httpsCallable(functions, 'activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
       return true;
     },
     async btnGetScores() {
-      await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      await httpsCallable(functions, 'scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
       return true;
     },
     btnResponses(status) {

@@ -55,6 +55,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
+import { httpsCallable } from '@firebase/functions';
 
 export default {
   components: {
@@ -113,7 +114,7 @@ export default {
     async gatherExportData() {
 
       // fetch data
-      const response = await functions.httpsCallable('exportQualifyingTestResponses')({ qualifyingTestId: this.qualifyingTest.id });
+      const response = await httpsCallable(functions, 'exportQualifyingTestResponses')({ qualifyingTestId: this.qualifyingTest.id });
 
       const reportData = [];
 

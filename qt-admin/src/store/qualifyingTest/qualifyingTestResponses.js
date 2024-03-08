@@ -1,5 +1,5 @@
-import firebase from '@firebase/app';
 import { firestore, auth } from '@/firebase';
+import { collection, query, where, orderBy, writeBatch, doc, getDocs,addDoc, updateDoc, serverTimestamp } from '@firebase/firestore';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
@@ -7,7 +7,7 @@ import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 import { authorisedToPerformAction } from '@/helpers/authUsers';
 import clone from 'clone';
 
-const collectionRef = firestore.collection('qualifyingTestResponses');
+const collectionRef = collection(firestore, 'qualifyingTestResponses');
 
 export default {
   namespaced: true,
@@ -19,28 +19,38 @@ export default {
       const isSearchInProgress = params.searchStatus === QUALIFYING_TEST.STATUS.PROGRESS;
       const isSearchStatus = params.searchStatus !== 'all' && !isSearchAdjustment && params.searchStatus !== '' && !isSearchStarted && !isSearchInProgress;
 
-      let firestoreRef = collectionRef
-        .where('qualifyingTest.id', '==', params.qualifyingTestId);
+      let firestoreRef = query(
+        collectionRef,
+        where('qualifyingTest.id', '==', params.qualifyingTestId)
+      );
 
       if (isSearchStatus) {
-        firestoreRef = firestoreRef
-          .where('status', '==', params.searchStatus);
+        firestoreRef = query(
+          firestoreRef,
+          where('status', '==', params.searchStatus)
+        );
       }
 
       if (isSearchAdjustment) {
-        firestoreRef = firestoreRef
-          .where('participant.reasonableAdjustments', '==', true);
+        firestoreRef = query(
+          firestoreRef,
+          where('participant.reasonableAdjustments', '==', true)
+        );
       }
 
       if (isSearchStarted) {
-        firestoreRef = firestoreRef
-          .where('statusLog.started', '>', new Date('1900-01-01')) // INCLUDE all items with a valid date - not null and not ''
-          .orderBy('statusLog.started');
+        firestoreRef = query(
+          firestoreRef,
+          where('statusLog.started', '>', new Date('1900-01-01')), // INCLUDE all items with a valid date - not null and not ''
+          orderBy('statusLog.started')
+        );
       }
 
       if (isSearchInProgress) {
-        firestoreRef = firestoreRef
-          .where('status', '==', QUALIFYING_TEST.STATUS.STARTED);
+        firestoreRef = query(
+          firestoreRef,
+          where('status', '==', QUALIFYING_TEST.STATUS.STARTED)
+        );
       }
 
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
@@ -55,27 +65,27 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindRecord: firestoreAction(({ bindFirestoreRef }, { id } ) => {
-      const firestoreRef = collectionRef.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     create: async (context, { data }) => {
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      return await collectionRef.add(data);
+      data.lastUpdated = serverTimestamp();
+      return await addDoc(collectionRef, data);
     },
     update: async (context, { data, id }) => {
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      return await collectionRef.doc(id).update(data);
+      data.lastUpdated = serverTimestamp();
+      return await updateDoc(doc(collectionRef, id), data);
     },
     updateRA: async (context, { data, id }) => {
       // Update Reasonable Adjustments
       await context.dispatch('update', { data: data, id: id });
     },
     delete: (context, { id }) => {
-      const batch = firestore.batch();
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const batch = writeBatch(firestore);
+      const timestamp = serverTimestamp();
       const data = {
         status: QUALIFYING_TEST_RESPONSE.STATUS.DELETED,
         lastUpdated: timestamp,
@@ -83,13 +93,11 @@ export default {
           'deleted': timestamp,
         },
       };
-      // eslint-disable-next-line no-unused-vars
-      const collection = firestore.collection('qualifyingTestResponses')
-        .where('application.id', '==', id)
-        .get()
+      const queryRef = query(collectionRef, where('application.id', '==', id));
+      getDocs(queryRef)
         .then(async snapshot => {
           snapshot.forEach(response => {
-            const ref = firestore.collection('qualifyingTestResponses').doc(response.id);
+            const ref = doc(collectionRef, response.id);
             batch.set(ref, data, { merge: true } );
           });
           await batch.commit();
@@ -118,7 +126,7 @@ export default {
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
     resetTest: async (context) => {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const timestamp = serverTimestamp();
       const email = auth.currentUser.email;
       const canReset = await authorisedToPerformAction(email);
       if (canReset) {
