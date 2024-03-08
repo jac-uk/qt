@@ -873,7 +873,7 @@ export default {
     },
     amountOfTimeOnQuestion(index) {
       let millisecs = 0;
-      if (this.response.history) {
+      if (this.response.history && this.response.questionSession) {
         Object.keys(this.response.questionSession).map(key => {
           const item = this.response.questionSession[key];
           if (item.question === index) {
