@@ -30,4 +30,9 @@ export default {
     records: [],
     dryRuns: [],
   },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
+  },
 };

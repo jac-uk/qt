@@ -1,5 +1,4 @@
 import { firestore, auth } from '@/firebase';
-// TODO: KO JACvuexfire
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import { doc, collection, serverTimestamp, Timestamp, updateDoc } from '@firebase/firestore';
 import clone from 'clone';
@@ -103,6 +102,14 @@ export default {
         && state.record.statusLog.started
         && getters.isOpen === true
         && getters.timeLeft > 0;
+    },
+  },
+  set(state, { name, value }) {
+    state[name] = value;
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
 };
