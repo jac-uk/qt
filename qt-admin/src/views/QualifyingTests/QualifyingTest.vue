@@ -53,18 +53,21 @@ export default {
   methods: {
     loadPage() {
       this.loaded = false;
-      this.$store.dispatch('qualifyingTest/bind', this.qualifyingTestId)
-        .then((data) => {
-          if (data === null) {
-            this.redirectToPage();
-          }
-          else {
-            this.loaded = true;
-          }
-        }).catch((e) => {
-          this.loadFailed = true;
-          throw e;
-        });
+      if (this.qualifyingTestId) {
+        this.$store.dispatch('qualifyingTest/bind', this.qualifyingTestId)
+          .then((data) => {
+            if (data === null) {
+              this.redirectToPage();
+            }
+            else {
+              this.loaded = true;
+            }
+          }).catch((e) => {
+            this.loadFailed = true;
+            throw e;
+          });
+      }
+
     },
     redirectToPage() {
       // this.$router.replace({ name: 'page-not-found' });
