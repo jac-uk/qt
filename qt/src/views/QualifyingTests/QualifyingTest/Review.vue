@@ -125,7 +125,7 @@
 
 <script>
 
-import { Timestamp, serverTimestamp } from '@firebase/firestore';
+import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
 
 import Modal from '@/components/Page/Modal.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
