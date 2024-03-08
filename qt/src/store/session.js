@@ -3,7 +3,7 @@
  */
 import 'firebase/database';
 import { database } from '@/firebase';
-import { ref, get, onValue } from '@firebase/database';
+import { ref, onValue } from '@firebase/database';
 
 const module = {
   namespaced: true,
@@ -12,8 +12,16 @@ const module = {
       // We are calling both `once` and `on` here so that we wait for offset and respond to changes
       // TODO changing computer time does not get picked up by this...even if we call `.off()`. Possibly need to do a write first?
       const recordRef = ref(database, '.info/serverTimeOffset');
-      const snapshot = await get(recordRef);
-      context.commit('setServerTimeOffset', snapshot.val());
+
+      // calling for `once`
+      onValue(recordRef, (snapshot) => {
+        context.commit('setServerTimeOffset', snapshot.val());
+
+      }, {
+        onlyOnce: true,
+      });
+
+      // calling for `on`
       onValue(recordRef, (snapshot) => {
         context.commit('setServerTimeOffset', snapshot.val());
       });
