@@ -37,6 +37,7 @@ import ErrorSummary from '@/components/Form/ErrorSummary.vue';
 import TextField from '@/components/Form/TextField.vue';
 import { functions, auth } from '@/firebase';
 import { httpsCallable } from '@firebase/functions';
+import { signInWithCustomToken } from '@firebase/auth';
 import ActionButton from '@/components/ActionButton.vue';
 export default {
   components: {
@@ -67,7 +68,7 @@ export default {
           if (response && response.data && response.data.success) {
 
             // sign in with token
-            await auth.signInWithCustomToken(response.data.token);
+            await signInWithCustomToken(auth, response.data.token);
           } else {
             this.errors = [{
               id: 'email',
