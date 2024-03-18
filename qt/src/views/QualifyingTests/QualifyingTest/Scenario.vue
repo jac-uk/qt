@@ -14,7 +14,7 @@
         v-if="enableScenario"
         class="govuk-grid-row"
       >
-        <div class="govuk-grid-column-one-half govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-9">
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
           <!-- eslint-disable -->
           <p v-html="$filters.showHTMLBreaks(qualifyingTestResponse.testQuestions.introduction)" />
           <!-- eslint-enable -->
@@ -48,7 +48,7 @@
 
         <div
           v-if="enableScenario"
-          class="govuk-grid-column-one-half govuk-grid-column-one-third-from-desktop"
+          class="govuk-grid-column-one-half"
         >
           <div class="jac-scenario__additional">
             <dl ref="accordion">
