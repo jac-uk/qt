@@ -23,7 +23,7 @@
         >
           <span>
             <a
-              v-if="showPrevious"
+              v-if="!isReviewPage && showPrevious"
               id="previous-link"
               href=""
               :class="`govuk-link countdown-link info-btn--qualifying-tests--previous-question-${infoClass()}`"
@@ -38,7 +38,7 @@
           #right-slot
         >
           <a
-            v-if="showSkip"
+            v-if="!isReviewPage && showSkip"
             id="skip-link"
             :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
             href=""
@@ -47,19 +47,6 @@
             ❯
           </a>
         </template>
-        <!--
-          <template
-          #right-slot
-        >
-          <a
-            :class="`govuk-link countdown-link info-btn--qualifying-tests--exit-test-${$route.params.qualifyingTestId}`"
-            href=""
-            @click.prevent="openExitModal"
-          >
-            Exit Test
-          </a>
-        </template>
-      -->
       </Countdown>
       <Banner
         v-if="message && !isCompleted"
@@ -172,6 +159,9 @@ export default {
     isCompleted() {
       return this.$store.getters['qualifyingTestResponse/isCompleted'];
     },
+    isReviewPage() {
+      return this.$route.name === 'online-test-review';
+    },
   },
   watch: {
     qualifyingTestResponse: async function (newVal) {
@@ -188,19 +178,11 @@ export default {
       }
     },
     '$route.params.qualifyingTestId'() {
-
-      console.log('TEST 1');
-
       this.loadQualifyingTestResponse();
     },
   },
   async created() {
-    console.log('TEST 0');
-
     await this.loadQualifyingTestResponse();
-
-    console.log('QTR', this.qualifyingTestResponse);
-
   },
   mounted() {
     window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -277,9 +259,6 @@ export default {
       }
     },
     redirectToList() {
-
-      console.log('-> redirectToList');
-
       this.$router.replace({ name: 'online-tests' });
     },
     handleCountdown(params) {
