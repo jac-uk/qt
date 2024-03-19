@@ -14,7 +14,7 @@
         v-if="enableScenario"
         class="govuk-grid-row"
       >
-        <div class="govuk-grid-column-one-half govuk-grid-column-two-thirds-from-desktop govuk-!-margin-bottom-9">
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
           <!-- eslint-disable -->
           <p v-html="$filters.showHTMLBreaks(qualifyingTestResponse.testQuestions.introduction)" />
           <!-- eslint-enable -->
@@ -37,13 +37,6 @@
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
-                :class="`moj-button-menu__item govuk-button govuk-button--secondary govuk-!-margin-right-2  info-btn--scenario--${infoClass()}--save-and-continue`"
-                type="button"
-                @click="skip"
-              >
-                Skip
-              </button>
-              <button
                 :class="`moj-button-menu__item govuk-button info-btn--scenario--${infoClass()}--save-and-continue`"
                 :disabled="reachMaxWords || isEmpty"
               >
@@ -55,7 +48,7 @@
 
         <div
           v-if="enableScenario"
-          class="govuk-grid-column-one-half govuk-grid-column-one-third-from-desktop"
+          class="govuk-grid-column-one-half"
         >
           <div class="jac-scenario__additional">
             <dl ref="accordion">
@@ -155,6 +148,12 @@ export default {
     questionNumber() {
       return parseInt(this.$route.params.questionNumber);
     },
+    isFirstQuestion() {
+      return this.questionNumber === 1;
+    },
+    isFirstScenario() {
+      return this.scenarioNumber === 1;
+    },
     isLastScenario() {
       return this.scenarioNumber === this.qualifyingTestResponse.testQuestions.questions.length;
     },
@@ -173,13 +172,16 @@ export default {
         return {};
       }
     },
+
     nextPage() {
+
+      // @TODO: WHEN GET TO THE END IT'S NOT DETECTING WE'RE ON THE LAST SCENARIO AND LAST QUESTION AND GOING TO THE REVIEW PAGE!
+
       if ((this.isLastScenario && this.isLastQuestion) || this.isComingFromReview) {
         return {
           name: 'online-test-review',
         };
       }
-
       return {
         name: 'online-test-scenario',
         params: {
@@ -244,10 +246,6 @@ export default {
   methods: {
     toggleAccordion() {
       this.showDetails = !this.showDetails;
-    },
-    async skip() {
-      this.saveHistoryAndSession({ action: 'skip', txt: 'Skip' });
-      this.$router.push(this.nextPage);
     },
     async save() {
       await this.saveResponse(true);

@@ -23,7 +23,7 @@
         >
           <span>
             <a
-              v-if="showPrevious"
+              v-if="!isReviewPage && showPrevious"
               id="previous-link"
               href=""
               :class="`govuk-link countdown-link info-btn--qualifying-tests--previous-question-${infoClass()}`"
@@ -38,7 +38,7 @@
           #right-slot
         >
           <a
-            v-if="showSkip"
+            v-if="!isReviewPage && showSkip"
             id="skip-link"
             :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
             href=""
@@ -47,19 +47,6 @@
             ❯
           </a>
         </template>
-        <!--
-          <template
-          #right-slot
-        >
-          <a
-            :class="`govuk-link countdown-link info-btn--qualifying-tests--exit-test-${$route.params.qualifyingTestId}`"
-            href=""
-            @click.prevent="openExitModal"
-          >
-            Exit Test
-          </a>
-        </template>
-      -->
       </Countdown>
       <Banner
         v-if="message && !isCompleted"
@@ -119,11 +106,41 @@ export default {
   },
   computed: {
     showPrevious() {
-      return this.$route.params.questionNumber > 1;
+      return !(this.isFirstScenario && this.isFirstQuestionInScenario);
     },
     showSkip() {
-      return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
+      return !(this.isLastScenario && this.isLastQuestionInScenario);
     },
+
+    scenarioNumber() {
+      return parseInt(this.$route.params.scenarioNumber);
+    },
+    questionNumber() {
+      return parseInt(this.$route.params.questionNumber);
+    },
+    numberOfScenarios() {
+      return this.qualifyingTestResponse.testQuestions.questions.length;
+    },
+    numberOfQuestionsInCurrentScenario() {
+      return this.scenarioNumber && this.questionNumber
+        ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
+        : 0;
+    },
+    isFirstQuestionInScenario() {
+      return this.questionNumber === 1;
+    },
+    isFirstScenario() {
+      return this.scenarioNumber === 1;
+    },
+    isLastScenario() {
+      return this.scenarioNumber === this.numberOfScenarios;
+    },
+    isLastQuestionInScenario() {
+      return this.numberOfQuestionsInCurrentScenario
+        ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
+        : false;
+    },
+
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
     },
@@ -141,6 +158,9 @@ export default {
     },
     isCompleted() {
       return this.$store.getters['qualifyingTestResponse/isCompleted'];
+    },
+    isReviewPage() {
+      return this.$route.name === 'online-test-review';
     },
   },
   watch: {
@@ -196,12 +216,47 @@ export default {
       }
     },
     btnPrevious() {
-      this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
+      // Move to the previous question unless it's at the first question of the first scenario (in which case go to the review pg)
+      if (this.isFirstScenario && this.isFirstQuestionInScenario) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
+      else {
+        const newScenarioNumber = this.isFirstQuestionInScenario ? this.scenarioNumber - 1 : this.scenarioNumber;
+        const newQuestionNumber = this.isFirstQuestionInScenario
+          ? this.getNumberQuestionsInScenario(newScenarioNumber)
+          : this.questionNumber - 1;
+        this.$router.push({
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: newScenarioNumber,
+            questionNumber: newQuestionNumber,
+          },
+        });
+      }
     },
     btnSkip() {
-      this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
       const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
+
+      // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
+      if (this.isLastScenario && this.isLastQuestionInScenario) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
+      else {
+        const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
+        const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+        this.$router.push({
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: scenarioNumber,
+            questionNumber: questionNumber,
+          },
+        });
+      }
     },
     redirectToList() {
       this.$router.replace({ name: 'online-tests' });
@@ -282,6 +337,9 @@ export default {
         event.preventDefault();
         event.returnValue = '';
       }
+    },
+    getNumberQuestionsInScenario(scenarioNumber) {
+      return this.qualifyingTestResponse.testQuestions.questions[scenarioNumber].options.length;
     },
   },
 };
