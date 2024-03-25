@@ -4,6 +4,7 @@
 
 <script>
 import { auth } from '@/firebase';
+import { EmailAuthProvider } from '@firebase/auth';
 import * as firebaseui from 'firebaseui';
 
 export default {
@@ -14,8 +15,8 @@ export default {
       uiConfig: {
         signInOptions: [
           {
-            provider: auth.EmailAuthProvider.PROVIDER_ID,
-            signInMethod: auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+            provider: EmailAuthProvider.PROVIDER_ID,
+            signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
           },
         ],
         credentialHelper: firebaseui.auth.CredentialHelper.NONE,

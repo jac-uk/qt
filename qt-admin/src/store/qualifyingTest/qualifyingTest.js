@@ -1,26 +1,25 @@
-import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
+import { collection, query, where, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from '@firebase/firestore';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('qualifyingTests');
+const collectionRef = collection(firestore, 'qualifyingTests');
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     bindQTs: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = collection
-        .where('folderId', '==', params.folderId);
+      let firestoreRef = query(collectionRef, where('folderId', '==', params.folderId));
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -28,28 +27,28 @@ export default {
       return unbindFirestoreRef('records');
     }),
     create: async (state, data) => {
-      data.created = firebase.firestore.FieldValue.serverTimestamp();
+      data.created = serverTimestamp();
       data.status = QUALIFYING_TEST.STATUS.CREATED;
       data.lastUpdated = null;
       data.counts = {};
-      const doc = await collection.add(data);
+      const doc = await addDoc(collectionRef, data);
       return doc.id;
     },
     save: async ({ state }, data) => {
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      return await collection.doc(state.record.id).update(data);
+      data.lastUpdated = serverTimestamp();
+      return await updateDoc(doc(collectionRef, state.record.id), data);
     },
     submitForApproval: async ({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.SUBMITTED,
       };
-      await collection.doc(state.record.id).update(data);
+      await updateDoc(doc(collectionRef, state.record.id), data);
     },
     approve: async ({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.APPROVED,
       };
-      await collection.doc(state.record.id).update(data);
+      await updateDoc(doc(collectionRef, state.record.id), data);
     },
     copy: async (context) => {
       const qualifyingTest = context.state.record;
@@ -65,7 +64,7 @@ export default {
       return newId;
     },
     delete: async ({ state }) => {
-      await collection.doc(state.record.id).delete();
+      await deleteDoc(doc(collectionRef, state.record.id));
     },
   },
   mutations: {

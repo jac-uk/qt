@@ -1,7 +1,7 @@
 /**
  * Here we use Realtime Database to monitor user's connection
  */
-import firebase from '@firebase/app';
+import { child ,onDisconnect, set, off, get, ref, onValue, push, serverTimestamp } from '@firebase/database';
 import { database, auth } from '@/firebase';
 
 let lastSessionPath = '';
@@ -9,41 +9,40 @@ let lastSessionPath = '';
 export default {
   namespaced: true,
   actions: {
-    start: async (context, ref) => {
+    start: async (context, refId) => {
       if (context.state.started) {
         return;
       }
       const userId = auth.currentUser.uid;
-      const userStatusPath = `/${ref}/userStatus/${userId}`;
-      const userStatusDatabaseRef = database.ref(userStatusPath);
-      await database.ref('.info/connected').on('value', (snapshot) => {
+      const userStatusPath = `/${refId}/userStatus/${userId}`;
+      const userStatusDatabaseRef = ref(database, userStatusPath);
+      await onValue(ref(database, '.info/connected'), (snapshot) => {
         if (snapshot.val() == false) {
           return;
         }
         context.commit('setStarted', true);
-        const sessionRef = userStatusDatabaseRef.push();
+        const sessionRef = push(userStatusDatabaseRef);
         lastSessionPath = `${userStatusPath}/${sessionRef.key}`;
-        sessionRef.child('offline').onDisconnect().set(firebase.database.ServerValue.TIMESTAMP).then(() => {
-          sessionRef.child('online').set(firebase.database.ServerValue.TIMESTAMP);
+        onDisconnect(child(sessionRef, 'offline')).set(serverTimestamp()).then(() => {
+          set(child(sessionRef, 'online'), serverTimestamp());
         });
       });
     },
     stop: async (context) => {
       context.commit('setStarted', false);
       if (lastSessionPath) {
-        database.ref(lastSessionPath).child('offline').set(firebase.database.ServerValue.TIMESTAMP);
+        await set(child(ref(database, lastSessionPath), 'offline'), serverTimestamp());
       }
-      database.ref('.info/connected').off();
+      off(ref(database, '.info/connected'));
     },
     checkConnectedOnce: async (context) => {
-      await database.ref('.info/connected').once('value', (snapshot) => {
-        if (snapshot.val() === true) {
-          context.commit('setConnectedOnce', true);
-        }
-        else {
-          context.commit('setConnectedOnce', false);
-        }
-      });
+      const snapshot = await get(ref(database, '.info/connected'));
+      if (snapshot.val() === true) {
+        context.commit('setConnectedOnce', true);
+      }
+      else {
+        context.commit('setConnectedOnce', false);
+      }
     },
   },
   mutations: {

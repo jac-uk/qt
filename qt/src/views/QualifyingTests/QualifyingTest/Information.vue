@@ -247,7 +247,7 @@
   </div>
 </template>
 <script>
-import firebase from '@/firebase';
+import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
 import Form from '@/components/Form/Form.vue';
 import ErrorSummary from '@/components/Form/ErrorSummary.vue';
 import Checkbox from '@/components/Form/Checkbox.vue';
@@ -367,12 +367,12 @@ export default {
       }
     },
     prepareSaveHistory(data) {
-      const timeNow = firebase.firestore.FieldValue.serverTimestamp();
+      const timeNow = serverTimestamp();
       const date = new Date();
       const objToSave = {
-        history: firebase.firestore.FieldValue.arrayUnion({
+        history: arrayUnion({
           ...data,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
           utcOffset: date.getTimezoneOffset(),
         }),
         lastUpdated: timeNow,

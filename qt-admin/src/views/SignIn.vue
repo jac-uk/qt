@@ -37,9 +37,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/app';
 import { auth } from '@/firebase';
-
+import { GoogleAuthProvider, OAuthProvider, signInWithPopup } from '@firebase/auth';
 export default {
   data: function() {
     return {
@@ -61,15 +60,16 @@ export default {
   },
   methods: {
     loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).then(() => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then(() => {
       }).catch(err => {
+        console.log(err);
         this.signInError = err.message;
       });
     },
     loginWithMicrosoft() {
-      const provider = new firebase.auth.OAuthProvider('microsoft.com');
-      auth.signInWithPopup(provider).then(() => {
+      const provider = new OAuthProvider('microsoft.com');
+      signInWithPopup(auth, provider).then(() => {
       }).catch(err => {
         this.signInError = err.message;
       });

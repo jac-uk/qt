@@ -1,9 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'firebase/functions';
-import 'firebase/database';
-import 'firebase/app-check';
+import { initializeApp } from 'firebase/app';
+import { connectFirestoreEmulator, getFirestore, Timestamp } from 'firebase/firestore';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { connectDatabaseEmulator, getDatabase } from 'firebase/database';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
@@ -16,18 +15,27 @@ const config = {
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
-const functions = firebase.initializeApp(config).functions('europe-west2');
-const firestore = firebase.firestore();
-const auth = firebase.auth();
-const database = firebase.database();
-const Timestamp = firebase.firestore.Timestamp;
+
+/**
+ * Module API
+ * @see https://firebase.google.com/docs/reference/js
+ */
+const app = initializeApp(config);
+const functions = getFunctions(app, 'europe-west2');
+const firestore = getFirestore(app);
+const auth = getAuth(app);
+const database = getDatabase(app);
 
 if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
-  firestore.useEmulator('localhost', 8080);
-  functions.useEmulator('localhost', 5001);
-  auth.useEmulator('http://localhost:9099');
-  database.useEmulator('localhost', 9000);
+    /**
+   * Module API
+   * @see https://firebase.google.com/docs/emulator-suite/connect_firestore#web-modular-api
+   */
+    connectFirestoreEmulator(firestore, 'localhost', 8080);
+    connectFunctionsEmulator(functions ,'localhost', 5001);
+    connectAuthEmulator(auth, 'http://localhost:9099');
+    connectDatabaseEmulator(database ,'localhost', 9000);
 }
 
 export { firestore, auth, functions, database, Timestamp };
-export default firebase;
+export default app;

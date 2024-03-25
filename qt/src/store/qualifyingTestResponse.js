@@ -1,18 +1,18 @@
-import firebase from '@firebase/app';
 import { firestore, auth } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
+import { doc, collection, serverTimestamp, Timestamp, updateDoc } from '@firebase/firestore';
 import clone from 'clone';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 import { helperTimeLeft } from '@/helpers/date';
 
-const collection = firestore.collection('qualifyingTestResponses');
+const collectionRef = collection(firestore, 'qualifyingTestResponses');
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -24,9 +24,9 @@ export default {
         state.record.status === QUALIFYING_TEST_RESPONSE.STATUS.ACTIVATED
         || (state.record.status === QUALIFYING_TEST_RESPONSE.STATUS.STARTED && getters.timeLeft)
       ) {
-        data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-        data.lastUpdatedClientTime = firebase.firestore.Timestamp.now();
-        return await collection.doc(state.record.id).update(data);
+        data.lastUpdated = serverTimestamp();
+        data.lastUpdatedClientTime = Timestamp.now();
+        return await updateDoc(doc(collectionRef, state.record.id), data);
       }
       return false;
     },
@@ -40,7 +40,7 @@ export default {
           client.cookieEnabled = 'cookieEnabled' in navigator ? navigator.cookieEnabled : '';
           client.deviceMemory = 'deviceMemory' in navigator ? navigator.deviceMemory : '';
         }
-        client.timestamp = firebase.firestore.Timestamp.now();
+        client.timestamp = Timestamp.now();
         client.timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : '';
         client.utcOffset = new Date().getTimezoneOffset();
       } catch {
@@ -48,7 +48,7 @@ export default {
       }
       const data = {
         status: QUALIFYING_TEST_RESPONSE.STATUS.STARTED,
-        'statusLog.started': firebase.firestore.FieldValue.serverTimestamp(),
+        'statusLog.started': serverTimestamp(),
         'participant.id': auth.currentUser.uid,
         client: client,
       };
@@ -57,7 +57,7 @@ export default {
     outOfTime: async (context) => {
       const data = {
         status: QUALIFYING_TEST_RESPONSE.STATUS.COMPLETED,
-        'statusLog.completed': firebase.firestore.FieldValue.serverTimestamp(),
+        'statusLog.completed': serverTimestamp(),
         'isOutOfTime': true,
       };
       await context.dispatch('save', data);
@@ -102,6 +102,14 @@ export default {
         && state.record.statusLog.started
         && getters.isOpen === true
         && getters.timeLeft > 0;
+    },
+  },
+  set(state, { name, value }) {
+    state[name] = value;
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
 };

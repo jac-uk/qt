@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import firebase from '@/firebase';
+import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
 import TextareaInput from '@/components/Form/TextareaInput.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import plusIcon from '@/assets/plus.png';
@@ -235,13 +235,13 @@ export default {
       return this.$router.replace({ name: 'online-tests' });
     }
     if (this.response && !this.response.started) {
-      this.response.started = firebase.firestore.Timestamp.fromDate(new Date());
+      this.response.started = Timestamp.fromDate(new Date());
       const data = {
         responses: this.responses,
       };
       await this.$store.dispatch('qualifyingTestResponse/save', data);
     }
-    this.questionSessionStart = firebase.firestore.Timestamp.now();
+    this.questionSessionStart = Timestamp.now();
   },
   methods: {
     toggleAccordion() {
@@ -255,7 +255,7 @@ export default {
       // TODO only save if there are un-saved changes
       let data = {};
       if (markAsCompleted) {
-        this.response.completed = firebase.firestore.Timestamp.fromDate(new Date());
+        this.response.completed = Timestamp.fromDate(new Date());
         const historyToSave = this.prepareSaveHistory({ action: 'saved' });
         const sessionToSave = this.prepareSaveQuestionSession();
         data = {
@@ -321,13 +321,13 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
     },
     prepareSaveHistory(data) {
-      const timeNow = firebase.firestore.FieldValue.serverTimestamp();
+      const timeNow = serverTimestamp();
       const date = new Date();
       const objToSave = {
-        history: firebase.firestore.FieldValue.arrayUnion({
+        history: arrayUnion({
           ...data,
           question: this.questionNumber - 1,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
           utcOffset: date.getTimezoneOffset(),
         }),
         lastUpdated: timeNow,
@@ -335,14 +335,14 @@ export default {
       return objToSave;
     },
     prepareSaveQuestionSession() {
-      const timeNow = firebase.firestore.FieldValue.serverTimestamp();
+      const timeNow = serverTimestamp();
       const date = new Date();
       const objToSave = {
-        questionSession: firebase.firestore.FieldValue.arrayUnion({
+        questionSession: arrayUnion({
           start: this.questionSessionStart,
-          end: firebase.firestore.Timestamp.fromDate(date),
+          end: Timestamp.fromDate(date),
           question: this.questionNumber - 1,
-          timestamp: firebase.firestore.Timestamp.fromDate(date),
+          timestamp: Timestamp.fromDate(date),
           utcOffset: date.getTimezoneOffset(),
         }),
         lastUpdated: timeNow,
