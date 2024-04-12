@@ -19,7 +19,7 @@ export default {
     }),
     bindDryRuns: firestoreAction(({ bindFirestoreRef, rootState }) => {
       let firestoreRef = query(collectionRef, where('participant.email', '==', rootState.auth.currentUser.email));
-      firestoreRef = query(collectionRef, limit(100));
+      firestoreRef = query(firestoreRef, limit(100));
       return bindFirestoreRef('dryRuns', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindDryRuns: firestoreAction(({ unbindFirestoreRef }) => {
