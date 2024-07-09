@@ -18,7 +18,7 @@
         :alert="1"
         @change="handleCountdown"
       >
-        <template
+        <!-- <template
           #left-slot
         >
           <span>
@@ -46,7 +46,8 @@
           >
             ❯
           </a>
-        </template>
+        </template> -->
+
         <!--
           <template
           #right-slot
