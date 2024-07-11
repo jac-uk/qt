@@ -18,7 +18,8 @@
         :alert="1"
         @change="handleCountdown"
       >
-        <!-- <template
+        <template
+          v-if="!isScenarioTest"
           #left-slot
         >
           <span>
@@ -35,6 +36,7 @@
         </template>
 
         <template
+          v-if="!isScenarioTest"
           #right-slot
         >
           <a
@@ -46,7 +48,7 @@
           >
             ❯
           </a>
-        </template> -->
+        </template>
 
         <!--
           <template
@@ -102,6 +104,9 @@ import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
 import Banner from '@/components/Page/Banner.vue';
+import { isScenarioTest } from '@/helpers/exerciseHelper.js';
+import { objectHasNestedProperty } from '@/helpers/object.js';
+
 export default {
   components: {
     LoadingMessage,
@@ -144,6 +149,13 @@ export default {
     },
     isCompleted() {
       return this.$store.getters['qualifyingTestResponse/isCompleted'];
+    },
+    isScenarioTest() {
+      if (objectHasNestedProperty(this.qualifyingTestResponse, 'qualifyingTest.type')) {
+        return isScenarioTest(this.qualifyingTestResponse.qualifyingTest);
+      }
+      console.log('qualifyingTestResponse is missing qualifyingTest.type');
+      return false;
     },
   },
   watch: {

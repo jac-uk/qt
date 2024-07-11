@@ -1,5 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -56,7 +57,10 @@ export {
   isMoreInformationNeeded,
   isApplicationComplete,
   hasApplicationProcess,
-  informationDeadline
+  informationDeadline,
+  isScenarioTest,
+  isCriticalAnalysisTest,
+  isSituationalJudgementTest
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -475,4 +479,16 @@ function informationDeadline(exercise) {
     }
   }
   return null;
+}
+
+function isScenarioTest(qualifyingTest) {
+  return qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+}
+
+function isCriticalAnalysisTest(qualifyingTest) {
+  return qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
+}
+
+function isSituationalJudgementTest(qualifyingTest) {
+  return qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
 }
