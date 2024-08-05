@@ -46,7 +46,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.14.0",
-    "firebase-mock": "^2.3.2",
+    "firebase-mock": "^2.2.4",
     "glob-parent": "^6.0.2",
     "highlight.js": "^11.8.0",
     "is-svg": "^5.0.0",
