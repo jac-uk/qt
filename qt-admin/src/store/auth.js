@@ -30,6 +30,8 @@ const module = {
           'tom.russell@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'drie@judicialappointments.digital',
+          'joe.beauchamp@judicialappointments.digital',
+          'grant.mcmillan@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
