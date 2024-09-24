@@ -1,6 +1,6 @@
 {
   "name": "qt-admin",
-  "version": "1.2.0",
+  "version": "Pen Test Access",
   "private": true,
   "scripts": {
     "serve": "vite serve --mode develop",
