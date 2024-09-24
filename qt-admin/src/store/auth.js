@@ -42,6 +42,8 @@ const module = {
               'nick.addy@judicialappointments.gov.uk',
               'halcyon@judicialappointments.digital',
               'drie@judicialappointments.digital',
+              'joe.beauchamp@judicialappointments.digital',
+              'grant.mcmillan@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
