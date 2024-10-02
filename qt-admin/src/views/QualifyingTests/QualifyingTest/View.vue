@@ -302,7 +302,7 @@
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnResponses('all')"
       >
-        Responses
+        All responses
       </button>
 
       <button
