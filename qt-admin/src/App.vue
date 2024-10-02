@@ -129,6 +129,7 @@
 <script>
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import 'floating-vue/dist/style.css';
 
 export default {
   name: 'App',

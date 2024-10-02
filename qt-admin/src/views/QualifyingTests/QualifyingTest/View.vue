@@ -90,33 +90,96 @@
           Number of Participants
         </h2>
 
-        <p class="govuk-body">
-          <span>
-
+        <div
+          class="govuk-body govuk-!-margin-bottom-0"
+          style="display: flex;"
+        >
+          <div>
             <RouterLink
               :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: 'all', }}"
             >
               Initialised
             </RouterLink>
-            <Tooltip />
-          </span>
+          </div>
+          <div>
+            <Tooltip2>
+              <template #content>
+                <div style="width: 300px;">
+                  <ul>
+                    <li>The test has been created, submitted for approval and approved. But the "open tests" button has not been pressed.</li>
+                    <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
+                    <li> They will see the test appear in their list of tests, but it will not be a link. The only information available to the participant is the title of the test, the start date and time and a status, which will be "Not Started".</li>
+                  </ul>
+                </div>
+              </template>
+            </Tooltip2>
+          </div>
+          <div>/</div>
+          <div>
+            <RouterLink
+              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
+            >
+              Activated
+            </RouterLink>
+          </div>
 
-          /
-          <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
-          >
-            Activated
-          </RouterLink>
+          <div>
+            <Tooltip2>
+              <template #content>
+                <div style="width: 300px;">
+                  <ul>
+                    <li>If not the test has been created, submitted for approval, approved and the "open tests" button has been pressed.</li>
+                    <li>If the tests start date is in the future then 'activated' will be the exact same as 'initialised' above.</li>
+                    <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
+                    <li>They will see the test appear in their list of tests, and it will be a link which takes them to the start page of the QT. Where candidates will be able to view the Important information and additional information sections, before starting the test.</li>
+                  </ul>
+                </div>
+              </template>
+            </Tooltip2>
+          </div>
+        </div>
+
+        <p class="govuk-body">
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.initialised }} / {{ qualifyingTest.counts.activated }}</span>
         </p>
+
+        <div
+          class="govuk-body govuk-!-margin-bottom-0"
+          style="display: flex;"
+        >
+          <div>
+            <RouterLink
+              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
+            >
+              Completed
+            </RouterLink>
+          </div>
+          <div>
+            <Tooltip2>
+              <template #content>
+                <div style="width: 300px;">
+                  Completed includes Auto-submitted tests.
+                </div>
+              </template>
+            </Tooltip2>
+          </div>
+          <div>/</div>
+          <div>
+            Auto-submitted
+          </div>
+          <div>
+            <Tooltip2>
+              <template #content>
+                <div style="width: 300px;">
+                  Auto-submitted tests will not show as completed until Close and score is clicked.
+                </div>
+              </template>
+            </Tooltip2>
+          </div>
+        </div>
         <p class="govuk-body">
-          <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
-          >
-            Completed
-          </RouterLink> / Auto-submitted
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>
@@ -298,7 +361,8 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { httpsCallable } from '@firebase/functions';
-import Tooltip from '../../../components/Micro/Tooltip.vue';
+import Tooltip2 from '@/components/Micro/Tooltip2.vue';
+import Tooltip from '@/components/Micro/Tooltip.vue';
 
 export default {
   components: {
@@ -306,6 +370,7 @@ export default {
     Banner,
     EditableMessage,
     Tooltip,
+    Tooltip2,
   },
   data() {
     return {

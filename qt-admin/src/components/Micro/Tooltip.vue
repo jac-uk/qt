@@ -213,8 +213,8 @@ ul.search-item-list[title]::before {
       outline: 0;
   }
   .tooltip__button__icon {
-      width: 1.15em;
-      height: 1.15em;
+      width: 0.7em;
+      height: 0.7em;
       border-radius: 50%;
       display: flex;
       align-items: center;
