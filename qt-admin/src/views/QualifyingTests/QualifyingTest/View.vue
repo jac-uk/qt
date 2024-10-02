@@ -91,11 +91,16 @@
         </h2>
 
         <p class="govuk-body">
-          <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: 'all', }}"
-          >
-            Initialised
-          </RouterLink>
+          <span>
+
+            <RouterLink
+              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: 'all', }}"
+            >
+              Initialised
+            </RouterLink>
+            <Tooltip />
+          </span>
+
           /
           <RouterLink
             :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
@@ -293,12 +298,14 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { httpsCallable } from '@firebase/functions';
+import Tooltip from '../../../components/Micro/Tooltip.vue';
 
 export default {
   components: {
     ActionButton,
     Banner,
     EditableMessage,
+    Tooltip,
   },
   data() {
     return {
