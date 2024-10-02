@@ -105,7 +105,7 @@
             <Tooltip2>
               <template #content>
                 <div style="width: 300px;">
-                  <ul>
+                  <ul style="margin: 0; padding-left: 20px;">
                     <li>The test has been created, submitted for approval and approved. But the "open tests" button has not been pressed.</li>
                     <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
                     <li> They will see the test appear in their list of tests, but it will not be a link. The only information available to the participant is the title of the test, the start date and time and a status, which will be "Not Started".</li>
@@ -127,7 +127,7 @@
             <Tooltip2>
               <template #content>
                 <div style="width: 300px;">
-                  <ul>
+                  <ul style="margin: 0; padding-left: 20px;">
                     <li>If not the test has been created, submitted for approval, approved and the "open tests" button has been pressed.</li>
                     <li>If the tests start date is in the future then 'activated' will be the exact same as 'initialised' above.</li>
                     <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
