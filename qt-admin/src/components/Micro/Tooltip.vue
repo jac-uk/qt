@@ -85,23 +85,6 @@ export default {
       padding: 0.2em;
       position: relative;
       border-width: 0;
-
-  }
-  button.tooltip__button:after {
-      content: '';
-      position: absolute;
-      bottom: -0.1em;
-      left: 0.1em;
-      right: 0.2em;
-      border-bottom: 2px dotted #969696;
-  }
-  button.tooltip__button:hover:after,
-  button.tooltip__button:focus:after,
-  button.tooltip__button:active:after {
-      border-color: #383838;
-      border-bottom-style: solid;
-      left: 0;
-      right: 0;
   }
   button.tooltip__button:hover .tooltip__button__icon,
   button.tooltip__button:focus .tooltip__button__icon,

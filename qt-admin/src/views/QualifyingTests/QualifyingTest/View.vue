@@ -101,18 +101,20 @@
               Initialised
             </RouterLink>
           </div>
-          <div>
-            <Tooltip>
-              <template #content>
-                <div style="width: 300px;">
-                  <ul style="margin: 0; padding-left: 20px;">
-                    <li>The test has been created, submitted for approval and approved. But the "open tests" button has not been pressed.</li>
-                    <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
-                    <li> They will see the test appear in their list of tests, but it will not be a link. The only information available to the participant is the title of the test, the start date and time and a status, which will be "Not Started".</li>
-                  </ul>
-                </div>
-              </template>
-            </Tooltip>
+          <div class="tooltip-anchor">
+            <div class="tooltip-wrapper">
+              <Tooltip>
+                <template #content>
+                  <div style="width: 300px;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                      <li>The test has been created, submitted for approval and approved, however, the ‘Open tests’ button has not been pressed.</li>
+                      <li>A test URL is present and a participant can log in to the QT platform using their registered email.</li>
+                      <li>Only the title of the test, start date and time, and status (which will be ‘Not started’) will appear on the QT platform, but it will not be clickable.</li>
+                    </ul>
+                  </div>
+                </template>
+              </Tooltip>
+            </div>
           </div>
           <div>/</div>
           <div>
@@ -123,19 +125,20 @@
             </RouterLink>
           </div>
 
-          <div>
-            <Tooltip>
-              <template #content>
-                <div style="width: 300px;">
-                  <ul style="margin: 0; padding-left: 20px;">
-                    <li>If not the test has been created, submitted for approval, approved and the "open tests" button has been pressed.</li>
-                    <li>If the tests start date is in the future then 'activated' will be the exact same as 'initialised' above.</li>
-                    <li>Meaning a link (from the qt-admin platform to the test on the qt platform) is present and a participant can use their email to log in.</li>
-                    <li>They will see the test appear in their list of tests, and it will be a link which takes them to the start page of the QT. Where candidates will be able to view the Important information and additional information sections, before starting the test.</li>
-                  </ul>
-                </div>
-              </template>
-            </Tooltip>
+          <div class="tooltip-anchor">
+            <div class="tooltip-wrapper">
+              <Tooltip>
+                <template #content>
+                  <div style="width: 300px;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                      <li>The test has been created, submitted for approval, approved and the ‘Open tests’ button has been pressed.</li>
+                      <li>If the test start date is in the future then the 'activated' test will display exactly as an 'initialised' test and a participant can log in to the QT platform using their registered email.</li>
+                      <li>The test will appear as a clickable link leading to the start page of the QT, where candidates will be able to view the important information and additional information sections, before starting the test.</li>
+                    </ul>
+                  </div>
+                </template>
+              </Tooltip>
+            </div>
           </div>
         </div>
 
@@ -156,27 +159,31 @@
               Completed
             </RouterLink>
           </div>
-          <div>
-            <Tooltip>
-              <template #content>
-                <div style="width: 300px;">
-                  Completed includes Auto-submitted tests.
-                </div>
-              </template>
-            </Tooltip>
+          <div class="tooltip-anchor">
+            <div class="tooltip-wrapper">
+              <Tooltip>
+                <template #content>
+                  <div style="width: 300px;">
+                    Completed includes Auto-submitted tests.
+                  </div>
+                </template>
+              </Tooltip>
+            </div>
           </div>
           <div>/</div>
           <div>
             Auto-submitted
           </div>
-          <div>
-            <Tooltip>
-              <template #content>
-                <div style="width: 300px;">
-                  Auto-submitted tests will not show as completed until Close and score is clicked.
-                </div>
-              </template>
-            </Tooltip>
+          <div class="tooltip-anchor">
+            <div class="tooltip-wrapper">
+              <Tooltip>
+                <template #content>
+                  <div style="width: 300px;">
+                    Auto-submitted tests will not show as completed until Close and score is clicked.
+                  </div>
+                </template>
+              </Tooltip>
+            </div>
           </div>
         </div>
         <p class="govuk-body">
@@ -583,3 +590,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.tooltip-anchor {
+  position: relative;
+  width: 20px;
+}
+
+.tooltip-wrapper {
+  position: absolute;
+  top: -10px
+}
+</style>
