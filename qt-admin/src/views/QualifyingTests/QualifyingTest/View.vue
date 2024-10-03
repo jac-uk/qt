@@ -102,7 +102,7 @@
             </RouterLink>
           </div>
           <div>
-            <Tooltip2>
+            <Tooltip>
               <template #content>
                 <div style="width: 300px;">
                   <ul style="margin: 0; padding-left: 20px;">
@@ -112,7 +112,7 @@
                   </ul>
                 </div>
               </template>
-            </Tooltip2>
+            </Tooltip>
           </div>
           <div>/</div>
           <div>
@@ -124,7 +124,7 @@
           </div>
 
           <div>
-            <Tooltip2>
+            <Tooltip>
               <template #content>
                 <div style="width: 300px;">
                   <ul style="margin: 0; padding-left: 20px;">
@@ -135,7 +135,7 @@
                   </ul>
                 </div>
               </template>
-            </Tooltip2>
+            </Tooltip>
           </div>
         </div>
 
@@ -157,26 +157,26 @@
             </RouterLink>
           </div>
           <div>
-            <Tooltip2>
+            <Tooltip>
               <template #content>
                 <div style="width: 300px;">
                   Completed includes Auto-submitted tests.
                 </div>
               </template>
-            </Tooltip2>
+            </Tooltip>
           </div>
           <div>/</div>
           <div>
             Auto-submitted
           </div>
           <div>
-            <Tooltip2>
+            <Tooltip>
               <template #content>
                 <div style="width: 300px;">
                   Auto-submitted tests will not show as completed until Close and score is clicked.
                 </div>
               </template>
-            </Tooltip2>
+            </Tooltip>
           </div>
         </div>
         <p class="govuk-body">
@@ -361,7 +361,6 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { httpsCallable } from '@firebase/functions';
-import Tooltip2 from '@/components/Micro/Tooltip2.vue';
 import Tooltip from '@/components/Micro/Tooltip.vue';
 
 export default {
@@ -370,7 +369,6 @@ export default {
     Banner,
     EditableMessage,
     Tooltip,
-    Tooltip2,
   },
   data() {
     return {
