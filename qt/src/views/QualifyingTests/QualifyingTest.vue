@@ -86,6 +86,8 @@ import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
 import Banner from '@/components/Page/Banner.vue';
+import { QUALIFYING_TEST } from '@/helpers/constants';
+
 export default {
   components: {
     LoadingMessage,
@@ -105,11 +107,28 @@ export default {
     };
   },
   computed: {
+    isSituationalJudgement() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+    },
+    isCriticalAnalysis() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
+    },
+    isScenario() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    },
     showPrevious() {
-      return !(this.isFirstScenario && this.isFirstQuestionInScenario);
+      if (this.isSituationalJudgement || this.isCriticalAnalysis)
+        return this.$route.params.questionNumber > 1;
+      else if (this.isScenario)
+        return !(this.isFirstScenario && this.isFirstQuestionInScenario);
+      return false;
     },
     showSkip() {
-      return !(this.isLastScenario && this.isLastQuestionInScenario);
+      if (this.isSituationalJudgement || this.isCriticalAnalysis)
+        return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
+      else if (this.isScenario)
+        return !(this.isLastScenario && this.isLastQuestionInScenario);
+      return false;
     },
 
     scenarioNumber() {
@@ -216,46 +235,54 @@ export default {
       }
     },
     btnPrevious() {
-      // Move to the previous question unless it's at the first question of the first scenario (in which case go to the review pg)
-      if (this.isFirstScenario && this.isFirstQuestionInScenario) {
-        this.$router.push({
-          name: 'online-test-review',
-        });
-      }
-      else {
-        const newScenarioNumber = this.isFirstQuestionInScenario ? this.scenarioNumber - 1 : this.scenarioNumber;
-        const newQuestionNumber = this.isFirstQuestionInScenario
-          ? this.getNumberQuestionsInScenario(newScenarioNumber)
-          : this.questionNumber - 1;
-        this.$router.push({
-          name: 'online-test-scenario',
-          params: {
-            scenarioNumber: newScenarioNumber,
-            questionNumber: newQuestionNumber,
-          },
-        });
+      if (this.isSituationalJudgement || this.isCriticalAnalysis) {
+        this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
+      } else if (this.isScenario) {
+        // Move to the previous question unless it's at the first question of the first scenario (in which case go to the review pg)
+        if (this.isFirstScenario && this.isFirstQuestionInScenario) {
+          this.$router.push({
+            name: 'online-test-review',
+          });
+        }
+        else {
+          const newScenarioNumber = this.isFirstQuestionInScenario ? this.scenarioNumber - 1 : this.scenarioNumber;
+          const newQuestionNumber = this.isFirstQuestionInScenario
+            ? this.getNumberQuestionsInScenario(newScenarioNumber)
+            : this.questionNumber - 1;
+          this.$router.push({
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: newScenarioNumber,
+              questionNumber: newQuestionNumber,
+            },
+          });
+        }
       }
     },
     btnSkip() {
       const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
 
-      // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
-      if (this.isLastScenario && this.isLastQuestionInScenario) {
-        this.$router.push({
-          name: 'online-test-review',
-        });
-      }
-      else {
-        const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
-        const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
-        this.$router.push({
-          name: 'online-test-scenario',
-          params: {
-            scenarioNumber: scenarioNumber,
-            questionNumber: questionNumber,
-          },
-        });
+      if (this.isSituationalJudgement || this.isCriticalAnalysis) {
+        this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+      } else if (this.isScenario) {
+        // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
+        if (this.isLastScenario && this.isLastQuestionInScenario) {
+          this.$router.push({
+            name: 'online-test-review',
+          });
+        }
+        else {
+          const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
+          const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          this.$router.push({
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: scenarioNumber,
+              questionNumber: questionNumber,
+            },
+          });
+        }
       }
     },
     redirectToList() {
