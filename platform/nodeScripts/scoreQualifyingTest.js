@@ -5,7 +5,7 @@ const { firebase, app, db } = require('./shared/admin.js');
 const scoreQualifyingTest = require('../functions/actions/qualifyingTests/scoreQualifyingTest')(config, firebase, db);
 
 const main = async () => {
-  return scoreQualifyingTest({ qualifyingTestId: 'zRthPXuKlAPQKop1SxBb' });
+  return scoreQualifyingTest({ qualifyingTestId: 'LkhJCypOfRgj90NT2gQs' });
 };
 
 main()

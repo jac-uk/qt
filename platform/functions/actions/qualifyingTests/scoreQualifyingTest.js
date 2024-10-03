@@ -2,6 +2,7 @@ const { getDocument, getDocuments, applyUpdates } = require('../../shared/helper
 
 module.exports = (config, firebase, db) => {
   const newResponsesWithScores = require('../../shared/factories/QualifyingTests/newResponsesWithScores')(config);
+  const updateCounts = require('../../actions/qualifyingTests/updateCounts')(config, firebase, db);
 
   return scoreQualifyingTest;
 
@@ -96,6 +97,9 @@ module.exports = (config, firebase, db) => {
 
     // write to db
     const result = await applyUpdates(db, commands);
+
+    // after status of QT responses updated, update the counts of status
+    await updateCounts(params.qualifyingTestId);
 
     // return
     return result ? qualifyingTestResponses.length : false;
