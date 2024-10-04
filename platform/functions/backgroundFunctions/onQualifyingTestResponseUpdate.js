@@ -8,5 +8,5 @@ module.exports = functions.region('europe-west2').firestore
   .onUpdate((change, context) => {
     const dataBefore = change.before.data();
     const dataAfter = change.after.data();
-    return onQualifyingTestResponseUpdate(dataBefore, dataAfter);
+    return onQualifyingTestResponseUpdate(dataBefore, dataAfter, data.after.ref);
   });
