@@ -133,7 +133,7 @@
                     <ul style="margin: 0; padding-left: 20px;">
                       <li>The test has been created, submitted for approval, approved and the ‘Open tests’ button has been pressed.</li>
                       <li>If the test start date is in the future then the 'activated' test will display exactly as an 'initialised' test and a participant can log in to the QT platform using their registered email.</li>
-                      <li>The test will appear as a clickable link leading to the start page of the QT, where candidates will be able to view the important information and additional information sections, before starting the test.</li>
+                      <ii>If the test is open, it will appear as a clickable link leading to the start page of the QT, where candidates will be able to view the important information and additional information sections, before starting the test.</ii>
                     </ul>
                   </div>
                 </template>
