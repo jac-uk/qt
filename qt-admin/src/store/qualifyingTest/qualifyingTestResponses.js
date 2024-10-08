@@ -134,7 +134,7 @@ export default {
         const data = {
           'status': 'activated',
           'statusLog.reset': timestamp,
-          [`statusLog.${rec.status}`]: null,
+          'statusLog.started': null,
         };
         if (rec.isOutOfTime === true) {
           data.isOutOfTime = false;
