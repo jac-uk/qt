@@ -70,6 +70,14 @@ module.exports = (config, firebase, db) => {
         statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED
       ) {
         data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED}`] = decrement;
+        // rollback started number if added
+        if (dataBefore.statusLog &&
+            dataAfter.statusLog &&
+            dataBefore.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] !== null &&
+            dataAfter.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] === null) {
+          
+            data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement; 
+        }
         // reset auto submit counts and flag
         if (dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = decrement;
@@ -79,6 +87,14 @@ module.exports = (config, firebase, db) => {
             }, {merge: true});
           }
         }
+      }
+
+      // mark activated to completed
+      if (
+        statusBefore === config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED &&
+        statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED
+      ) {
+        data[`counts.${statusAfter}`] = increment;
       }
 
       if (Object.keys(data).length > 0) {
