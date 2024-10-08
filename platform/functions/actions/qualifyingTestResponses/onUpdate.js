@@ -150,6 +150,9 @@ module.exports = (config, firebase, db) => {
       previousStatuses.push(status);
       if (status === targetStatus) break;
     }
+    if (targetStatus === config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED) {
+      previousStatuses.push('inProgress');
+    }
     return previousStatuses;
   }
 
