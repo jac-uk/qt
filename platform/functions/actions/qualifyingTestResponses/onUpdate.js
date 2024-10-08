@@ -103,11 +103,16 @@ module.exports = (config, firebase, db) => {
       const decrement = firebase.firestore.FieldValue.increment(-1);
 
       // reset counts of previous statuses
-      const previousStatuses = listPreviousStatuses(dataAfter.status);
+      const previousStatuses = listPreviousStatuses(dataBefore.status);
+
       const updateBefore = previousStatuses.reduce((data, status) => {
         data[`counts.${status}`] = decrement;
         return data;
       }, {});
+      if (dataBefore.isOutOfTime) {
+        updateBefore['counts.outOfTime'] = decrement;
+      }
+
       const updateAfter = {
         'counts.initialised': increment,
       };
@@ -131,9 +136,9 @@ module.exports = (config, firebase, db) => {
   function listPreviousStatuses(targetStatus) {
     const orderedStatuses = [
       'initialised',
-      QUALIFYING_TEST_RESPONSES.STATUS.STARTED,
-      'inProgress',
-      QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED,
+      config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED,
+      config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED,
+      config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED,
     ];
 
     if (!orderedStatuses.includes(targetStatus)) {
