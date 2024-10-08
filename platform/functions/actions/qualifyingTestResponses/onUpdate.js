@@ -79,13 +79,8 @@ module.exports = (config, firebase, db) => {
             data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement; 
         }
         // reset auto submit counts and flag
-        if (dataAfter.isOutOfTime) {
+        if (dataBefore.isOutOfTime && !dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = decrement;
-          if (ref) {
-            await ref.set({
-              isOutOfTime: false,
-            }, {merge: true});
-          }
         }
       }
 
