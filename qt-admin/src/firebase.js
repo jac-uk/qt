@@ -27,10 +27,13 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
-  connectFirestoreEmulator(firestore, 'localhost', 8080);
-  connectFunctionsEmulator(functions ,'localhost', 5001);
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  connectDatabaseEmulator(database ,'localhost', 9000);
+  // firestore.useEmulator('localhost', 8082);
+  // functions.useEmulator('localhost', 5002);
+  // auth.useEmulator('http://localhost:9092');
+  connectFirestoreEmulator(firestore, 'localhost', 8082);
+  connectFunctionsEmulator(functions ,'localhost', 5002);
+  connectAuthEmulator(auth, 'http://localhost:9092');
+  // connectDatabaseEmulator(database ,'localhost', 9002);
 }
 
 export { firestore, auth, functions, database };

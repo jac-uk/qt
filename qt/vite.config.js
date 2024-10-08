@@ -23,6 +23,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8181,
+    port: 8085,
   },
 });

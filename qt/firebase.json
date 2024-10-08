@@ -129,5 +129,41 @@
         }
       ]
     }
-  ]
+  ],
+  "emulators": {
+    "auth": {
+      "host": "localhost",
+      "port": 9092
+    },
+    "functions": {
+      "host": "localhost",
+      "port": 5002
+    },
+    "firestore": {
+      "host": "localhost",
+      "port": 8082,
+      "websocketPort": 9152
+    },
+    "database": {
+      "host": "localhost",
+      "port": 9002
+    },
+    "storage": {
+      "host": "localhost",
+      "port": 9192
+    },
+    "ui": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 4002
+    },
+    "hub": {
+      "host": "localhost",
+      "port": 4402
+    },
+    "logging": {
+      "host": "localhost",
+      "port": 4502
+    }
+  }
 }

@@ -30,7 +30,10 @@ module.exports = (config, firebase, db) => {
       }
       if (qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
         question.options.forEach((option, decimal) => {
-          headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.question }`);
+          headers.push(
+            `Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.question }`,
+            `S${ index + 1 }. Q${ decimal + 1 }. Score`
+          );
         });
       }
       if (qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
@@ -104,7 +107,10 @@ module.exports = (config, firebase, db) => {
           }
           if (responses) {
             responses.forEach((response) => {
-              row.push(response.text === undefined || response.text === null ? 'Question skipped' : response.text);
+              row.push(
+                response.text === undefined || response.text === null ? 'Question skipped' : response.text,
+                ''
+              );
             });
           }
         });
@@ -143,7 +149,7 @@ module.exports = (config, firebase, db) => {
     let result;
     const strArray = string.split('-');
     if (strArray.length === 1) {
-      result =  'SC';
+      result =  'ST';
     } else {
       result = `${strArray[0].charAt(0)}${strArray[strArray.length - 1].charAt(0)}`;
     }

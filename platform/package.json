@@ -15,7 +15,7 @@
     "serve": "firebase emulators:start --import=./data/",
     "shell": "firebase functions:shell",
     "emulators:firestore": "firebase emulators:start --only firestore",
-    "emulators:kill": "lsof -t -i tcp:9099 | xargs kill && lsof -t -i tcp:5001 | xargs kill && lsof -t -i tcp:8080 | xargs kill && lsof -t -i tcp:9000 | xargs kill && lsof -t -i tcp:8085 | xargs kill && lsof -t -i tcp:9199 | xargs kill && lsof -t -i tcp:4500 | xargs kill && lsof -t -i tcp:9150 | xargs kill && lsof -t -i tcp:4000 | xargs kill",
+    "emulators:kill": "lsof -t -i tcp:9092 | xargs kill && lsof -t -i tcp:5002 | xargs kill && lsof -t -i tcp:8082 | xargs kill && lsof -t -i tcp:9152 | xargs kill && lsof -t -i tcp:9002 | xargs kill && lsof -t -i tcp:9192 | xargs kill && lsof -t -i tcp:4002 | xargs kill && lsof -t -i tcp:4402 | xargs kill && lsof -t -i tcp:4502 | xargs kill",
     "start": "npm run shell",
     "logs": "firebase functions:log",
     "local:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && export FIRESTORE_EMULATOR_HOST='localhost:8080' && run(){ node -r dotenv/config nodeScripts/$1; }; run",

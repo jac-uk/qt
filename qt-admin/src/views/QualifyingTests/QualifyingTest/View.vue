@@ -339,6 +339,8 @@ export default {
       let url = '';
       if (this.$store.getters.isLive) {
         url = 'https://qt.judicialappointments.digital';
+      } else if (this.$store.getters.isLocal) {
+        url = 'http://localhost:8085';
       } else {
         url = 'https://qt-develop.judicialappointments.digital';
       }

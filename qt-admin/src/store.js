@@ -37,6 +37,9 @@ const store = createStore({
       return state.packageVersion;
     },
     appEnvironment: () => {
+      if (import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
+        return 'LOCAL';
+      }
       const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';
@@ -48,6 +51,9 @@ const store = createStore({
     },
     isLive: (state, getters) => {
       return getters.appEnvironment === 'LIVE';
+    },
+    isLocal: (state, getters) => {
+      return getters.appEnvironment === 'LOCAL';
     },
     isDevelop: (state, getters) => {
       return getters.appEnvironment === 'DEVELOP';

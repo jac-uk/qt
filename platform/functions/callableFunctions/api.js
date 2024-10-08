@@ -111,8 +111,8 @@ api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
 });
 
 function checkAccess(req, res) {
-  if (!req.query.key) { res.status(400).send('Missing key'); }
-  if (req.query.key !== config.QT_KEY) { res.status(400).send('Incorrect key'); }
+  if (!req.query.key) { console.log('Missing key'); res.status(400).send('Missing key'); return; }
+  if (req.query.key !== config.QT_KEY) { console.log('Incorrect key'); res.status(400).send('Incorrect key'); return; }
 }
 
 module.exports = functions.region('europe-west2').https.onRequest(api);
