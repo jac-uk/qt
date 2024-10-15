@@ -11,7 +11,7 @@ module.exports = (config, firebase, db) => {
    * - if status has changed to started or completed update counts in qualifyingTest
    * - if document has been moved to another qualifyingTest then update counts in both tests
    */
-  async function onUpdate(dataBefore, dataAfter) {
+  async function onUpdate(dataBefore, dataAfter, ref) {
     if (dataBefore.status !== dataAfter.status) {
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
@@ -27,6 +27,16 @@ module.exports = (config, firebase, db) => {
         data[`counts.${statusAfter}`] = increment;
         data['counts.inProgress'] = increment;
       }
+
+      // reset started test
+      if (
+        statusBefore === config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED &&
+        statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED
+      ) {
+        data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement;
+        data['counts.inProgress'] = decrement;
+      }
+
       // completed test
       if (
         statusBefore === config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED &&
@@ -53,16 +63,56 @@ module.exports = (config, firebase, db) => {
         };
         sendEmail(participantEmail, templateId, personalisation);
       }
+
+      // reset completed test
+      if (
+        statusBefore === config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED &&
+        statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED
+      ) {
+        data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED}`] = decrement;
+        // rollback started number if added
+        if (dataBefore.statusLog &&
+            dataAfter.statusLog &&
+            dataBefore.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] !== null &&
+            dataAfter.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] === null) {
+          
+            data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement; 
+        }
+        // reset auto submit counts and flag
+        if (dataBefore.isOutOfTime && !dataAfter.isOutOfTime) {
+          data['counts.outOfTime'] = decrement;
+        }
+      }
+
+      // mark activated to completed
+      if (
+        statusBefore === config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED &&
+        statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED
+      ) {
+        data[`counts.${statusAfter}`] = increment;
+      }
+
       if (Object.keys(data).length > 0) {
         await db.doc(`qualifyingTests/${qualifyingTestId}`).update(data);
       }
     }
+
+    // move participant to other test (mop up test)
     if (dataBefore.qualifyingTest.id !== dataAfter.qualifyingTest.id) {
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
-      const updateBefore = {
-        'counts.initialised': decrement,
-      };
+
+      // reset counts of previous statuses
+      const previousStatuses = listPreviousStatuses(dataBefore.status);
+
+      const updateBefore = previousStatuses.reduce((data, status) => {
+        data[`counts.${status}`] = decrement;
+        return data;
+      }, {});
+      if (dataBefore.isOutOfTime) {
+        updateBefore['counts.outOfTime'] = decrement;
+      }
+
       const updateAfter = {
         'counts.initialised': increment,
       };
@@ -81,6 +131,29 @@ module.exports = (config, firebase, db) => {
       return result;
     }
     return true;
+  }
+
+  function listPreviousStatuses(targetStatus) {
+    const orderedStatuses = [
+      'initialised',
+      config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED,
+      config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED,
+      config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED,
+    ];
+
+    if (!orderedStatuses.includes(targetStatus)) {
+      return [];
+    }
+
+    const previousStatuses = [];
+    for (const status of orderedStatuses) {
+      previousStatuses.push(status);
+      if (status === targetStatus) break;
+    }
+    if (targetStatus === config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED) {
+      previousStatuses.push('inProgress');
+    }
+    return previousStatuses;
   }
 
 };
