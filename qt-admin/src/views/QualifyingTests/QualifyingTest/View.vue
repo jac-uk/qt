@@ -281,6 +281,115 @@
         Close & Score
       </ActionButton>
     </div>
+
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
+      <h2 class="govuk-heading-m">
+        Questions
+      </h2>
+
+      <dl
+        v-if="qualifyingTest.testQuestions"
+        class="govuk-summary-list"
+      >
+        <div
+          v-if="qualifyingTest.testQuestions.introduction"
+          class="govuk-summary-list__row"
+        >
+          <dt
+            class="govuk-summary-list__key"
+          >
+            Introduction
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ qualifyingTest.testQuestions.introduction }}
+          </dd>
+        </div>
+        <div
+          v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
+          :key="index"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            {{ questionLabel }} {{ index + 1 }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ testQuestion.details }}
+
+            <hr class="govuk-section-break govuk-section-break--visible">
+            <ol
+              v-if="isSituationalJudgement() || isCriticalAnalysis()"
+            >
+              <li
+                v-for="(option, i) in testQuestion.options"
+                :key="i"
+              >
+                {{ option.answer }}
+              </li>
+            </ol>
+            <hr
+              v-if="isSituationalJudgement() || isCriticalAnalysis()"
+              class="govuk-section-break govuk-section-break--visible"
+            >
+
+            <div
+              v-if="isSituationalJudgement() && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
+              class="govuk-!-padding-1"
+            >
+              <strong>
+                Most appropriate:
+              </strong>
+              {{ testQuestion.options[testQuestion.mostAppropriate].answer }}
+              <br>
+              <strong>
+                Least appropriate:
+              </strong>
+              {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
+            </div>
+
+            <div
+              v-if="isCriticalAnalysis() && testQuestion.correct >= 0"
+              class="govuk-!-padding-1"
+            >
+              Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+            </div>
+
+            <div
+              v-if="isScenario()"
+              class="govuk-!-padding-1"
+            >
+              <div
+                v-for="(document, docNum) in testQuestion.documents"
+                :key="docNum"
+              >
+                <strong>
+                  {{ document.title }}
+                </strong>
+                <!-- eslint-disable -->
+                <p
+                  v-html="document.content"
+                />
+                <!-- eslint-enable -->
+                <hr>
+              </div>
+              <ol>
+                <li
+                  v-for="(option, i) in testQuestion.options"
+                  :key="i"
+                >
+                  {{ option.question }}
+                  <span
+                    v-if="option.hint"
+                    class="govuk-hint"
+                  >
+                    {{ option.hint }}
+                  </span>
+                </li>
+              </ol>
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </template>
 
@@ -293,6 +402,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import EditableMessage from '@/components/Micro/EditableMessage.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { httpsCallable } from '@firebase/functions';
+import { isScenario, isCriticalAnalysis, isSituationalJudgement } from '../../../helpers/qualifyingTestHelpers';
 
 export default {
   components: {
@@ -319,6 +429,15 @@ export default {
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isScenario() {
+      return isScenario;
+    },
+    isSituationalJudgement() {
+      return isSituationalJudgement;
+    },
+    isCriticalAnalysis() {
+      return isCriticalAnalysis;
     },
     isProcessing() {
       return true;

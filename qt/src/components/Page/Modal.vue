@@ -22,7 +22,7 @@
               class="govuk-button govuk-button--secondary govuk-!-margin-right-3 deny info-btn--modal--cancel"
               @click="closeModal"
             >
-              Cancel
+              {{ cancelButtonText }}
             </button>
           </span>
           <button
@@ -52,6 +52,10 @@ export default {
     buttonText: {
       type: String,
       default: 'Accept',
+    },
+    cancelButtonText: {
+      type: String,
+      default: 'Cancel',
     },
     message: {
       type: String,
@@ -101,7 +105,9 @@ export default {
       min-height: 100%;
     }
   }
-
+  .modal__content {
+    text-align: center;
+  }
   .modal__title {
     text-align: center;
     vertical-align: middle;
