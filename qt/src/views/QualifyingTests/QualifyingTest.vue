@@ -110,24 +110,28 @@ export default {
     };
   },
   computed: {
-    showPrevious() {
-      if (this.isScenario) {
-        return !(this.isFirstScenario && this.isFirstQuestionInScenario);
-      }
-      return !this.isFirstQuestion;
-    },
-    showSkip() {
-      return true;
-      // return !(this.isLastScenario && this.isLastQuestionInScenario);
-    },
-    isScenario() {
-      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    isSituationalJudgement() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
     isCriticalAnalysis() {
       return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
     },
-    isSituationalJudgement() {
-      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+    isScenario() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    },
+    showPrevious() {
+      if (this.isSituationalJudgement || this.isCriticalAnalysis)
+        return this.$route.params.questionNumber > 1;
+      else if (this.isScenario)
+        return !(this.isFirstScenario && this.isFirstQuestionInScenario);
+      return false;
+    },
+    showSkip() {
+      if (this.isSituationalJudgement || this.isCriticalAnalysis)
+        return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
+      else if (this.isScenario)
+        return !(this.isLastScenario && this.isLastQuestionInScenario);
+      return false;
     },
     scenarioNumber() {
       return parseInt(this.$route.params.scenarioNumber);
@@ -306,17 +310,20 @@ export default {
       }
     },
     btnPrevious() {
-      // Move to the previous question unless it's at the first question of the first scenario (go to review page)
-      if (this.isScenario) {
+      if (this.isSituationalJudgement || this.isCriticalAnalysis) {
+        this.$router.replace({ params: { questionNumber: this.$route.params.questionNumber - 1 } });
+      } else if (this.isScenario) {
+        // Move to the previous question unless it's at the first question of the first scenario (in which case go to the review pg)
         if (this.isFirstScenario && this.isFirstQuestionInScenario) {
-          // At the first question of the first scenario, go to the review page
           this.$router.push({
             name: 'online-test-review',
           });
-        } else {
+        }
+        else {
           const newScenarioNumber = this.isFirstQuestionInScenario ? this.scenarioNumber - 1 : this.scenarioNumber;
-          const newQuestionNumber = this.isFirstQuestionInScenario ? this.getNumberQuestionsInScenario(newScenarioNumber) : this.questionNumber - 1;
-
+          const newQuestionNumber = this.isFirstQuestionInScenario
+            ? this.getNumberQuestionsInScenario(newScenarioNumber)
+            : this.questionNumber - 1;
           this.$router.push({
             name: 'online-test-scenario',
             params: {
@@ -325,19 +332,33 @@ export default {
             },
           });
         }
-      } else {
-        // If not in a scenario, navigate back a question or stay at question 1
-        this.$router.push({
-          name: 'online-test-question',
-          params: {
-            questionNumber: this.questionNumber === 1 ? 1 : this.questionNumber - 1,
-          },
-        });
       }
     },
     btnSkip() {
-      this.saveHistoryAndSession({ action: 'skip', txt: 'Skip' }, true);
-      this.$router.push(this.nextPage);
+      const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
+      this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
+
+      if (this.isSituationalJudgement || this.isCriticalAnalysis) {
+        this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+      } else if (this.isScenario) {
+        // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
+        if (this.isLastScenario && this.isLastQuestionInScenario) {
+          this.$router.push({
+            name: 'online-test-review',
+          });
+        }
+        else {
+          const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
+          const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          this.$router.push({
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: scenarioNumber,
+              questionNumber: questionNumber,
+            },
+          });
+        }
+      }
     },
     redirectToList() {
       this.$router.replace({ name: 'online-tests' });
