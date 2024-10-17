@@ -66,3 +66,6 @@ node_modules/
 .env
 platform/data/auth_export/accounts.json
 .vscode/settings.json
+
+# ds store
+.DS_Store

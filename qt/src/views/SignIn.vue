@@ -60,11 +60,12 @@ export default {
   methods: {
     async login() {
       await this.validate();
+      const loginEmail = this.formData.email.toLowerCase().replaceAll(' ', '');
       if (this.isValid) {
         this.errors = [];
         try {
           // request access
-          const response = await httpsCallable(functions, 'signIn')({ email: this.formData.email, testId: this.qualifyingTestId });
+          const response = await httpsCallable(functions, 'signIn')({ email: loginEmail, testId: this.qualifyingTestId });
           if (response && response.data && response.data.success) {
 
             // sign in with token

@@ -25,7 +25,7 @@
               v-if="response"
               id="scenario-question"
               v-model="response.text"
-              :label="`${questionNumber}. ${question.question}`"
+              :label="`Question ${getOverallQuestionNumber}.`"
               :hint="$filters.showHTMLBreaks(question.hint) || 'Answer below:'"
               :word-limit="wordLimit"
               :hard-word-limit="true"
@@ -157,6 +157,19 @@ export default {
     isLastScenario() {
       return this.scenarioNumber === this.qualifyingTestResponse.testQuestions.questions.length;
     },
+    isLastQuestionInScenario() {
+      return this.numberOfQuestionsInCurrentScenario
+        ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
+        : false;
+    },
+    isScenario() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    },
+    numberOfQuestionsInCurrentScenario() {
+      return this.scenarioNumber && this.questionNumber
+        ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
+        : 0;
+    },
     isLastQuestion() {
       return this.questionNumber === this.scenario.options.length;
     },
@@ -168,27 +181,9 @@ export default {
       if (this.scenario && this.scenario.options && this.scenario.options[questionNumber]) {
         return this.scenario.options[questionNumber];
       } else {
-        this.redirectToList();
+        // this.redirectToList
         return {};
       }
-    },
-
-    nextPage() {
-
-      // @TODO: WHEN GET TO THE END IT'S NOT DETECTING WE'RE ON THE LAST SCENARIO AND LAST QUESTION AND GOING TO THE REVIEW PAGE!
-
-      if ((this.isLastScenario && this.isLastQuestion) || this.isComingFromReview) {
-        return {
-          name: 'online-test-review',
-        };
-      }
-      return {
-        name: 'online-test-scenario',
-        params: {
-          scenarioNumber: this.isLastQuestion ? this.scenarioNumber + 1 : this.scenarioNumber,
-          questionNumber: this.isLastQuestion ? 1 : this.questionNumber + 1,
-        },
-      };
     },
     wordsCounter() {
       let content = this.response ? this.response.text : '';
@@ -212,6 +207,50 @@ export default {
     },
     wordLimit() {
       return this.question.wordLimit;
+    },
+    nextPage() {
+      console.log(this.overallQuestionNumber);
+
+      // Check if it's the last scenario and the last question or coming from the review page
+      if ((this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
+        return {
+          name: 'online-test-review',
+        };
+      }
+      if (this.isLastQuestionInScenario) {
+        // If it's the last question in the current scenario, move to the next scenario
+        return {
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: this.scenarioNumber + 1,
+            questionNumber: 1, // Reset to the first question of the next scenario
+          },
+        };
+      } else {
+        // If it's not the last question, move to the next question in the current scenario
+        return {
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: this.scenarioNumber,
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      }
+    },
+    getOverallQuestionNumber() {
+      if (!this.scenarioNumber || !this.questionNumber) return 0;
+
+      let overallQuestionNumber = 0;
+
+      // Loop through all previous scenarios and add their number of questions
+      for (let i = 0; i < this.scenarioNumber - 1; i++) {
+        overallQuestionNumber += this.qualifyingTestResponse.testQuestions.questions[i].options.length;
+      }
+
+      // Add the current question number within the current scenario
+      overallQuestionNumber += this.questionNumber;
+
+      return overallQuestionNumber;
     },
   },
   watch: {
@@ -246,6 +285,9 @@ export default {
   methods: {
     toggleAccordion() {
       this.showDetails = !this.showDetails;
+    },
+    getNumberQuestionsInScenario(scenarioNumber) {
+      return this.qualifyingTestResponse.testQuestions.questions[scenarioNumber].options.length;
     },
     async save() {
       await this.saveResponse(true);

@@ -11,6 +11,7 @@
       </Banner>
 
       <form
+        v-if="response"
         ref="formRef"
         @submit.prevent="save(true, {})"
       >
@@ -52,7 +53,6 @@
 </template>
 <script>
 import { Timestamp, arrayUnion } from '@firebase/firestore';
-
 import CriticalAnalysis from '@/views/QualifyingTests/QualifyingTest/Question/CriticalAnalysis.vue';
 import SituationalJudgement from '@/views/QualifyingTests/QualifyingTest/Question/SituationalJudgement.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
@@ -63,6 +63,12 @@ export default {
     CriticalAnalysis,
     SituationalJudgement,
     Banner,
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.isComingFromReview = from.name === 'online-test-review';
+      return true;
+    });
   },
   props: {
     autoSave: {
@@ -103,6 +109,9 @@ export default {
     };
   },
   computed: {
+    questionType() {
+      return this.qualifyingTestResponse.qualifyingTest.type;
+    },
     questionNumber() {
       return parseInt(this.$route.params.questionNumber);
     },
@@ -116,11 +125,14 @@ export default {
     introduction() {
       return this.qualifyingTestResponse.qualifyingTest.questions.introduction;
     },
-    questionType() {
-      return this.qualifyingTestResponse.qualifyingTest.type;
-    },
     isSituationalJudgment() {
-      return this.questionType === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+    },
+    isCriticalAnalysis() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
+    },
+    isScenario() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
     canSaveAndContinue() {
       if (this.previousTestQuestion) {
@@ -138,13 +150,14 @@ export default {
       }
       return false;
     },
+    isLastScenario() {
+      return this.scenarioNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+    },
+    scenarioNumber() {
+      return parseInt(this.$route.params.scenarioNumber || 0);
+    },
     nextPage() {
-      if (this.isLastQuestion || this.hasStartedAllQuestions) {
-        return {
-          name: 'online-test-review',
-        };
-      }
-
+      // Determine the next page for non-scenario-based tests
       return {
         name: 'online-test-question',
         params: {
@@ -171,18 +184,28 @@ export default {
     window.scrollTo(0, 0);
   },
   async created() {
+    if ((this.$route.params.questionNumber || this.$route.params.scenarioNumber) > this.qualifyingTestResponse.testQuestions.questions.length) {
+      this.$router.push({
+        name: 'online-test-review',
+      });
+      return;
+    }
     if (this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-      return this.$router.replace({ name: 'online-tests' });
+      // return this.$router.replace({ name: 'online-tests' });
     }
-    if (!this.response.started) {
-      this.response.started = Timestamp.fromDate(new Date());
-      const data = {
-        responses: this.responses,
-      };
-      await this.$store.dispatch('qualifyingTestResponse/save', data);
-    }
-    if (this.qualifyingTestResponse._unlockPreviousAnswers !== true) {
-      this.questionStartedOnPreviousTest();
+    if (this.response) {
+
+      if (!this.response.started) {
+        this.response.started = Timestamp.fromDate(new Date());
+        const data = {
+          responses: this.responses,
+        };
+        await this.$store.dispatch('qualifyingTestResponse/save', data);
+      }
+
+      if (this.qualifyingTestResponse._unlockPreviousAnswers !== true) {
+        this.questionStartedOnPreviousTest();
+      }
     }
     this.questionSessionStart = Timestamp.now();
   },

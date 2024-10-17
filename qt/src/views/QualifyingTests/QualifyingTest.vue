@@ -18,9 +18,7 @@
         :alert="1"
         @change="handleCountdown"
       >
-        <template
-          #left-slot
-        >
+        <template #left-slot>
           <span>
             <a
               v-if="!isReviewPage && showPrevious"
@@ -34,9 +32,7 @@
           </span>
         </template>
 
-        <template
-          #right-slot
-        >
+        <template #right-slot>
           <a
             v-if="!isReviewPage && showSkip"
             id="skip-link"
@@ -80,8 +76,9 @@
     </template>
   </div>
 </template>
+
 <script>
-import { Timestamp, arrayUnion } from '@firebase/firestore';
+import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
 import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
@@ -94,6 +91,12 @@ export default {
     Modal,
     Countdown,
     Banner,
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.isComingFromReview = from.name === 'online-test-review';
+      return true;
+    });
   },
   data() {
     return {
@@ -130,7 +133,6 @@ export default {
         return !(this.isLastScenario && this.isLastQuestionInScenario);
       return false;
     },
-
     scenarioNumber() {
       return parseInt(this.$route.params.scenarioNumber);
     },
@@ -145,8 +147,11 @@ export default {
         ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
         : 0;
     },
+    isFirstQuestion() {
+      return !this.isScenario && this.questionNumber === 1;
+    },
     isFirstQuestionInScenario() {
-      return this.questionNumber === 1;
+      return this.isScenario && this.questionNumber === 1;
     },
     isFirstScenario() {
       return this.scenarioNumber === 1;
@@ -159,7 +164,6 @@ export default {
         ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
         : false;
     },
-
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
     },
@@ -180,6 +184,71 @@ export default {
     },
     isReviewPage() {
       return this.$route.name === 'online-test-review';
+    },
+    isLastQuestion() {
+      return this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+    },
+    nextPage() {
+      // Handle navigation to the review page for both scenarios and non-scenarios
+
+      // Determine the next page for scenario-based tests
+      if (this.isScenario) { // Check if this is a scenario-based test
+        if ((this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
+          return {
+            name: 'online-test-review',
+          };
+        }
+        if (this.isLastQuestionInScenario) {
+          // If it's the last question in the current scenario, move to the next scenario
+          return {
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: this.scenarioNumber + 1,
+              questionNumber: 1, // Reset to the first question of the next scenario
+            },
+          };
+        } else {
+          // If it's not the last question, move to the next question in the current scenario
+          return {
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: this.scenarioNumber,
+              questionNumber: this.questionNumber + 1,
+            },
+          };
+        }
+      } else if (this.isLastQuestion) {
+        return {
+          name: 'online-test-review',
+        };
+      }
+
+      // Determine the next page for non-scenario-based tests
+      return {
+        name: 'online-test-question',
+        params: {
+          questionNumber: this.questionNumber + 1,
+        },
+      };
+    },
+    currentQuestion() {
+      if (!this.scenarioNumber || !this.questionNumber) return false;
+      return this.qualifyingTestResponse.testQuestions.questions[this.scenarioNumber - 1].options[this.questionNumber - 1];
+    },
+    getOverallQuestionNumber() {
+      if (!this.scenarioNumber || !this.questionNumber) return 0;
+
+      let overallQuestionNumber = 0;
+
+      // Loop through all previous scenarios and add their number of questions
+      for (let i = 0; i < this.scenarioNumber - 1; i++) {
+        overallQuestionNumber += this.qualifyingTestResponse.testQuestions.questions[i].options.length;
+      }
+
+      // Add the current question number within the current scenario
+      overallQuestionNumber += this.questionNumber;
+
+      return overallQuestionNumber;
     },
   },
   watch: {
@@ -202,6 +271,7 @@ export default {
   },
   async created() {
     await this.loadQualifyingTestResponse();
+    this.questionSessionStart = Timestamp.now();
   },
   mounted() {
     window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -214,6 +284,11 @@ export default {
   },
   methods: {
     async loadQualifyingTestResponse() {
+      if ((this.$route.params.questionNumber || this.$route.params.scenarioNumber) <= 0) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
       try {
         const qualifyingTestResponse = await this.$store.dispatch('qualifyingTestResponse/bind', this.$route.params.qualifyingTestId);
         if (qualifyingTestResponse === null) {
@@ -366,7 +441,32 @@ export default {
       }
     },
     getNumberQuestionsInScenario(scenarioNumber) {
-      return this.qualifyingTestResponse.testQuestions.questions[scenarioNumber].options.length;
+      const scenarioIndex = scenarioNumber - 1;
+      return this.qualifyingTestResponse.testQuestions.questions[scenarioIndex].options.length;
+    },
+    async saveHistoryAndSession(data) {
+      const historyToSave = this.prepareSaveHistory(data);
+      const sessionToSave = this.prepareSaveQuestionSession();
+      const objToSave = {
+        ...historyToSave,
+        ...sessionToSave,
+      };
+      await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
+    },
+    prepareSaveQuestionSession() {
+      const timeNow = serverTimestamp();
+      const date = new Date();
+      const objToSave = {
+        questionSession: arrayUnion({
+          start: this.questionSessionStart,
+          end: Timestamp.fromDate(date),
+          question: this.questionNumber - 1,
+          timestamp: Timestamp.fromDate(date),
+          utcOffset: date.getTimezoneOffset(),
+        }),
+        lastUpdated: timeNow,
+      };
+      return objToSave;
     },
   },
 };
