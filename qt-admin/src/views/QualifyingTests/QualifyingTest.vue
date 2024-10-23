@@ -1,11 +1,11 @@
 <template>
   <div class="xgovuk-grid-row">
-    <RouterLink
+    <a
       class="govuk-back-link"
-      :to="{ name: 'qualifying-tests', params: { folderId: folderId } }"
+      @click="$router.back()"
     >
       Back
-    </RouterLink>
+    </a>
     <span class="govuk-caption-l">{{ folder.name }}</span>
 
     <LoadingMessage
