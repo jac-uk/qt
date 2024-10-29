@@ -3,11 +3,14 @@
     <div class="govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
         {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
-        <routerLink
-          :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }"
-        >
-          {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
-        </routerLink>
+        <span>
+          <routerLink
+            :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }"
+          >
+            {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
+          </routerLink>
+          <!-- {{ qualifyingTest.mode == 'mop-up' ? 'Mop-up' : '' }} -->
+        </span>
       </h2>
       <h3
         v-if="participant.fullName"
@@ -61,7 +64,19 @@
             Start date
           </dt>
           <dd class="govuk-summary-list__value">
-            <span v-if="response.statusLog.started">{{ $filters.formatDate(response.statusLog.started, 'datetime') }}</span>
+            <template
+              v-if="testStartTimestamps.length"
+            >
+              <span>
+                <span
+                  v-for="started in testStartTimestamps"
+                  :key="started"
+                >
+                  {{ $filters.formatDate(started, 'datetime') }}
+                  <br>
+                </span>
+              </span>
+            </template>
             <span v-else>{{ $filters.formatDate(qualifyingTest.startDate, 'datetime') }}</span>
             <div v-if="hasRelatedTests && isEditingTestDate">
               <Select
@@ -262,11 +277,34 @@
             >
               <dt class="govuk-summary-list__key">
                 {{ questionLabel }} {{ index + 1 }}
+                <br>
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="responses[index] && responses[index].started"
+                  :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].started"
                   :end="lastUpdatedQuestion(index)"
                 />
+                <div
+                  v-if="isScenario && responses[index]"
+                >
+                  <div
+                    v-for="(res, i) in responses[index].responsesForScenario"
+                    :key="i"
+                  >
+                    <span
+                      v-if="responses[index].responsesForScenario[i].started"
+                    >
+                      <span
+                        class="govuk-hint"
+                      >
+                        Question {{ i+1 }}
+                        <QuestionDuration
+                          :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].responsesForScenario[i].started"
+                          :end="responses[index].responsesForScenario[i].completed || lastUpdatedQuestion(scenarioQuestionIndex(i, index))"
+                        />
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </dt>
               <dd class="govuk-summary-list__value">
                 <div v-if="isScenario">
@@ -317,11 +355,6 @@
                       >{{ testQuestion.options[i].hint
                       }}</span>
                     </p>
-
-                    <QuestionDuration
-                      :start="res.started"
-                      :end="res.completed"
-                    />
                     <span v-if="res.started !== null && res.text === null">
                       [Answer skipped]
                     </span>
@@ -424,43 +457,133 @@
           </h2>
           <div v-if="responses.length">
             <table class="history-logs">
-              <div
-                v-for="(testQuestion, index) in questions"
-                :key="index"
-              >
-                <tr class="log_row">
-                  <td rowspan="8">
-                    Question {{ index + 1 }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>First started question: </td>
-                  <td>{{ $filters.formatDate(responses[index].started, 'datetime') }}</td>
-                </tr>
-                <tr>
-                  <td>Last updated answer: </td>
-                  <td>{{ $filters.formatDate(lastUpdatedQuestion(index), 'datetime') }}</td>
-                </tr>
-                <tr>
-                  <td>Amount of time on question: </td>
-                  <td>{{ amountOfTimeOnQuestion(index) }}</td>
-                </tr>
-                <tr>
-                  <td>How many times visited question: </td>
-                  <td>{{ amountOfTimeVisitedQuestion(index) }} </td>
-                </tr>
-                <tr>
-                  <td>How many times saved: </td>
-                  <td>{{ historyCount('save', index) }}</td>
-                </tr>
-                <tr>
-                  <td>How many times skipped: </td>
-                  <td>{{ historyCount('skip', index) }}</td>
-                </tr>
-                <tr>
-                  <td>How many times changed answer: </td>
-                  <td>{{ historyCount('changed', index) }}</td>
-                </tr>
+              <div v-if="!isScenario">
+                <div
+                  v-for="(testQuestion, index) in questions"
+                  :key="index"
+                  class="log_row"
+                >
+                  <tr>
+                    <td>
+                      Question {{ index + 1 }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>First started question: </td>
+                    <td>
+                      <li
+                        style="list-style-type: none;"
+                      >
+                        {{ $filters.formatDate(responses[index].started, 'datetime') }}
+                      </li>
+                      <li
+                        v-for="started in firstVisitOfDayToQuestion(index)"
+                        :key="started"
+                        style="list-style-type: none;"
+                      >
+                        {{ $filters.formatDate(started, 'datetime') }}
+                      </li>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Last updated answer: </td>
+                    <td>{{ $filters.formatDate(lastUpdatedQuestion(index), 'datetime') }}</td>
+                  </tr>
+                  <tr>
+                    <td>Amount of time on question: </td>
+                    <td>{{ amountOfTimeOnQuestion(index) }}</td>
+                  </tr>
+                  <tr>
+                    <td>How many times visited question: </td>
+                    <td>{{ amountOfTimeVisitedQuestion(index) }} </td>
+                  </tr>
+                  <tr>
+                    <td>How many times saved: </td>
+                    <td>
+                      {{ historyCount('save', index) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>How many times skipped: </td>
+                    <td>{{ historyCount('skip', index) }}</td>
+                  </tr>
+                  <tr>
+                    <td>How many times changed answer: </td>
+                    <td>{{ historyCount('changed', index) }}</td>
+                  </tr>
+                </div>
+              </div>
+              <div v-else-if="isScenario">
+                <hr>
+                <div
+                  v-for="(question, i) in questions"
+                  :key="i"
+                  class="log_row"
+                >
+                  <div
+                    v-for="(testQuestion, index) in question.options"
+                    :key="index"
+                  >
+                    <tr>
+                      <td>
+                        Question {{ getOverallQuestionNumber(i+1, index+1) }}
+                        <br>
+                        <span
+                          class="govuk-hint govuk-caption-s govuk-!-margin-bottom-0"
+                        >
+                          Scenario {{ i + 1 }}: Question {{ index + 1 }}
+                        </span>
+                      </td>
+                    </tr>
+                    <hr>
+                    <tr>
+                      <td>First started question: </td>
+                      <td>
+                        <li
+                          v-if="!firstVisitOfDayToQuestion(i, index).length"
+                          style="list-style-type: none;"
+                        >
+                          {{ $filters.formatDate(responses[i].responsesForScenario[index].started, 'datetime') }}
+                        </li>
+                        <li
+                          v-for="started in firstVisitOfDayToQuestion(scenarioQuestionIndex(i,index))"
+                          v-else
+                          :key="started"
+                          style="list-style-type: none;"
+                        >
+                          {{ $filters.formatDate(started, 'datetime') }}
+                        </li>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Last updated answer: </td>
+                      <td>{{ $filters.formatDate(lastUpdatedQuestion(scenarioQuestionIndex(i, index)), 'datetime') }}</td>
+                    </tr>
+                    <tr>
+                      <td>Amount of time on question: </td>
+                      <td>{{ amountOfTimeOnQuestion(scenarioQuestionIndex(i, index)) }}</td>
+                    </tr>
+                    <tr>
+                      <td>How many times visited question: </td>
+                      <td>{{ amountOfTimeVisitedQuestion(scenarioQuestionIndex(i, index)) }} </td>
+                    </tr>
+                    <tr>
+                      <td>How many times saved: </td>
+                      <td>
+                        {{ historyCount('saved', scenarioQuestionIndex(i, index)) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>How many times skipped: </td>
+                      <td>{{ historyCount('skip', scenarioQuestionIndex(i, index)) }}</td>
+                    </tr>
+                    <tr>
+                      <td>How many times changed answer: </td>
+                      <td>{{ historyCount('changed', scenarioQuestionIndex(i, index)) }}</td>
+                    </tr>
+                    <hr>
+                  </div>
+                </div>
               </div>
             </table>
           </div>
@@ -690,6 +813,13 @@ export default {
       }
       return false;
     },
+    testStartTimestamps() {
+      let result = [];
+      if (this.response.history) {
+        result = this.earliestVisitOnEachDate(this.response.history.filter(item => (item.action === 'start' && item.location === 'information')).map(item => item.timestamp));
+      }
+      return result;
+    },
   },
   watch: {
     activeTab: async function (newActiveTab) {
@@ -709,6 +839,50 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
+    scenarioQuestionIndex(scenario, question){
+      return this.getOverallQuestionNumber(scenario + 1, question + 1) - 1;
+    },
+    getOverallQuestionNumber(scenarioNumber, questionNumber) {
+      let overallQuestionNumber = 0;
+
+      for (let i = 0; i < scenarioNumber - 1; i++) {
+        overallQuestionNumber += this.response.testQuestions.questions[i].options.length;
+      }
+
+      overallQuestionNumber += questionNumber;
+
+      return overallQuestionNumber;
+    },
+    earliestVisitOnEachDate(dates) {
+      const result = {};
+
+      // Loop through each date
+      dates.forEach(dateStr => {
+        const dateObj = new Date(dateStr);
+
+        const dayKey = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+        // Check if this is the earliest instance for this day
+        if (!result[dayKey] || new Date(result[dayKey]) > dateObj) {
+          result[dayKey] = dateStr; // Store the earliest instance for this day
+        }
+      });
+
+      return Object.values(result);
+    },
+    firstVisitOfDayToQuestion(number) {
+      const dates = this.questionStartTimestamps(number);
+      const dayMap = this.earliestVisitOnEachDate(dates);
+
+      return Object.values(dayMap);
+    },
+    questionStartTimestamps(number) {
+      let result = [];
+      if (this.response.history) {
+        result = this.response.history.filter(item => item.action == 'start' && item.question == number).map(item => item.timestamp);
+      }
+      return result;
+    },
     async confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         try {
@@ -889,7 +1063,7 @@ export default {
       if (this.response.history) {
         Object.keys(this.response.history).map(key => {
           const item = this.response.history[key];
-          if (item.question === index && (item.action === 'save' || item.action === 'skip' || item.action === 'exit')) {
+          if (item.question === index && (item.action === 'save' || item.action === 'saved' || item.action === 'skip' || item.action === 'exit')) {
             counter++;
           }
         });
@@ -901,7 +1075,7 @@ export default {
       if (this.response.history) {
         Object.keys(this.response.history).map(key => {
           const item = this.response.history[key];
-          if (item.question === index && (item.action === 'save' || item.action === 'changed')) {
+          if (item.question === index && (item.action === 'save' || item.action === 'saved' || item.action === 'changed')) {
             if (item.timestamp && (!latestTimestamp || item.timestamp > latestTimestamp)) {
               latestTimestamp = item.timestamp;
             }
@@ -944,8 +1118,9 @@ export default {
     line-height: 1;
     padding: 5px;
   }
-  .history-logs [rowspan] {
+  .history-logs {
     font-weight: bold;
     font-size: larger;
+    width: 100%;
   }
 </style>

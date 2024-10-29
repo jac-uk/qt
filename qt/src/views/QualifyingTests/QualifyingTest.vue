@@ -31,11 +31,10 @@
             </a>
           </span>
         </template>
-
         <template #right-slot>
           <a
-            v-if="!isReviewPage && showSkip"
-            id="skip-link"
+            v-if="!isReviewPage"
+            :id="showSkip ? 'skip-link' : 'review-link'"
             :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
             href=""
             @click.prevent="btnSkip"
@@ -78,12 +77,13 @@
 </template>
 
 <script>
-import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
 import Banner from '@/components/Page/Banner.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -107,9 +107,13 @@ export default {
       exitTest: false,
       serverTimeOffset: 0,
       testInProgress: false,
+      questionNumber: parseInt(this.$route.params.questionNumber),
     };
   },
   computed: {
+    scenarioNumber() {
+      return parseInt(this.$route.params.scenarioNumber);
+    },
     isSituationalJudgement() {
       return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
@@ -121,30 +125,24 @@ export default {
     },
     showPrevious() {
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
-        return this.$route.params.questionNumber > 1;
+        return this.questionNumber > 1;
       else if (this.isScenario)
         return !(this.isFirstScenario && this.isFirstQuestionInScenario);
       return false;
     },
     showSkip() {
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
-        return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
+        return this.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
       else if (this.isScenario)
         return !(this.isLastScenario && this.isLastQuestionInScenario);
       return false;
-    },
-    scenarioNumber() {
-      return parseInt(this.$route.params.scenarioNumber);
-    },
-    questionNumber() {
-      return parseInt(this.$route.params.questionNumber);
     },
     numberOfScenarios() {
       return this.qualifyingTestResponse.testQuestions.questions.length;
     },
     numberOfQuestionsInCurrentScenario() {
       return this.scenarioNumber && this.questionNumber
-        ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
+        ? this.getNumberQuestionsInScenario(this.scenarioNumber)
         : 0;
     },
     isFirstQuestion() {
@@ -160,9 +158,7 @@ export default {
       return this.scenarioNumber === this.numberOfScenarios;
     },
     isLastQuestionInScenario() {
-      return this.numberOfQuestionsInCurrentScenario
-        ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
-        : false;
+      return this.questionNumber === this.numberOfQuestionsInCurrentScenario;
     },
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
@@ -254,6 +250,7 @@ export default {
   watch: {
     qualifyingTestResponse: async function (newVal) {
       if (newVal) {
+        this.questionNumber = parseInt(this.$route.params.questionNumber);
         if (this.qualifyingTestResponse && this.qualifyingTestResponse.lastUpdated && this.qualifyingTestResponse.lastUpdatedClientTime) {
           this.serverTimeOffset = this.qualifyingTestResponse.lastUpdated.getTime() - this.qualifyingTestResponse.lastUpdatedClientTime.getTime();
           this.testInProgress = this.$store.getters['qualifyingTestResponse/testInProgress'];
@@ -335,11 +332,11 @@ export default {
       }
     },
     btnSkip() {
-      const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
+      const dataToSave = prepareSaveHistory({ action: 'skip', txt: 'Skip' }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
 
       if (this.isSituationalJudgement || this.isCriticalAnalysis) {
-        this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+        this.$router.replace({ params: { questionNumber: this.questionNumber + 1 } });
       } else if (this.isScenario) {
         // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
         if (this.isLastScenario && this.isLastQuestionInScenario) {
@@ -349,12 +346,12 @@ export default {
         }
         else {
           const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
-          const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          const nextQuestionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
           this.$router.push({
             name: 'online-test-scenario',
             params: {
               scenarioNumber: scenarioNumber,
-              questionNumber: questionNumber,
+              questionNumber: nextQuestionNumber,
             },
           });
         }
@@ -386,12 +383,12 @@ export default {
       this.$refs.timeElapsedModalRef.openModal();
     },
     openExitModal(){
-      const historyToSave = this.prepareSaveHistory({
+      const historyToSave = prepareSaveHistory({
         action: 'exit',
         txt: 'Exit Test',
         location: 'timer bar',
         question: this.$route.params.questionNumber - 1,
-      });
+      }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', historyToSave);
       this.$refs.exitModalRef.openModal();
     },
@@ -405,12 +402,12 @@ export default {
       if (this.$route.params.questionNumber) {
         this.exitTest = true; // question view will exit test
       } else {
-        const dataToSave = this.prepareSaveHistory({
+        const dataToSave = prepareSaveHistory({
           action: 'exit',
           txt: 'Exit Test',
           location: 'modal',
           question: null,
-        });
+        }, this.questionNumber);
         this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
       }
       this.timerEnded = true;
@@ -423,16 +420,6 @@ export default {
       const hyphenated = `${params.qualifyingTestId}--scenario-${params.scenarioNumber}--from-${params.questionNumber}-to-${params.questionNumber - 1}`;
       return hyphenated;
     },
-    prepareSaveHistory(data) {
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          timestamp: Timestamp.fromDate(date),
-        }),
-      };
-      return objToSave;
-    },
     handleBeforeUnload(event) {
       if (!this.exitTest) {
         // Show default browser msg warning user they're closing the tab/window
@@ -443,30 +430,6 @@ export default {
     getNumberQuestionsInScenario(scenarioNumber) {
       const scenarioIndex = scenarioNumber - 1;
       return this.qualifyingTestResponse.testQuestions.questions[scenarioIndex].options.length;
-    },
-    async saveHistoryAndSession(data) {
-      const historyToSave = this.prepareSaveHistory(data);
-      const sessionToSave = this.prepareSaveQuestionSession();
-      const objToSave = {
-        ...historyToSave,
-        ...sessionToSave,
-      };
-      await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
-    },
-    prepareSaveQuestionSession() {
-      const timeNow = serverTimestamp();
-      const date = new Date();
-      const objToSave = {
-        questionSession: arrayUnion({
-          start: this.questionSessionStart,
-          end: Timestamp.fromDate(date),
-          question: this.questionNumber - 1,
-          timestamp: Timestamp.fromDate(date),
-          utcOffset: date.getTimezoneOffset(),
-        }),
-        lastUpdated: timeNow,
-      };
-      return objToSave;
     },
   },
 };
@@ -484,6 +447,10 @@ export default {
 
   #skip-link::before{
     content: 'Skip to the next question';
+  }
+
+  #review-link::before{
+    content: 'Skip to review';
   }
 
   @include mobile-view {

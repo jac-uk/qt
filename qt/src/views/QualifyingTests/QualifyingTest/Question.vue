@@ -29,18 +29,17 @@
         >
           Please select one option 'Most appropriate' and one 'Least appropriate' before clicking on 'Save and continue'.
         </p>
-
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
-              :class="`moj-button-menu__item govuk-button govuk-button--secondary govuk-!-margin-right-2 info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-skip`"
+              :class="`moj-button-menu__item govuk-button govuk-button--secondary govuk-!-margin-right-2 info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-skip`"
               type="button"
               @click="skip"
             >
               Skip to next question
             </button>
             <button
-              :class="`moj-button-menu__item govuk-button info-btn--question-${$route.params.questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
+              :class="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
               :disabled="!canSaveAndContinue"
             >
               Save and continue
@@ -52,11 +51,12 @@
   </div>
 </template>
 <script>
-import { Timestamp, arrayUnion } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import CriticalAnalysis from '@/views/QualifyingTests/QualifyingTest/Question/CriticalAnalysis.vue';
 import SituationalJudgement from '@/views/QualifyingTests/QualifyingTest/Question/SituationalJudgement.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner.vue';
+import { prepareSaveHistory, prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -106,6 +106,7 @@ export default {
       responses,
       showDetails: true,
       previousTestQuestion: false,
+      questionSessionStart: undefined,
     };
   },
   computed: {
@@ -150,12 +151,6 @@ export default {
       }
       return false;
     },
-    isLastScenario() {
-      return this.scenarioNumber === this.qualifyingTestResponse.testQuestions.questions.length;
-    },
-    scenarioNumber() {
-      return parseInt(this.$route.params.scenarioNumber || 0);
-    },
     nextPage() {
       // Determine the next page for non-scenario-based tests
       return {
@@ -167,35 +162,42 @@ export default {
     },
   },
   watch: {
-    exitTest: function (newVal, oldVal) {
+    exitTest: async function (newVal, oldVal) {
       if (newVal !== oldVal) {
         if (this.exitTest) { // exitTest therefore update history and session
-          this.saveHistoryAndSession({
+          const sessionData =            {
             action: 'exit',
             txt: `Exit Test question ${this.questionNumber}`,
             location: 'modal',
             question: this.questionNumber - 1,
-          });
+          };
+          const saveData = await saveHistoryAndSession(sessionData, this.questionNumber, this.questionSessionStart);
+          await this.$store.dispatch('qualifyingTestResponse/save', saveData);
         }
       }
     },
   },
-  mounted() {
+  async mounted() {
+    const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
+    await this.$store.dispatch('qualifyingTestResponse/save', saveData);
     window.scrollTo(0, 0);
+    this.questionSessionStart = Timestamp.now();
   },
   async created() {
-    if ((this.$route.params.questionNumber || this.$route.params.scenarioNumber) > this.qualifyingTestResponse.testQuestions.questions.length) {
+    if (this.isScenario) {
       this.$router.push({
         name: 'online-test-review',
       });
       return;
     }
-    if (this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-      // return this.$router.replace({ name: 'online-tests' });
+    if (this.questionNumber > this.qualifyingTestResponse.testQuestions.questions.length) {
+      this.$router.push({
+        name: 'online-test-review',
+      });
+      return;
     }
-    if (this.response) {
-
-      if (!this.response.started) {
+    if (this.qualifyingTestResponse) {
+      if (this.response && !this.response.started) {
         this.response.started = Timestamp.fromDate(new Date());
         const data = {
           responses: this.responses,
@@ -207,18 +209,18 @@ export default {
         this.questionStartedOnPreviousTest();
       }
     }
-    this.questionSessionStart = Timestamp.now();
   },
   methods: {
     async skip() {
-      this.saveHistoryAndSession({ action: 'skip', txt: 'Skip' }, true);
+      const saveData = await saveHistoryAndSession({ action: 'skip', txt: 'Skip' }, this.questionNumber, this.questionSessionStart);
+      await this.$store.dispatch('qualifyingTestResponse/save', saveData);
       this.$router.push(this.nextPage);
     },
     async save(isCompleted, history) {
       let data = {};
       if (isCompleted) {
-        const historyToSave = this.prepareSaveHistory({ action: 'save', txt: 'Save and continue' });
-        const sessionToSave = this.prepareSaveQuestionSession();
+        const historyToSave = prepareSaveHistory({ action: 'save', txt: 'Save and continue' }, this.questionNumber);
+        const sessionToSave = prepareSaveQuestionSession(this.questionSessionStart, this.questionNumber);
         this.response.completed = Timestamp.fromDate(new Date());
         data = {
           ...historyToSave,
@@ -226,7 +228,7 @@ export default {
           responses: this.responses,
         };
       } else {
-        const historyToSave = this.prepareSaveHistory(history);
+        const historyToSave = prepareSaveHistory(history, this.questionNumber);
         data = {
           ...historyToSave,
           responses: this.responses,
@@ -246,39 +248,6 @@ export default {
           this.previousTestQuestion = true;
         }
       }
-    },
-    async saveHistoryAndSession(data) {
-      const historyToSave = this.prepareSaveHistory(data);
-      const sessionToSave = this.prepareSaveQuestionSession();
-      const objToSave = {
-        ...historyToSave,
-        ...sessionToSave,
-      };
-      await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
-    },
-    prepareSaveHistory(data) {
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          timestamp: Timestamp.fromDate(date),
-          location: `question ${this.questionNumber}`,
-          question: this.questionNumber - 1,
-        }),
-      };
-      return objToSave;
-    },
-    prepareSaveQuestionSession() {
-      const date = new Date();
-      const objToSave = {
-        questionSession: arrayUnion({
-          start: this.questionSessionStart,
-          end: Timestamp.fromDate(date),
-          question: this.questionNumber - 1,
-          timestamp: Timestamp.fromDate(date),
-        }),
-      };
-      return objToSave;
     },
   },
 };

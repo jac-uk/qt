@@ -395,10 +395,13 @@
             <hr class="govuk-section-break govuk-section-break--visible">
             <ol
               v-if="isSituationalJudgement() || isCriticalAnalysis()"
+              class="govuk-!-padding-left-0"
             >
               <li
                 v-for="(option, i) in testQuestion.options"
+                id="option"
                 :key="i"
+                class="question-or-option"
               >
                 {{ option.answer }}
               </li>
@@ -407,7 +410,6 @@
               v-if="isSituationalJudgement() || isCriticalAnalysis()"
               class="govuk-section-break govuk-section-break--visible"
             >
-
             <div
               v-if="isSituationalJudgement() && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
               class="govuk-!-padding-1"
@@ -422,12 +424,16 @@
               </strong>
               {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
             </div>
-
             <div
               v-if="isCriticalAnalysis() && testQuestion.correct >= 0"
               class="govuk-!-padding-1"
             >
-              Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+              <span>
+                <strong>
+                  Correct:
+                </strong>
+                {{ testQuestion.options[testQuestion.correct].answer }}
+              </span>
             </div>
 
             <div
@@ -448,10 +454,14 @@
                 <!-- eslint-enable -->
                 <hr>
               </div>
-              <ol>
+              <ol
+                class="govuk-!-padding-left-0"
+              >
                 <li
                   v-for="(option, i) in testQuestion.options"
+                  id="question"
                   :key="i"
+                  class="question-or-option"
                 >
                   {{ option.question }}
                   <span
@@ -497,6 +507,14 @@ export default {
     };
   },
   computed: {
+    questionLabel() {
+      let label = 'Question';
+
+      if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
+        label = 'Scenario';
+      }
+      return label;
+    },
     folderId() {
       return this.$route.params.folderId;
     },
@@ -716,6 +734,22 @@ export default {
 .tooltip-anchor {
   position: relative;
   width: 20px;
+}
+
+.question-or-option {
+  position: relative;
+  list-style-type: none;
+  counter-increment: item;
+}
+
+#question::before {
+  content: "Question " counter(item) ". ";
+  font-weight: bold;
+}
+
+#option::before {
+  content: "Option " counter(item) ". ";
+  font-weight: bold;
 }
 
 .tooltip-wrapper {

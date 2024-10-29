@@ -125,10 +125,11 @@
 
 <script>
 
-import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
+import { serverTimestamp } from '@firebase/firestore';
 
 import Modal from '@/components/Page/Modal.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -169,24 +170,11 @@ export default {
       this.saveHistory({ action: 'modal', txt: 'Cancel' });
     },
     async saveHistory(data) {
-      const objToSave = this.prepareSaveHistory({
+      const objToSave = prepareSaveHistory({
         ...data,
         location: 'review answers',
-      });
+      }, this.questionNumber);
       await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
-    },
-    prepareSaveHistory(data) {
-      const timeNow = serverTimestamp();
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          timestamp: Timestamp.fromDate(date),
-          utcOffset: date.getTimezoneOffset(),
-        }),
-        lastUpdated: timeNow,
-      };
-      return objToSave;
     },
   },
 };

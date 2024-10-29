@@ -119,7 +119,6 @@
 </template>
 
 <script>
-import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
 import Form from '@/components/Form/Form.vue';
 import ErrorSummary from '@/components/Form/ErrorSummary.vue';
 import Checkbox from '@/components/Form/Checkbox.vue';
@@ -128,6 +127,7 @@ import Modal from '@/components/Page/Modal.vue';
 import Banner from '@/components/Page/Banner.vue';
 import { isToday, formatDate } from '@/helpers/date';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -244,7 +244,7 @@ export default {
           this.errors.push({ message: error.message });
           this.scrollToTop();
         }
-        const saveHistory = this.prepareSaveHistory({ action: 'start', location: 'information' });
+        const saveHistory = prepareSaveHistory({ action: 'start', location: 'information' });
         await this.$store.dispatch('qualifyingTestResponse/save', saveHistory);
       }
     },
@@ -253,19 +253,6 @@ export default {
     },
     async btnModalConfirmed() {
       await this.onSubmit();
-    },
-    prepareSaveHistory(data) {
-      const timeNow = serverTimestamp();
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          timestamp: Timestamp.fromDate(date),
-          utcOffset: date.getTimezoneOffset(),
-        }),
-        lastUpdated: timeNow,
-      };
-      return objToSave;
     },
   },
 };

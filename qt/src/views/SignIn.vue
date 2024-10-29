@@ -60,7 +60,7 @@ export default {
   methods: {
     async login() {
       await this.validate();
-      const loginEmail = this.formData.email.toLowerCase().replaceAll(' ', '');
+      const loginEmail = this.formData.email.toLowerCase().replace(/\s+/g, '');
       if (this.isValid) {
         this.errors = [];
         try {
