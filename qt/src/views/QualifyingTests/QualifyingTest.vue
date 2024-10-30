@@ -231,21 +231,6 @@ export default {
       if (!this.scenarioNumber || !this.questionNumber) return false;
       return this.qualifyingTestResponse.testQuestions.questions[this.scenarioNumber - 1].options[this.questionNumber - 1];
     },
-    getOverallQuestionNumber() {
-      if (!this.scenarioNumber || !this.questionNumber) return 0;
-
-      let overallQuestionNumber = 0;
-
-      // Loop through all previous scenarios and add their number of questions
-      for (let i = 0; i < this.scenarioNumber - 1; i++) {
-        overallQuestionNumber += this.qualifyingTestResponse.testQuestions.questions[i].options.length;
-      }
-
-      // Add the current question number within the current scenario
-      overallQuestionNumber += this.questionNumber;
-
-      return overallQuestionNumber;
-    },
   },
   watch: {
     qualifyingTestResponse: async function (newVal) {

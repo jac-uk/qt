@@ -10,6 +10,11 @@
       >
         {{ qualifyingTestResponse.qualifyingTest.title }}
       </h1>
+      <!-- <h1
+        class="govuk-caption-m"
+      >
+        Scenario {{ scenarioNumber }} Question {{ questionNumber }}
+      </h1> -->
       <div
         v-if="enableScenario"
         class="govuk-grid-row"
@@ -25,7 +30,7 @@
               v-if="response"
               id="scenario-question"
               v-model="response.text"
-              :label="`Question ${getOverallQuestionNumber}.`"
+              :label="`Question ${getOverallQuestionNumber}: ${qualifyingTestResponse.testQuestions.questions[scenarioNumber - 1].options[questionNumber - 1].question}`"
               :hint="$filters.showHTMLBreaks(question.hint) || 'Answer below:'"
               :word-limit="wordLimit"
               :hard-word-limit="true"
