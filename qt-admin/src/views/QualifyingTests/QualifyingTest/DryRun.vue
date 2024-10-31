@@ -69,6 +69,7 @@ export default {
       this.$router.push({ name: `${this.routeNamePrefix}-review` });
     },
     onChangeEmails() {
+      this.invitedEmailsText = this.invitedEmailsText.toLowerCase();
       this.invitedEmailsText = this.invitedEmailsText.replaceAll(',', '\n');
       this.invitedEmailsText = this.invitedEmailsText.replaceAll(';', '\n');
       this.invitedEmailsText = this.invitedEmailsText.replaceAll(' ', '');

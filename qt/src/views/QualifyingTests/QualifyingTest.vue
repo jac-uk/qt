@@ -18,9 +18,7 @@
         :alert="1"
         @change="handleCountdown"
       >
-        <template
-          #left-slot
-        >
+        <template #left-slot>
           <span>
             <a
               v-if="!isReviewPage && showPrevious"
@@ -33,13 +31,10 @@
             </a>
           </span>
         </template>
-
-        <template
-          #right-slot
-        >
+        <template #right-slot>
           <a
-            v-if="!isReviewPage && showSkip"
-            id="skip-link"
+            v-if="!isReviewPage"
+            :id="showSkip ? 'skip-link' : 'review-link'"
             :class="`govuk-link countdown-link info-btn--qualifying-tests--skip-question-${infoClass()}`"
             href=""
             @click.prevent="btnSkip"
@@ -80,13 +75,15 @@
     </template>
   </div>
 </template>
+
 <script>
-import { Timestamp, arrayUnion } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import LoadingMessage from '@/components/LoadingMessage.vue';
 import Modal from '@/components/Page/Modal.vue';
 import Countdown from '@/components/QualifyingTest/Countdown.vue';
 import Banner from '@/components/Page/Banner.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -94,6 +91,12 @@ export default {
     Modal,
     Countdown,
     Banner,
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.isComingFromReview = from.name === 'online-test-review';
+      return true;
+    });
   },
   data() {
     return {
@@ -104,9 +107,13 @@ export default {
       exitTest: false,
       serverTimeOffset: 0,
       testInProgress: false,
+      questionNumber: parseInt(this.$route.params.questionNumber),
     };
   },
   computed: {
+    scenarioNumber() {
+      return parseInt(this.$route.params.scenarioNumber);
+    },
     isSituationalJudgement() {
       return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
@@ -118,35 +125,31 @@ export default {
     },
     showPrevious() {
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
-        return this.$route.params.questionNumber > 1;
+        return this.questionNumber > 1;
       else if (this.isScenario)
         return !(this.isFirstScenario && this.isFirstQuestionInScenario);
       return false;
     },
     showSkip() {
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
-        return this.$route.params.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
+        return this.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
       else if (this.isScenario)
         return !(this.isLastScenario && this.isLastQuestionInScenario);
       return false;
-    },
-
-    scenarioNumber() {
-      return parseInt(this.$route.params.scenarioNumber);
-    },
-    questionNumber() {
-      return parseInt(this.$route.params.questionNumber);
     },
     numberOfScenarios() {
       return this.qualifyingTestResponse.testQuestions.questions.length;
     },
     numberOfQuestionsInCurrentScenario() {
       return this.scenarioNumber && this.questionNumber
-        ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
+        ? this.getNumberQuestionsInScenario(this.scenarioNumber)
         : 0;
     },
+    isFirstQuestion() {
+      return !this.isScenario && this.questionNumber === 1;
+    },
     isFirstQuestionInScenario() {
-      return this.questionNumber === 1;
+      return this.isScenario && this.questionNumber === 1;
     },
     isFirstScenario() {
       return this.scenarioNumber === 1;
@@ -155,11 +158,8 @@ export default {
       return this.scenarioNumber === this.numberOfScenarios;
     },
     isLastQuestionInScenario() {
-      return this.numberOfQuestionsInCurrentScenario
-        ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
-        : false;
+      return this.questionNumber === this.numberOfQuestionsInCurrentScenario;
     },
-
     qualifyingTestResponse() {
       return this.$store.state.qualifyingTestResponse.record;
     },
@@ -181,10 +181,61 @@ export default {
     isReviewPage() {
       return this.$route.name === 'online-test-review';
     },
+    isLastQuestion() {
+      return this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+    },
+    nextPage() {
+      // Handle navigation to the review page for both scenarios and non-scenarios
+
+      // Determine the next page for scenario-based tests
+      if (this.isScenario) { // Check if this is a scenario-based test
+        if ((this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
+          return {
+            name: 'online-test-review',
+          };
+        }
+        if (this.isLastQuestionInScenario) {
+          // If it's the last question in the current scenario, move to the next scenario
+          return {
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: this.scenarioNumber + 1,
+              questionNumber: 1, // Reset to the first question of the next scenario
+            },
+          };
+        } else {
+          // If it's not the last question, move to the next question in the current scenario
+          return {
+            name: 'online-test-scenario',
+            params: {
+              scenarioNumber: this.scenarioNumber,
+              questionNumber: this.questionNumber + 1,
+            },
+          };
+        }
+      } else if (this.isLastQuestion) {
+        return {
+          name: 'online-test-review',
+        };
+      }
+
+      // Determine the next page for non-scenario-based tests
+      return {
+        name: 'online-test-question',
+        params: {
+          questionNumber: this.questionNumber + 1,
+        },
+      };
+    },
+    currentQuestion() {
+      if (!this.scenarioNumber || !this.questionNumber) return false;
+      return this.qualifyingTestResponse.testQuestions.questions[this.scenarioNumber - 1].options[this.questionNumber - 1];
+    },
   },
   watch: {
     qualifyingTestResponse: async function (newVal) {
       if (newVal) {
+        this.questionNumber = parseInt(this.$route.params.questionNumber);
         if (this.qualifyingTestResponse && this.qualifyingTestResponse.lastUpdated && this.qualifyingTestResponse.lastUpdatedClientTime) {
           this.serverTimeOffset = this.qualifyingTestResponse.lastUpdated.getTime() - this.qualifyingTestResponse.lastUpdatedClientTime.getTime();
           this.testInProgress = this.$store.getters['qualifyingTestResponse/testInProgress'];
@@ -202,6 +253,7 @@ export default {
   },
   async created() {
     await this.loadQualifyingTestResponse();
+    this.questionSessionStart = Timestamp.now();
   },
   mounted() {
     window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -214,6 +266,11 @@ export default {
   },
   methods: {
     async loadQualifyingTestResponse() {
+      if ((this.$route.params.questionNumber || this.$route.params.scenarioNumber) <= 0) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
       try {
         const qualifyingTestResponse = await this.$store.dispatch('qualifyingTestResponse/bind', this.$route.params.qualifyingTestId);
         if (qualifyingTestResponse === null) {
@@ -260,11 +317,11 @@ export default {
       }
     },
     btnSkip() {
-      const dataToSave = this.prepareSaveHistory({ action: 'skip', txt: 'Skip' });
+      const dataToSave = prepareSaveHistory({ action: 'skip', txt: 'Skip' }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
 
       if (this.isSituationalJudgement || this.isCriticalAnalysis) {
-        this.$router.replace({ params: { questionNumber: (parseInt(this.$route.params.questionNumber) + 1) } });
+        this.$router.replace({ params: { questionNumber: this.questionNumber + 1 } });
       } else if (this.isScenario) {
         // Move to the next question unless it's at the last question of the last scenario (in which case go to the review pg)
         if (this.isLastScenario && this.isLastQuestionInScenario) {
@@ -274,12 +331,12 @@ export default {
         }
         else {
           const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
-          const questionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          const nextQuestionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
           this.$router.push({
             name: 'online-test-scenario',
             params: {
               scenarioNumber: scenarioNumber,
-              questionNumber: questionNumber,
+              questionNumber: nextQuestionNumber,
             },
           });
         }
@@ -311,12 +368,12 @@ export default {
       this.$refs.timeElapsedModalRef.openModal();
     },
     openExitModal(){
-      const historyToSave = this.prepareSaveHistory({
+      const historyToSave = prepareSaveHistory({
         action: 'exit',
         txt: 'Exit Test',
         location: 'timer bar',
         question: this.$route.params.questionNumber - 1,
-      });
+      }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', historyToSave);
       this.$refs.exitModalRef.openModal();
     },
@@ -330,12 +387,12 @@ export default {
       if (this.$route.params.questionNumber) {
         this.exitTest = true; // question view will exit test
       } else {
-        const dataToSave = this.prepareSaveHistory({
+        const dataToSave = prepareSaveHistory({
           action: 'exit',
           txt: 'Exit Test',
           location: 'modal',
           question: null,
-        });
+        }, this.questionNumber);
         this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
       }
       this.timerEnded = true;
@@ -348,16 +405,6 @@ export default {
       const hyphenated = `${params.qualifyingTestId}--scenario-${params.scenarioNumber}--from-${params.questionNumber}-to-${params.questionNumber - 1}`;
       return hyphenated;
     },
-    prepareSaveHistory(data) {
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          timestamp: Timestamp.fromDate(date),
-        }),
-      };
-      return objToSave;
-    },
     handleBeforeUnload(event) {
       if (!this.exitTest) {
         // Show default browser msg warning user they're closing the tab/window
@@ -366,7 +413,8 @@ export default {
       }
     },
     getNumberQuestionsInScenario(scenarioNumber) {
-      return this.qualifyingTestResponse.testQuestions.questions[scenarioNumber].options.length;
+      const scenarioIndex = scenarioNumber - 1;
+      return this.qualifyingTestResponse.testQuestions.questions[scenarioIndex].options.length;
     },
   },
 };
@@ -384,6 +432,10 @@ export default {
 
   #skip-link::before{
     content: 'Skip to the next question';
+  }
+
+  #review-link::before{
+    content: 'Skip to review';
   }
 
   @include mobile-view {

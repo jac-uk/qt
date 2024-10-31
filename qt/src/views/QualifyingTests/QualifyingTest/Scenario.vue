@@ -10,6 +10,11 @@
       >
         {{ qualifyingTestResponse.qualifyingTest.title }}
       </h1>
+      <!-- <h1
+        class="govuk-caption-m"
+      >
+        Scenario {{ scenarioNumber }} Question {{ questionNumber }}
+      </h1> -->
       <div
         v-if="enableScenario"
         class="govuk-grid-row"
@@ -25,7 +30,7 @@
               v-if="response"
               id="scenario-question"
               v-model="response.text"
-              :label="`${questionNumber}. ${question.question}`"
+              :label="`Question ${getOverallQuestionNumber}: ${qualifyingTestResponse.testQuestions.questions[scenarioNumber - 1].options[questionNumber - 1].question}`"
               :hint="$filters.showHTMLBreaks(question.hint) || 'Answer below:'"
               :word-limit="wordLimit"
               :hard-word-limit="true"
@@ -80,11 +85,13 @@
 </template>
 
 <script>
-import { Timestamp, serverTimestamp, arrayUnion } from '@firebase/firestore';
+import { Timestamp } from '@firebase/firestore';
 import TextareaInput from '@/components/Form/TextareaInput.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 import plusIcon from '@/assets/plus.png';
 import minusIcon from '@/assets/minus.png';
+import { prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
 
 export default {
   components: {
@@ -133,12 +140,14 @@ export default {
     const response = responses[scenarioNumber - 1] ? responses[scenarioNumber - 1].responsesForScenario[questionNumber - 1] : {};
 
     return {
+      previsitText: response.text || null,
       qualifyingTestResponse,
       scenario,
       response,
       responses,
       showDetails: true,
       enableScenario: true,
+      // questionSessionStart: undefined,
     };
   },
   computed: {
@@ -157,6 +166,19 @@ export default {
     isLastScenario() {
       return this.scenarioNumber === this.qualifyingTestResponse.testQuestions.questions.length;
     },
+    isLastQuestionInScenario() {
+      return this.numberOfQuestionsInCurrentScenario
+        ? this.questionNumber === this.numberOfQuestionsInCurrentScenario
+        : false;
+    },
+    isScenario() {
+      return this.qualifyingTestResponse.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    },
+    numberOfQuestionsInCurrentScenario() {
+      return this.scenarioNumber && this.questionNumber
+        ? this.getNumberQuestionsInScenario(this.scenarioNumber - 1)
+        : 0;
+    },
     isLastQuestion() {
       return this.questionNumber === this.scenario.options.length;
     },
@@ -168,27 +190,9 @@ export default {
       if (this.scenario && this.scenario.options && this.scenario.options[questionNumber]) {
         return this.scenario.options[questionNumber];
       } else {
-        this.redirectToList();
+        // this.redirectToList
         return {};
       }
-    },
-
-    nextPage() {
-
-      // @TODO: WHEN GET TO THE END IT'S NOT DETECTING WE'RE ON THE LAST SCENARIO AND LAST QUESTION AND GOING TO THE REVIEW PAGE!
-
-      if ((this.isLastScenario && this.isLastQuestion) || this.isComingFromReview) {
-        return {
-          name: 'online-test-review',
-        };
-      }
-      return {
-        name: 'online-test-scenario',
-        params: {
-          scenarioNumber: this.isLastQuestion ? this.scenarioNumber + 1 : this.scenarioNumber,
-          questionNumber: this.isLastQuestion ? 1 : this.questionNumber + 1,
-        },
-      };
     },
     wordsCounter() {
       let content = this.response ? this.response.text : '';
@@ -212,6 +216,48 @@ export default {
     },
     wordLimit() {
       return this.question.wordLimit;
+    },
+    nextPage() {
+      // Check if it's the last scenario and the last question or coming from the review page
+      if ((this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
+        return {
+          name: 'online-test-review',
+        };
+      }
+      if (this.isLastQuestionInScenario) {
+        // If it's the last question in the current scenario, move to the next scenario
+        return {
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: this.scenarioNumber + 1,
+            questionNumber: 1, // Reset to the first question of the next scenario
+          },
+        };
+      } else {
+        // If it's not the last question, move to the next question in the current scenario
+        return {
+          name: 'online-test-scenario',
+          params: {
+            scenarioNumber: this.scenarioNumber,
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      }
+    },
+    getOverallQuestionNumber() {
+      if (!this.scenarioNumber || !this.questionNumber) return 0;
+
+      let overallQuestionNumber = 0;
+
+      // Loop through all previous scenarios and add their number of questions
+      for (let i = 0; i < this.scenarioNumber - 1; i++) {
+        overallQuestionNumber += this.qualifyingTestResponse.testQuestions.questions[i].options.length;
+      }
+
+      // Add the current question number within the current scenario
+      overallQuestionNumber += this.questionNumber;
+
+      return overallQuestionNumber;
     },
   },
   watch: {
@@ -243,9 +289,17 @@ export default {
     }
     this.questionSessionStart = Timestamp.now();
   },
+  async mounted() {
+    const saveData = await saveHistoryAndSession({ action: 'start' }, this.getOverallQuestionNumber, this.questionSessionStart);
+    await this.$store.dispatch('qualifyingTestResponse/save', saveData);
+    window.scrollTo(0, 0);
+  },
   methods: {
     toggleAccordion() {
       this.showDetails = !this.showDetails;
+    },
+    getNumberQuestionsInScenario(scenarioNumber) {
+      return this.qualifyingTestResponse.testQuestions.questions[scenarioNumber].options.length;
     },
     async save() {
       await this.saveResponse(true);
@@ -254,10 +308,20 @@ export default {
     async saveResponse(markAsCompleted) {
       // TODO only save if there are un-saved changes
       let data = {};
+      if (this.previsitText !== this.response.text) {
+        const historyToSave = prepareSaveHistory({ action: 'changed' }, this.getOverallQuestionNumber);
+        const sessionToSave = prepareSaveQuestionSession(this.questionSessionStart, this.getOverallQuestionNumber);
+        const changeData = {
+          ...historyToSave,
+          ...sessionToSave,
+          responses: this.responses,
+        };
+        await this.$store.dispatch('qualifyingTestResponse/save', changeData);
+      }
       if (markAsCompleted) {
         this.response.completed = Timestamp.fromDate(new Date());
-        const historyToSave = this.prepareSaveHistory({ action: 'saved' });
-        const sessionToSave = this.prepareSaveQuestionSession();
+        const historyToSave = prepareSaveHistory({ action: 'saved' }, this.getOverallQuestionNumber);
+        const sessionToSave = prepareSaveQuestionSession(this.questionSessionStart, this.getOverallQuestionNumber);
         data = {
           ...historyToSave,
           ...sessionToSave,
@@ -308,46 +372,8 @@ export default {
       this.$router.push({ name: 'online-tests' });
     },
     async saveQuestionSession() {
-      const objToSave = this.prepareSaveQuestionSession({});
+      const objToSave = prepareSaveQuestionSession(this.questionSessionStart, this.questionNumber);
       await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
-    },
-    async saveHistoryAndSession(data) {
-      const historyToSave = this.prepareSaveHistory(data);
-      const sessionToSave = this.prepareSaveQuestionSession();
-      const objToSave = {
-        ...historyToSave,
-        ...sessionToSave,
-      };
-      await this.$store.dispatch('qualifyingTestResponse/save', objToSave);
-    },
-    prepareSaveHistory(data) {
-      const timeNow = serverTimestamp();
-      const date = new Date();
-      const objToSave = {
-        history: arrayUnion({
-          ...data,
-          question: this.questionNumber - 1,
-          timestamp: Timestamp.fromDate(date),
-          utcOffset: date.getTimezoneOffset(),
-        }),
-        lastUpdated: timeNow,
-      };
-      return objToSave;
-    },
-    prepareSaveQuestionSession() {
-      const timeNow = serverTimestamp();
-      const date = new Date();
-      const objToSave = {
-        questionSession: arrayUnion({
-          start: this.questionSessionStart,
-          end: Timestamp.fromDate(date),
-          question: this.questionNumber - 1,
-          timestamp: Timestamp.fromDate(date),
-          utcOffset: date.getTimezoneOffset(),
-        }),
-        lastUpdated: timeNow,
-      };
-      return objToSave;
     },
   },
 };
