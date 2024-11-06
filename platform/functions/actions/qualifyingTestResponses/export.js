@@ -1,8 +1,7 @@
-const helpers = require('../../shared/converters/helpers');
-const lookup = require('../../shared/converters/lookup');
-const { getDocument, getDocuments } = require('../../shared/helpers');
+import { formatDate } from '../../shared/converters/helpers';
+import { getDocument, getDocuments } from '../../shared/helpers';
 
-module.exports = (config, firebase, db) => {
+export default (config, firebase, db) => {
 
   const QUALIFYING_TEST = config.QUALIFYING_TEST;
 
@@ -57,8 +56,8 @@ module.exports = (config, firebase, db) => {
         element.duration.reasonableAdjustment,
         timeTaken(element),
         element.status,
-        helpers.formatDate(element.statusLog.started, 'longdatetime'),
-        helpers.formatDate(element.statusLog.completed, 'longdatetime'),
+        formatDate(element.statusLog.started, 'longdatetime'),
+        formatDate(element.statusLog.completed, 'longdatetime'),
         element.score,
       ];
 

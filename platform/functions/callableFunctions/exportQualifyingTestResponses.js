@@ -1,12 +1,19 @@
-const functions = require('firebase-functions');
-const { firebase, db, auth } = require('../shared/admin.js');
-const config = require('../shared/config');
-const { exportQualifyingTestResponses } = require('../actions/qualifyingTestResponses/export')(config, firebase, db);
-const { getDocument } = require('../shared/helpers');
-const { logEvent } = require('../actions/logs/logEvent')(firebase, db, auth);
-const { checkFunctionEnabled } = require('../shared/serviceSettings.js')(db);
+import functions from 'firebase-functions';
+import { firebase, db, auth } from '../shared/admin.js';
+import config from '../shared/config.js';
 
-module.exports = functions.runWith({
+import initExportQualifyingTestResponses from '../actions/qualifyingTestResponses/export';
+const { exportQualifyingTestResponses } = initExportQualifyingTestResponses(config, firebase, db);
+
+import { getDocument } from '../shared/helpers';
+
+import initLogEvent from '../actions/logs/logEvent.js';
+const { logEvent } = initLogEvent(firebase, db, auth);
+
+import initServiceSettings from '../shared/serviceSettings.js';
+const { checkFunctionEnabled } = initServiceSettings(db);
+
+export default functions.runWith({
   timeoutSeconds: 60,
   memory: '1GB',
 }).region('europe-west2').https.onCall(async (data, context) => {

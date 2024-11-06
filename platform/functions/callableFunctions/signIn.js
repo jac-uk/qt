@@ -1,11 +1,14 @@
-const functions = require('firebase-functions');
-const config = require('../shared/config');
-const { auth, firebase, db } = require('../shared/admin.js');
-const { checkArguments } = require('../shared/helpers.js');
-const signIn = require('../actions/qualifyingTests/signIn')(config, firebase, db, auth);
-// const { checkFunctionEnabled } = require('../shared/serviceSettings.js')(db);
+import functions from 'firebase-functions';
+import config from '../shared/config.js';
+import { firebase, db, auth } from '../shared/admin.js';
 
-module.exports = functions.region('europe-west2').https.onCall(async (data, context) => {
+import { checkArguments } from '../shared/helpers.js';
+import initSignIn from '../actions/qualifyingTests/signIn';
+const signIn = initSignIn(config, firebase, db, auth);
+
+// import initServiceSettings from '../shared/serviceSettings.js';
+
+export default functions.region('europe-west2').https.onCall(async (data, context) => {
   // await checkFunctionEnabled();
   if (!checkArguments({
     email: { required: true },

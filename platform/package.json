@@ -5,8 +5,10 @@
   "repository": "https://github.com/jac-uk/qt",
   "license": "MIT",
   "readme": "README.md",
+  "main": "index.js",
+  "type": "module",
   "engines": {
-    "node": "10"
+    "node": "18"
   },
   "scripts": {
     "lint": "eslint .",
@@ -19,7 +21,7 @@
     "start": "npm run shell",
     "logs": "firebase functions:log",
     "local:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && export FIRESTORE_EMULATOR_HOST='localhost:8080' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
-    "develop:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
+    "develop:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && run(){ node --trace-warnings -r dotenv/config nodeScripts/$1; }; run",
     "live:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.live.json' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
     "nodeScriptOnWindows": "set GOOGLE_APPLICATION_CREDENTIALS=service-account.json&& node nodeScripts/%SCRIPT%",
     "indexes:export": "firebase firestore:indexes > database/firestore.indexes.json --project=jac-qualifying-tests-develop",
@@ -53,7 +55,7 @@
     "axios": "^0.21.2",
     "bottleneck": "^2.19.5",
     "firebase": "^8.4.3",
-    "firebase-admin": "^9.7.0",
+    "firebase-admin": "^12.7.0",
     "firebase-functions": "^3.14.1",
     "firebase-functions-test": "^0.2.3",
     "firebase-tools": "^9.11.0",
@@ -69,6 +71,7 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.18.0",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-import": "^2.29.1",
     "firebase-mock": "^2.2.10",
     "firestore-size": "^2.0.7",
     "jest": "^25.2.1",

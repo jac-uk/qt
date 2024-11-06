@@ -1,6 +1,6 @@
-const functions = require('firebase-functions');
+import functions from 'firebase-functions';
 
-module.exports = {
+export default {
   PROJECT_ID: functions.config().project.id,
   QT_URL: `https://europe-west2-${functions.config().project.id}.cloudfunctions.net/api/v1`,
   QT_KEY: functions.config().qts.key,

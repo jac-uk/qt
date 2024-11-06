@@ -1,6 +1,6 @@
-const { getDocument, getDocuments } = require('../../shared/helpers');
+import { getDocuments } from '../../shared/helpers';
 
-module.exports = (config, firebase, db) => {
+export default (config, firebase, db) => {
 
   return listQualifyingTests;
 

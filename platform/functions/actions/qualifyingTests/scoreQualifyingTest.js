@@ -1,8 +1,10 @@
-const { getDocument, getDocuments, applyUpdates } = require('../../shared/helpers');
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
+import initNewResponsesWithScores from'../../shared/factories/QualifyingTests/newResponsesWithScores';
+import initUpdateCounts from '../../actions/qualifyingTests/updateCounts';
 
-module.exports = (config, firebase, db) => {
-  const newResponsesWithScores = require('../../shared/factories/QualifyingTests/newResponsesWithScores')(config);
-  const updateCounts = require('../../actions/qualifyingTests/updateCounts')(config, firebase, db);
+export default (config, firebase, db) => {
+  const newResponsesWithScores = initNewResponsesWithScores(config);
+  const updateCounts = initUpdateCounts(config, firebase, db);
 
   return scoreQualifyingTest;
 

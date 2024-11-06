@@ -1,6 +1,6 @@
-const { replaceCharacters } = require('./helpers');
+import { replaceCharacters } from './helpers.js';
 
-module.exports = {
+export default {
   getSearchMap,
   formatSearchTerm,
 };

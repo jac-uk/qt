@@ -1,4 +1,4 @@
-const { checkArguments, applyUpdates, convertStringToSearchParts, getEarliestDate, getLatestDate } = require('../../functions/shared/helpers');
+import { checkArguments, applyUpdates, convertStringToSearchParts, getEarliestDate, getLatestDate } from '../../functions/shared/helpers';
 
 describe('checkArguments()', () => {
 

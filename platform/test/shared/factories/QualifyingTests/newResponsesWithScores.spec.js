@@ -1,5 +1,6 @@
-const config = require('../../../../nodeScripts/shared/config');
-const newResponsesWithScores = require('../../../../functions/shared/factories/QualifyingTests/newResponsesWithScores')(config);
+import config from '../../../../nodeScripts/shared/config';
+import initNewResponsesWithScores from '../../../../functions/shared/factories/QualifyingTests/newResponsesWithScores';
+const newResponsesWithScores = initNewResponsesWithScores(config);
 
 describe('newResponsesWithScores()', () => {
   describe('critical analysis test', () => {

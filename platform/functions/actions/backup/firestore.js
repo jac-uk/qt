@@ -1,12 +1,15 @@
-const firestore = require('@google-cloud/firestore');
-const client = new firestore.v1.FirestoreAdminClient();
-const { getDocument, getDocuments, applyUpdates } = require('../../shared/helpers');
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
 
-module.exports = (config, firebase, db) => {
-  const slack = require('../../shared/slack')(config);
+import firestore from '@google-cloud/firestore';
+import initSlack from '../../shared/slack.js';
+
+const client = new firestore.v1.FirestoreAdminClient();
+
+export default (config, firebase, db) => {
+  const slack = initSlack(config);
   return {
-    backupFirestore,
-    backupFirestoreWhenBusy,
+    initBackupFirestore: backupFirestore,
+    initBackupFirestoreWhenBusy: backupFirestoreWhenBusy,
   };
 
   async function backupFirestoreWhenBusy() {

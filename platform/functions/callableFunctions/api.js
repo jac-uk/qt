@@ -1,10 +1,19 @@
-const express = require('express');
-const cors = require('cors');
-const functions = require('firebase-functions');
-const config = require('../shared/config');
-const { firebase, db } = require('../shared/admin.js');
-const { checkArguments } = require('../shared/helpers.js');
-const { isFunctionEnabled } = require('../shared/serviceSettings.js')(db);
+import express from 'express';
+import cors from 'cors';
+
+import functions from 'firebase-functions';
+import config from '../shared/config.js';
+import { firebase, db } from '../shared/admin.js';
+import { checkArguments } from '../shared/helpers.js';
+
+import initServiceSettings from '../shared/serviceSettings.js';
+const { isFunctionEnabled } = initServiceSettings(db);
+
+import initListQualifyingTests from '../actions/qualifyingTests/listQualifyingTests';
+import initCreateQualifyingTest from '../actions/qualifyingTests/createQualifyingTest';
+import initUpdateQualifyingTestParticipants from '../actions/qualifyingTests/updateQualifyingTestParticipants';
+import initGetQualifyingTestScores from '../actions/qualifyingTests/getQualifyingTestScores';
+
 const api = express();
 
 api.use(cors({ origin: true }));
@@ -27,7 +36,7 @@ api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
   }
   if (!isFunctionEnabled('listQualifyingTests')) return res.status(400).send('Service offline');
   try {
-    const listQualifyingTests = require('../actions/qualifyingTests/listQualifyingTests')(config, firebase, db);
+    const listQualifyingTests = initListQualifyingTests(config, firebase, db);
     const result = await listQualifyingTests({ folder: req.query.folder });
     return res
       .status(200)
@@ -51,7 +60,7 @@ api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
   }
   if (!isFunctionEnabled('createQualifyingTest')) return res.status(400).send('Service offline');
   try {
-    const createQualifyingTest = require('../actions/qualifyingTests/createQualifyingTest')(config, firebase, db);
+    const createQualifyingTest = initCreateQualifyingTest(config, firebase, db);
     const result = await createQualifyingTest(req.body);
     return res
       .status(200)
@@ -75,7 +84,7 @@ api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
   }
   if (!isFunctionEnabled('updateQualifyingTestParticipants')) return res.status(400).send('Service offline');
   try {
-    const updateQualifyingTestParticipants = require('../actions/qualifyingTests/updateQualifyingTestParticipants')(config, firebase, db);
+    const updateQualifyingTestParticipants = initUpdateQualifyingTestParticipants(config, firebase, db);
     const result = await updateQualifyingTestParticipants(req.body);
     return res
       .status(200)
@@ -98,7 +107,7 @@ api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
   }
   if (!isFunctionEnabled('getQualifyingTestScores')) return res.status(400).send('Service offline');
   try {
-    const getQualifyingTestScores = require('../actions/qualifyingTests/getQualifyingTestScores')(config, firebase, db);
+    const getQualifyingTestScores = initGetQualifyingTestScores(config, firebase, db);
     const result = await getQualifyingTestScores({ testId: req.query.testId });
     return res
       .status(200)
@@ -115,4 +124,4 @@ function checkAccess(req, res) {
   if (req.query.key !== config.QT_KEY) { res.status(400).send('Incorrect key'); }
 }
 
-module.exports = functions.region('europe-west2').https.onRequest(api);
+export default functions.region('europe-west2').https.onRequest(api);

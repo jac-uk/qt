@@ -1,9 +1,11 @@
-const functions = require('firebase-functions');
-const config = require('../shared/config');
-const { firebase, db } = require('../shared/admin.js');
-const onQualifyingTestUpdate = require('../actions/qualifyingTests/onUpdate')(config, firebase, db);
+import functions from 'firebase-functions';
+import config from '../shared/config.js';
+import { firebase, db } from '../shared/admin.js';
+import initOnQualifyingTestUpdate from '../actions/qualifyingTests/onUpdate';
 
-module.exports = functions.region('europe-west2').firestore
+const onQualifyingTestUpdate = initOnQualifyingTestUpdate(config, firebase, db)
+
+export default functions.region('europe-west2').firestore
   .document('qualifyingTests/{qualifyingTestId}')
   .onUpdate((change, context) => {
     const dataBefore = change.before.data();

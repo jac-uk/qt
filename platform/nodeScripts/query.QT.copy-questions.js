@@ -1,8 +1,8 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const { getDocument, applyUpdates } = require('../functions/shared/helpers');
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { getDocument, applyUpdates } from '../functions/shared/helpers.js';
 
 const main = async () => {
   const srcId = 'YBdY7Gz7UVJ3pRwo9S70';

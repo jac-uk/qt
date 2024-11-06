@@ -1,11 +1,13 @@
-const config = require('../shared/config');
-const { firebase, db } = require('../shared/admin.js');
-const functions = require('firebase-functions');
-const { backupFirestoreWhenBusy } = require('../actions/backup/firestore')(config, firebase, db);
+import config from '../shared/config.js';
+import { firebase, db } from '../shared/admin.js';
+import functions from 'firebase-functions';
+
+import { initBackupFirestoreWhenBusy } from '../actions/backup/firestore';
+const { backupFirestoreWhenBusy } = initBackupFirestoreWhenBusy(config, firebase, db);
 
 const SCHEDULE = 'every 5 minutes from 06:30 to 22:30';
 
-module.exports = functions.region('europe-west2')
+export default functions.region('europe-west2')
   .pubsub
   .schedule(SCHEDULE)
   .timeZone('Europe/London')

@@ -1,7 +1,7 @@
-const { getDocument, getDocuments, applyUpdates } = require('../../shared/helpers');
-const updateQualifyingTestParticipants = require('./updateQualifyingTestParticipants');
+import { getDocument, getDocuments } from '../../shared/helpers.js';
+// import updateQualifyingTestParticipants from './updateQualifyingTestParticipants';
 
-module.exports = (config, firebase, db) => {
+export default (config, firebase, db) => {
 
   return getQualifyingTestScores;
 

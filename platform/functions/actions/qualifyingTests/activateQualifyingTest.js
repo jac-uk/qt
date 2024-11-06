@@ -1,7 +1,7 @@
-const { getDocument, getDocuments, applyUpdates } = require('../../shared/helpers');
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
+import newQuestionsWithoutSolutions from '../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions';
 
-module.exports = (config, firebase, db) => {
-  const newQuestionsWithoutSolutions = require('../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
+export default (config, firebase, db) => {
 
   return activateQualifyingTest;
 

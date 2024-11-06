@@ -1,9 +1,10 @@
 'use strict';
 
-const config = require('./shared/config');
-const { app, db } = require('./shared/admin.js');
-const { getDocument, getDocuments } = require('../functions/shared/helpers');
-const slack = require('../functions/shared/slack')(config);
+import config from './shared/config.js';
+import { app, db } from './shared/admin.js';
+import { getDocument, getDocuments } from '../functions/shared/helpers';
+import initSlack from '../functions/shared/slack.js';
+const slack = initSlack(config);
 
 const main = async () => {
 

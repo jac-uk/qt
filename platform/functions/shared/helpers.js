@@ -1,7 +1,6 @@
-const firebase = require('firebase-admin');
-const Timestamp = firebase.firestore.Timestamp;
+import { Timestamp } from 'firebase-admin/firestore';
 
-module.exports = {
+export {
   getDocument,
   getDocuments,
   getDocumentsFromQueries,

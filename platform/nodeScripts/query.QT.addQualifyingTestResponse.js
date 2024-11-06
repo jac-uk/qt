@@ -1,10 +1,14 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const { getDocument, applyUpdates } = require('../functions/shared/helpers');
-const newQualifyingTestResponse = require('../functions/shared/factories/QualifyingTests/newQualifyingTestResponse')(config, firebase);
-const newQuestionsWithoutSolutions = require('../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { getDocument, applyUpdates } from '../functions/shared/helpers.js';
+
+import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse';
+const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);
+
+import initNewQuestionsWithoutSolutions from '../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions';
+const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
 
 const main = async () => {
   const qualifyingTestId = 'yubYbWZ5WGQoG2OhHTfT';

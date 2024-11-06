@@ -1,6 +1,6 @@
-const { getDocument, getDocuments } = require('../../shared/helpers');
+import { getDocument, getDocuments } from '../../shared/helpers';
 
-module.exports = (config, firebase, db, auth) => {
+export default (config, firebase, db, auth) => {
 
   return signIn;
 

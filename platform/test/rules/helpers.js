@@ -1,14 +1,14 @@
-const firebase = require('@firebase/rules-unit-testing');
-const fs = require('fs');
-const admin = require('firebase-admin');
+import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
+import { Timestamp } from 'firebase/firestore';
+import fs from 'fs';
 
 const projectId = `rules-spec-${Date.now()}`;
 
-module.exports.setup = async (auth, data) => {
+export const setup = async (auth, data) => {
 
   const rules = fs.readFileSync('database/firestore.rules', 'utf8');
 
-  const app = await firebase.initializeTestApp({
+  const app = await initializeTestEnvironment({
     projectId,
     auth,
   });
@@ -16,7 +16,7 @@ module.exports.setup = async (auth, data) => {
   const db = app.firestore();
 
   if (data) {
-    const adminApp = await firebase.initializeAdminApp({
+    const adminApp = await initializeTestEnvironment({
       projectId: projectId,
     });
     const adminDb = adminApp.firestore();
@@ -34,11 +34,11 @@ module.exports.setup = async (auth, data) => {
   return db;
 };
 
-module.exports.teardown = async () => {
+export const teardown = async () => {
   await Promise.all(firebase.apps().map(app => app.delete()));
 };
 
-module.exports.setupAdmin = async (db, data) => {
+export const setupAdmin = async (db, data) => {
   const app = await firebase.initializeAdminApp({
     projectId: db.app.options.projectId,
   });
@@ -52,8 +52,8 @@ module.exports.setupAdmin = async (db, data) => {
   return adminDb;
 };
 
-module.exports.getTimeStamp = (date) => {
-  return admin.firestore.Timestamp.fromDate(date);
+export const getTimeStamp = (date) => {
+  return Timestamp.fromDate(date);
 };
 
 const getRandomInt = (min, max) => {
@@ -62,7 +62,7 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 };
 
-module.exports.getValidExerciseData = () => {
+export const getValidExerciseData = () => {
   return {
     referenceNumber: '000' + getRandomInt(100, 1000),
     progress: {started: true},

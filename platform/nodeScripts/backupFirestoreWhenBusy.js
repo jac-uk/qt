@@ -1,8 +1,9 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const { backupFirestoreWhenBusy } = require('../functions/actions/backup/firestore')(config, firebase, db);
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { initBackupFirestoreWhenBusy } from '../functions/actions/backup/firestore';
+const backupFirestoreWhenBusy = initBackupFirestoreWhenBusy(config, firebase, db);
 
 const main = async () => {
   return backupFirestoreWhenBusy();

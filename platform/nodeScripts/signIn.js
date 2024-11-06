@@ -1,8 +1,9 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const signIn = require('../functions/actions/qualifyingTests/signIn')(config, firebase, db);
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import initSignIn from '../functions/actions/qualifyingTests/signIn';
+const signIn = initSignIn(config, firebase, db);
 
 const main = async () => {
   return signIn({ email: 'warren@precise-minds.co.uk' });

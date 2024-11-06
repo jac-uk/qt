@@ -1,8 +1,8 @@
 'use strict';
 
-const config = require('./shared/config.js');
-const { firebase, app, db } = require('./shared/admin.js');
-const { applyUpdates, getDocuments, getDocument } = require('../functions/shared/helpers');
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { applyUpdates, getDocuments, getDocument } from '../functions/shared/helpers';
 
 function mockResponses(type, numQuestions, numAnswers) {
   const responses = [];

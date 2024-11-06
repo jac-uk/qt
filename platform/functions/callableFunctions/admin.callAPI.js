@@ -1,11 +1,17 @@
-const functions = require('firebase-functions');
-const config = require('../shared/config');
-const { db } = require('../shared/admin.js');
-const { checkArguments } = require('../shared/helpers.js');
-const qts = require('../shared/qts')(config);
-const { checkFunctionEnabled } = require('../shared/serviceSettings.js')(db);
+import functions from 'firebase-functions';
+import config from '../shared/config.js';
 
-module.exports = functions.region('europe-west2').https.onCall(async (data, context) => {
+import { db } from '../shared/admin.js';
+
+import { checkArguments } from '../shared/helpers.js';
+
+import initQts from '../shared/qts';
+const qts = initQts(config);
+
+import initServiceSettings from '../shared/serviceSettings.js';
+const { checkFunctionEnabled } = initServiceSettings(db);
+
+export default functions.region('europe-west2').https.onCall(async (data, context) => {
   if (!checkArguments({
     folder: { required: true },
     test: { required: true },

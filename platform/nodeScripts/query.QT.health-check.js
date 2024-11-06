@@ -1,8 +1,8 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const { getDocuments } = require('../functions/shared/helpers');
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { getDocuments } from '../functions/shared/helpers';
 
 const main = async () => {
   const qualifyingTestId = 'vRg0rrKJOsKSdeCI3mop';
