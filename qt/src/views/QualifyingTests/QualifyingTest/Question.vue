@@ -38,12 +38,13 @@
             >
               Skip to next question
             </button>
-            <button
-              :class="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
+            <ActionButton
+              :propclass="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
               :disabled="!canSaveAndContinue"
+              :action="save"
             >
               Save and continue
-            </button>
+            </ActionButton>
           </div>
         </div>
       </form>
@@ -57,12 +58,14 @@ import SituationalJudgement from '@/views/QualifyingTests/QualifyingTest/Questio
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner.vue';
 import { prepareSaveHistory, prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
+import ActionButton from '@/components/ActionButton.vue';
 
 export default {
   components: {
     CriticalAnalysis,
     SituationalJudgement,
     Banner,
+    ActionButton,
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -153,12 +156,21 @@ export default {
     },
     nextPage() {
       // Determine the next page for non-scenario-based tests
-      return {
-        name: 'online-test-question',
-        params: {
-          questionNumber: this.questionNumber + 1,
-        },
-      };
+      if (this.isLastQuestion || isNaN(this.questionNumber + 1)) {
+        return {
+          name: 'online-test-review',
+          params: {
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      } else {
+        return {
+          name: 'online-test-question',
+          params: {
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      }
     },
   },
   watch: {

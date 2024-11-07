@@ -2,7 +2,7 @@
   <button
     v-bind="$attrs"
     class="govuk-button jac-actionbutton"
-    :class="computedClasses"
+    :class="`${computedClasses} ${propClass}`"
     :disabled="isLoading || disabled"
     @click="handleClick"
   >
@@ -36,6 +36,10 @@ export default {
     timeout: {
       type: Number,
       default: 2000,
+    },
+    propClass: {
+      type: String,
+      default: '',
     },
     type: {
       type: String,
