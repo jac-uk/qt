@@ -2,10 +2,10 @@ import functions from 'firebase-functions';
 import { firebase, db, auth } from '../shared/admin.js';
 import config from '../shared/config.js';
 
-import initExportQualifyingTestResponses from '../actions/qualifyingTestResponses/export';
+import initExportQualifyingTestResponses from '../actions/qualifyingTestResponses/export.js';
 const { exportQualifyingTestResponses } = initExportQualifyingTestResponses(config, firebase, db);
 
-import { getDocument } from '../shared/helpers';
+import { getDocument } from '../shared/helpers.js';
 
 import initLogEvent from '../actions/logs/logEvent.js';
 const { logEvent } = initLogEvent(firebase, db, auth);

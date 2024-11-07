@@ -1,4 +1,4 @@
-import { getSearchMap } from '../../search';
+import { getSearchMap } from '../../search.js';
 
 export default (config, firebase) => {
 

@@ -5,7 +5,7 @@ import { db } from '../shared/admin.js';
 
 import { checkArguments } from '../shared/helpers.js';
 
-import initQts from '../shared/qts';
+import initQts from '../shared/qts.js';
 const qts = initQts(config);
 
 import initServiceSettings from '../shared/serviceSettings.js';

@@ -1,5 +1,5 @@
 import { getDocument, getDocuments } from '../../shared/helpers.js';
-// import updateQualifyingTestParticipants from './updateQualifyingTestParticipants';
+// import updateQualifyingTestParticipants from './updateQualifyingTestParticipants.js';
 
 export default (config, firebase, db) => {
 

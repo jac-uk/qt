@@ -1,5 +1,5 @@
 import { applyUpdates } from '../../shared/helpers.js';
-import initNotify from '../../shared/notify';
+import initNotify from '../../shared/notify.js';
 
 export default (config, firebase, db) => {
     

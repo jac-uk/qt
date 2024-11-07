@@ -4,10 +4,10 @@ import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
 import { getDocument, applyUpdates } from '../functions/shared/helpers.js';
 
-import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse';
+import initNewQualifyingTestResponse from '../functions/shared/factories/QualifyingTests/newQualifyingTestResponse.js';
 const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);
 
-import initNewQuestionsWithoutSolutions from '../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions';
+import initNewQuestionsWithoutSolutions from '../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
 const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
 
 const main = async () => {

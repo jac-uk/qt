@@ -1,4 +1,4 @@
-import { getDocument, getDocuments } from '../../shared/helpers';
+import { getDocument, getDocuments } from '../../shared/helpers.js';
 export default (config, firebase, db) => {
 
   return updateCounts;

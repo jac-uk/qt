@@ -1,4 +1,4 @@
-import { setup, teardown, setupAdmin } from './helpers';
+import { setup, teardown, setupAdmin } from './helpers.js';
 import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 const COLLECTION_NAME = 'qualifyingTestResponses';
 

@@ -1,6 +1,6 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
-import initNewResponsesWithScores from'../../shared/factories/QualifyingTests/newResponsesWithScores';
-import initUpdateCounts from '../../actions/qualifyingTests/updateCounts';
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
+import initNewResponsesWithScores from'../../shared/factories/QualifyingTests/newResponsesWithScores.js';
+import initUpdateCounts from '../../actions/qualifyingTests/updateCounts.js';
 
 export default (config, firebase, db) => {
   const newResponsesWithScores = initNewResponsesWithScores(config);

@@ -2,9 +2,9 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import initGetQualifyingTestScores from '../functions/actions/qualifyingTests/getQualifyingTestScores.js'
+import initGetQualifyingTestScores from '../functions/actions/qualifyingTests/getQualifyingTestScores.js';
 const getQualifyingTestScores = initGetQualifyingTestScores(config, firebase, db);
-// import initQts from '../functions/shared/qts';
+// import initQts from '../functions/shared/qts.js';
 // const qts = initQts(config);
 
 const main = async () => {

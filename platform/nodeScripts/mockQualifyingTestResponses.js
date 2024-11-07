@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import { applyUpdates, getDocuments, getDocument } from '../functions/shared/helpers';
+import { applyUpdates, getDocuments, getDocument } from '../functions/shared/helpers.js';
 
 function mockResponses(type, numQuestions, numAnswers) {
   const responses = [];

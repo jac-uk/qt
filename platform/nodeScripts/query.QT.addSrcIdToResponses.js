@@ -1,7 +1,7 @@
 'use strict';
 
 import { app, db } from './shared/admin.js';
-import { getDocument, getDocuments, applyUpdates } from '../functions/shared/helpers';
+import { getDocument, getDocuments, applyUpdates } from '../functions/shared/helpers.js';
 
 const main = async () => {
   /**

@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import {getDocument, getDocuments, applyUpdates} from '../functions/shared/helpers';
+import {getDocument, getDocuments, applyUpdates} from '../functions/shared/helpers.js';
 import sizeof from 'firestore-size';
 
 const main = async () => {

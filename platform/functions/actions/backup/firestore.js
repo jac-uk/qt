@@ -1,4 +1,4 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
 
 import firestore from '@google-cloud/firestore';
 import initSlack from '../../shared/slack.js';

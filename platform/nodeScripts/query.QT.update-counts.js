@@ -2,9 +2,8 @@
 
 import config from './shared/config.js';
 import { db, firebase } from './shared/admin.js';
-import updateCounts from '../functions/actions/qualifyingTests/updateCounts';
 
-import initUpdateCounts from '../functions/actions/qualifyingTests/updateCounts';
+import initUpdateCounts from '../functions/actions/qualifyingTests/updateCounts.js';
 const updateCounts = initUpdateCounts(config, firebase, db);
 
 const main = async () => {

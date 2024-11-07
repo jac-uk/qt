@@ -1,9 +1,12 @@
 import functions from 'firebase-functions';
 
 export default {
-  PROJECT_ID: functions.config().project.id,
-  QT_URL: `https://europe-west2-${functions.config().project.id}.cloudfunctions.net/api/v1`,
-  QT_KEY: functions.config().qts.key,
+  PROJECT_ID: '',
+  QT_URL: '',
+  QT_KEY: '',
+  // PROJECT_ID: functions.config().project.id,
+  // QT_URL: `https://europe-west2-${functions.config().project.id}.cloudfunctions.net/api/v1`,
+  // QT_KEY: functions.config().qts.key,
   QUALIFYING_TEST: {
     TYPE: {
       SCENARIO: 'scenarioTest',
@@ -35,7 +38,10 @@ export default {
       CANCELLED: 'cancelled',
     },
   },
-  STORAGE_URL: functions.config().project.id + '.appspot.com',
-  SLACK_URL: functions.config().slack.url,
-  NOTIFY_KEY: functions.config().notify.key,
+  // STORAGE_URL: functions.config().project.id + '.appspot.com',
+  // SLACK_URL: functions.config().slack.url,
+  // NOTIFY_KEY: functions.config().notify.key,
+  STORAGE_URL: '',
+  SLACK_URL: '',
+  NOTIFY_KEY: '',
 };

@@ -2,10 +2,10 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import { initExportQualifyingTestResponses } from '../functions/actions/qualifyingTestResponses/export';
+import { initExportQualifyingTestResponses } from '../functions/actions/qualifyingTestResponses/export.js';
 const exportQualifyingTestResponses = initExportQualifyingTestResponses(config, firebase, db);
 
-// import initQts from '../functions/shared/qts';
+// import initQts from '../functions/shared/qts.js';
 // const qts = initQts(config);
 
 const main = async () => {

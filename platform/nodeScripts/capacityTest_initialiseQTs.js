@@ -7,18 +7,22 @@
  *   npm run nodeScript example.js
  *   ```
  */
- 'use strict';
+
+// nodescript broken
+
+'use strict';
 
 import config from './shared/config.js';
 import { auth, firebase, app, db } from './shared/admin.js';
-
-import initAction from '../functions/actions/applications/applications';
+let initAction;
+// import initAction from '../functions/actions/applications/applications.js';
 const action = initAction(config, firebase, db, auth);
 
-import { initInitialiseApplicationRecords } from '../functions/actions/applicationRecords'
+let initInitialiseApplicationRecords;
+// import { initInitialiseApplicationRecords } from '../functions/actions/applicationRecords.js';
 const initialiseApplicationRecords = initInitialiseApplicationRecords(config, firebase, db, auth);
 
-import initInitialiseQualifyingTest from '../functions/actions/qualifyingTests/initialiseQualifyingTest';
+import initInitialiseQualifyingTest from '../functions/actions/qualifyingTests/initialiseQualifyingTest.js';
 const initialiseQualifyingTest = initInitialiseQualifyingTest(config, firebase, db);
 
 import { getDocument, getDocuments, applyUpdates } from '../functions/shared/helpers.js';

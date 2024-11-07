@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import htmlWriter from '../../functions/shared/htmlWriter';
+import htmlWriter from '../../functions/shared/htmlWriter.js';
 const DEFAULT_STYLESHEET = `
   <style>
     body {

@@ -1,25 +1,25 @@
 
 // Scheduled
-import backupFirestore from './scheduledFunctions/backupFirestore';
-import backupFirestoreWhenBusy from './scheduledFunctions/backupFirestoreWhenBusy';
-import backupAuthentication from './scheduledFunctions/backupAuthentication';
+import backupFirestore from './scheduledFunctions/backupFirestore.js';
+import backupFirestoreWhenBusy from './scheduledFunctions/backupFirestoreWhenBusy.js';
+import backupAuthentication from './scheduledFunctions/backupAuthentication.js';
 
 // Background
-import onDelete from './backgroundFunctions/onDelete';
-import onQualifyingTestResponseUpdate from './backgroundFunctions/onQualifyingTestResponseUpdate';
-import onQualifyingTestUpdate from './backgroundFunctions/onQualifyingTestUpdate';
+import onDelete from './backgroundFunctions/onDelete.js';
+import onQualifyingTestResponseUpdate from './backgroundFunctions/onQualifyingTestResponseUpdate.js';
+import onQualifyingTestUpdate from './backgroundFunctions/onQualifyingTestUpdate.js';
 
 // Callable
-import api from './callableFunctions/api';
-import activateQualifyingTest from './callableFunctions/activateQualifyingTest';
-import exportQualifyingTestResponses from './callableFunctions/exportQualifyingTestResponses';
-import initialiseQualifyingTest from './callableFunctions/initialiseQualifyingTest';
-import logEvent from './callableFunctions/logEvent';
-import scoreQualifyingTest from './callableFunctions/scoreQualifyingTest';
-import signIn from './callableFunctions/signIn';
+import api from './callableFunctions/api.js';
+import activateQualifyingTest from './callableFunctions/activateQualifyingTest.js';
+import exportQualifyingTestResponses from './callableFunctions/exportQualifyingTestResponses.js';
+import initialiseQualifyingTest from './callableFunctions/initialiseQualifyingTest.js';
+import logEvent from './callableFunctions/logEvent.js';
+import scoreQualifyingTest from './callableFunctions/scoreQualifyingTest.js';
+import signIn from './callableFunctions/signIn.js';
 
 // admin call api
-import adminCallAPI from './callableFunctions/admin.callAPI';
+import adminCallAPI from './callableFunctions/admin.callAPI.js';
 
 export {
   // Scheduled
@@ -40,4 +40,4 @@ export {
   signIn,
   // admin call api
   adminCallAPI
-}
+};

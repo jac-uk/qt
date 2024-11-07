@@ -1,5 +1,5 @@
-import { formatDate } from '../../shared/converters/helpers';
-import { getDocument, getDocuments } from '../../shared/helpers';
+import { formatDate } from '../../shared/converters/helpers.js';
+import { getDocument, getDocuments } from '../../shared/helpers.js';
 
 export default (config, firebase, db) => {
 

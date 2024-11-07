@@ -1,5 +1,5 @@
 import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
-import newQuestionsWithoutSolutions from '../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions';
+import newQuestionsWithoutSolutions from '../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
 
 export default (config, firebase, db) => {
 

@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { app, db } from './shared/admin.js';
-import { getDocument, getDocuments } from '../functions/shared/helpers';
+import { getDocument, getDocuments } from '../functions/shared/helpers.js';
 import initSlack from '../functions/shared/slack.js';
 const slack = initSlack(config);
 

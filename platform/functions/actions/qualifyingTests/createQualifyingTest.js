@@ -1,4 +1,4 @@
-import { getDocument, getDocuments, lookup } from '../../shared/helpers';
+import { getDocument, getDocuments, lookup } from '../../shared/helpers.js';
 
 export default (config, firebase, db) => {
 

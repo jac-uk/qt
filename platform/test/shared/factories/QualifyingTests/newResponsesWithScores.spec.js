@@ -1,5 +1,5 @@
-import config from '../../../../nodeScripts/shared/config';
-import initNewResponsesWithScores from '../../../../functions/shared/factories/QualifyingTests/newResponsesWithScores';
+import config from '../../../../nodeScripts/shared/config.js';
+import initNewResponsesWithScores from '../../../../functions/shared/factories/QualifyingTests/newResponsesWithScores.js';
 const newResponsesWithScores = initNewResponsesWithScores(config);
 
 describe('newResponsesWithScores()', () => {

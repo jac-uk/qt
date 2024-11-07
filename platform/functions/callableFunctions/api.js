@@ -9,10 +9,10 @@ import { checkArguments } from '../shared/helpers.js';
 import initServiceSettings from '../shared/serviceSettings.js';
 const { isFunctionEnabled } = initServiceSettings(db);
 
-import initListQualifyingTests from '../actions/qualifyingTests/listQualifyingTests';
-import initCreateQualifyingTest from '../actions/qualifyingTests/createQualifyingTest';
-import initUpdateQualifyingTestParticipants from '../actions/qualifyingTests/updateQualifyingTestParticipants';
-import initGetQualifyingTestScores from '../actions/qualifyingTests/getQualifyingTestScores';
+import initListQualifyingTests from '../actions/qualifyingTests/listQualifyingTests.js';
+import initCreateQualifyingTest from '../actions/qualifyingTests/createQualifyingTest.js';
+import initUpdateQualifyingTestParticipants from '../actions/qualifyingTests/updateQualifyingTestParticipants.js';
+import initGetQualifyingTestScores from '../actions/qualifyingTests/getQualifyingTestScores.js';
 
 const api = express();
 

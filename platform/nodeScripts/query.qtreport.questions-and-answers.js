@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { app, db } from './shared/admin.js';
-import { getDocument } from '../functions/shared/helpers';
+import { getDocument } from '../functions/shared/helpers.js';
 
 
 const main = async () => {

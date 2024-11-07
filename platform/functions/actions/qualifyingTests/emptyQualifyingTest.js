@@ -1,4 +1,4 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
 
 export default (config, firebase, db) => {
 

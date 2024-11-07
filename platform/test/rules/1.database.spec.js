@@ -1,4 +1,4 @@
-import { setup, teardown } from './helpers';
+import { setup, teardown } from './helpers.js';
 import { assertFails } from '@firebase/rules-unit-testing';
 
 describe('Database', () => {

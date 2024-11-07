@@ -1,5 +1,5 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers';
-import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse';
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
+import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse.js';
 
 export default (config, firebase, db) => {
   const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);

@@ -3,7 +3,7 @@
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
 
-import initInitialiseQualifyingTest from '../actions/qualifyingTests/initialiseQualifyingTest'
+import initInitialiseQualifyingTest from '../functions/actions/qualifyingTests/initialiseQualifyingTest.js';
 const initialiseQualifyingTest = initInitialiseQualifyingTest(config, firebase, db);
 
 const main = async () => {

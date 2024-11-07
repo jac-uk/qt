@@ -3,9 +3,9 @@
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
 
-import initAddParticipants from '../functions/actions/qualifyingTests/updateQualifyingTestParticipants';
+import initAddParticipants from '../functions/actions/qualifyingTests/updateQualifyingTestParticipants.js';
 const addParticipants = initAddParticipants(config, firebase, db);
-// import initQts from '../functions/shared/qts';
+// import initQts from '../functions/shared/qts.js';
 // const qts = initQts(config);
 
 const main = async () => {
@@ -18,7 +18,7 @@ const main = async () => {
         email: 'warren@precise-minds.co.uk',
         fullName: 'Warren Searle',
         adjustments: false,
-      }
+      },
     ],
   });
 

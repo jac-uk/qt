@@ -1,4 +1,4 @@
-import initNewQuestionsWithoutSolutions from '../../../../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions';
+import initNewQuestionsWithoutSolutions from '../../../../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
 const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
 
 describe('newQuestionsWithoutSolutions(questions)', () => {

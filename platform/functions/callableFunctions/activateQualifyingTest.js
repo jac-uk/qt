@@ -7,7 +7,7 @@ import { checkArguments } from '../shared/helpers.js';
 import initServiceSettings from '../shared/serviceSettings.js';
 const { checkFunctionEnabled } = initServiceSettings(db);
 
-import initActivateQualifyingTest from '../actions/qualifyingTests/activateQualifyingTest';
+import initActivateQualifyingTest from '../actions/qualifyingTests/activateQualifyingTest.js';
 const activateQualifyingTest = initActivateQualifyingTest(config, firebase, db);
 
 export default functions.runWith({
