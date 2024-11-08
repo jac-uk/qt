@@ -1,7 +1,7 @@
 import config from '../shared/config.js';
 import { firebase, db } from '../shared/admin.js';
 import functions from 'firebase-functions';
-import { initBackupFirestore } from '../actions/backup/firestore.js';
+import initBackupFirestore from '../actions/backup/firestore.js';
 
 const { backupFirestore } = initBackupFirestore(config, firebase, db);
 
