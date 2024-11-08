@@ -15,7 +15,7 @@ import connectionMonitor from '@/store/connectionMonitor';
 
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: import.meta.env.NODE_ENV !== 'production',
+  strict: import.meta.env.DEV,
   modules: {
     auth,
     services,
