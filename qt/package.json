@@ -23,10 +23,13 @@
     "test-ci": "TZ='Europe/London' vite test:unit --ci --runInBand"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.15",
+    "@firebase/auth": "^1.8.0",
+    "@firebase/database": "^1.0.9",
+    "@firebase/firestore": "^4.7.4",
+    "@firebase/functions": "^0.11.9",
     "@jac-uk/jac-kit": "4.0.0",
     "@ministryofjustice/frontend": "1.2.0",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.15",
     "buffer": "^6.0.3",
     "firebase": "^10.7.1",
     "firebaseui": "^6.0.0",
