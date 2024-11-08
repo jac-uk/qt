@@ -298,7 +298,7 @@
                       >
                         Question {{ i+1 }}
                         <QuestionDuration
-                          :start="getStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].responsesForScenario[i].started"
+                          :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].responsesForScenario[i].started"
                           :end="responses[index].responsesForScenario[i].completed || lastUpdatedQuestion(scenarioQuestionIndex(i, index))"
                         />
                       </span>
