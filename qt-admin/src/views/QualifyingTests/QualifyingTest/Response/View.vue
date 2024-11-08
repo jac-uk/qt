@@ -280,7 +280,7 @@
                 <br>
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].started"
+                  :start="getQuestionDurationStart(responses, index)"
                   :end="lastUpdatedQuestion(index)"
                 />
                 <div
@@ -298,7 +298,7 @@
                       >
                         Question {{ i+1 }}
                         <QuestionDuration
-                          :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].responsesForScenario[i].started"
+                          :start="getStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].responsesForScenario[i].started"
                           :end="responses[index].responsesForScenario[i].completed || lastUpdatedQuestion(scenarioQuestionIndex(i, index))"
                         />
                       </span>
@@ -839,6 +839,13 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
+    getQuestionDurationStart(responses, index) {
+      let result = null;
+      if (responses && responses[index]) {
+        result = this.questionStartTimestamps(index).length ? this.questionStartTimestamps(index) : responses[index].started;
+      }
+      return result;
+    },
     scenarioQuestionIndex(scenario, question){
       return this.getOverallQuestionNumber(scenario + 1, question + 1) - 1;
     },
