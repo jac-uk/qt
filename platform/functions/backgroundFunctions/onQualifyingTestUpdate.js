@@ -1,7 +1,7 @@
 import functions from 'firebase-functions';
 import config from '../shared/config.js';
 import { firebase, db } from '../shared/admin.js';
-import initOnQualifyingTestUpdate from '../actions/qualifyingTests/onUpdate';
+import initOnQualifyingTestUpdate from '../actions/qualifyingTests/onUpdate.js';
 
 const onQualifyingTestUpdate = initOnQualifyingTestUpdate(config, firebase, db)
 

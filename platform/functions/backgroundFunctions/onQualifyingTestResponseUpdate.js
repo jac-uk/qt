@@ -1,6 +1,7 @@
 import functions from 'firebase-functions';
 import config from '../shared/config.js';
-import initOnQualifyingTestResponseUpdate from '../actions/qualifyingTestResponses/onUpdate'
+import initOnQualifyingTestResponseUpdate from '../actions/qualifyingTestResponses/onUpdate.js';
+
 const onQualifyingTestResponseUpdate = initOnQualifyingTestResponseUpdate(config, firebase, db);
 
 export default functions.region('europe-west2').firestore

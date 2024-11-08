@@ -1,6 +1,5 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
-
 import firestore from '@google-cloud/firestore';
+import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
 import initSlack from '../../shared/slack.js';
 
 const client = new firestore.v1.FirestoreAdminClient();
@@ -8,8 +7,8 @@ const client = new firestore.v1.FirestoreAdminClient();
 export default (config, firebase, db) => {
   const slack = initSlack(config);
   return {
-    initBackupFirestore: backupFirestore,
-    initBackupFirestoreWhenBusy: backupFirestoreWhenBusy,
+    backupFirestore,
+    backupFirestoreWhenBusy,
   };
 
   async function backupFirestoreWhenBusy() {

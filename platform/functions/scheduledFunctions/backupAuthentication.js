@@ -1,6 +1,7 @@
 import config from '../shared/config.js';
 import functions from 'firebase-functions';
-import initBackupAuthentication from '../actions/backup/authentication'
+import initBackupAuthentication from '../actions/backup/authentication.js';
+
 const backupAuthentication = initBackupAuthentication(config);
 
 const SCHEDULE = 'every day 23:00';

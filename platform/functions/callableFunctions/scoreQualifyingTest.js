@@ -2,11 +2,10 @@ import functions from 'firebase-functions';
 import config from '../shared/config.js';
 import { firebase, db } from '../shared/admin.js';
 import { checkArguments } from '../shared/helpers.js';
-
-import initScoreQualifyingTest from '../actions/qualifyingTests/scoreQualifyingTest'
-const scoreQualifyingTest = initScoreQualifyingTest(config, firebase, db);
-
+import initScoreQualifyingTest from '../actions/qualifyingTests/scoreQualifyingTest.js';
 import initServiceSettings from '../shared/serviceSettings.js';
+
+const scoreQualifyingTest = initScoreQualifyingTest(config, firebase, db);
 const { checkFunctionEnabled } = initServiceSettings(db);
 
 export default functions.runWith({
