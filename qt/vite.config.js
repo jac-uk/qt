@@ -17,7 +17,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-        @forward "@/styles/_shared.scss";
+        @import "@/styles/_shared.scss";
         `,
         quietDeps: true,
         silenceDeprecations: ['legacy-js-api'],

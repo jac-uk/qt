@@ -23,6 +23,7 @@
     "test-ci": "TZ='Europe/London' vite test:unit --ci --runInBand"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.15",
     "@jac-uk/jac-kit": "4.0.0",
     "@ministryofjustice/frontend": "1.2.0",
     "firebase": "^10.7.1",
