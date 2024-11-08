@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.5",
-    "@firebase/rules-unit-testing": "^2.0.0",
+    "@firebase/rules-unit-testing": "^4.0.0",
     "eslint": "^7.18.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-promise": "^4.2.1",
