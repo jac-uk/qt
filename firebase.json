@@ -35,26 +35,38 @@
   },
   "emulators": {
     "auth": {
-      "port": 9097
+      "host": "localhost",
+      "port": 9092
     },
     "functions": {
-      "port": 5007
+      "host": "localhost",
+      "port": 5002
     },
     "firestore": {
-      "port": 8087
+      "host": "localhost",
+      "port": 8082,
+      "websocketPort": 9152
     },
     "database": {
-      "port": 9007
-    },
-    "pubsub": {
-      "port": 8089
+      "host": "localhost",
+      "port": 9002
     },
     "storage": {
-      "port": 9197
+      "host": "localhost",
+      "port": 9192
     },
     "ui": {
       "enabled": true,
-      "port": 4007
+      "host": "localhost",
+      "port": 4002
+    },
+    "hub": {
+      "host": "localhost",
+      "port": 4402
+    },
+    "logging": {
+      "host": "localhost",
+      "port": 4502
     }
   }
 }
