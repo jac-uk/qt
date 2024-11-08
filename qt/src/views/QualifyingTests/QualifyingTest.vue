@@ -138,7 +138,7 @@ export default {
       return false;
     },
     numberOfScenarios() {
-      return this.qualifyingTestResponse.testQuestions.questions.length;
+      return this.qualifyingTestResponse ? this.qualifyingTestResponse.testQuestions.questions.length : 0;
     },
     numberOfQuestionsInCurrentScenario() {
       return this.scenarioNumber && this.questionNumber
@@ -256,6 +256,13 @@ export default {
     this.questionSessionStart = Timestamp.now();
   },
   mounted() {
+    if (this.numberOfScenarios) {
+      if (this.scenarioNumber > this.numberOfScenarios) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
+    }
     window.addEventListener('beforeunload', this.handleBeforeUnload);
   },
   beforeUnmount() {
@@ -330,8 +337,10 @@ export default {
           });
         }
         else {
-          const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
-          const nextQuestionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          let scenarioNumber;
+          scenarioNumber = (this.isLastQuestionInScenario || this.questionNumber > this.numberOfQuestionsInCurrentScenario) ? this.scenarioNumber + 1 : this.scenarioNumber;
+          scenarioNumber = scenarioNumber > this.numberOfScenarios ? this.numberOfScenarios : scenarioNumber;
+          const nextQuestionNumber = (this.isLastQuestionInScenario || this.questionNumber > this.numberOfQuestionsInCurrentScenario) ? 1 : this.questionNumber + 1;
           this.$router.push({
             name: 'online-test-scenario',
             params: {
