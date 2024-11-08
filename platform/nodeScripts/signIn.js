@@ -1,12 +1,11 @@
 'use strict';
 
-import config from './shared/config.js';
-import { firebase, app, db } from './shared/admin.js';
+import { auth, app, db } from './shared/admin.js';
 import initSignIn from '../functions/actions/qualifyingTests/signIn.js';
-const signIn = initSignIn(config, firebase, db);
+const signIn = initSignIn(db, auth);
 
 const main = async () => {
-  return signIn({ email: 'warren@precise-minds.co.uk' });
+  return signIn({ email: 'test1@jac.test' });
 };
 
 main()

@@ -1,6 +1,6 @@
-import { getDocument, getDocuments } from '../../shared/helpers.js';
+import { getDocuments } from '../../shared/helpers.js';
 
-export default (config, firebase, db, auth) => {
+export default (db, auth) => {
 
   return signIn;
 
