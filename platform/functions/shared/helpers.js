@@ -17,7 +17,7 @@ export {
   getLatestDate,
   convertStringToSearchParts,
   lookup,
-  replaceCharacters,
+  replaceCharacters
 };
 
 async function getDocument(query) {

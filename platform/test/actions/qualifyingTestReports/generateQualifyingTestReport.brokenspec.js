@@ -3,7 +3,10 @@ const mockConfig = jest.fn();
 const mockFirebase = jest.fn();
 const mockDb = jest.fn();
 
-import { initQtReportLookupRank, initQtReportScoresReport } from '../../../functions/actions/qualifyingTests/generateQualifyingTestReport.js';
+let initQtReportLookupRank;
+let initQtReportScoresReport;
+// file doesnt exist VVV
+// import { initQtReportLookupRank, initQtReportScoresReport } from '../../../functions/actions/qualifyingTests/generateQualifyingTestReport.js';
 const { qtReportLookupRank, qtReportScoresReport } = { initQtReportLookupRank, initQtReportScoresReport }(mockConfig, mockFirebase, mockDb);
 
 describe('qtReportScoresReport()', () => {

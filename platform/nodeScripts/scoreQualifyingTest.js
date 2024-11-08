@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import initScoreQualifyingTest from '../functions/actions/qualifyingTests/scoreQualifyingTest';
+import initScoreQualifyingTest from '../functions/actions/qualifyingTests/scoreQualifyingTest.js';
 const scoreQualifyingTest = initScoreQualifyingTest(config, firebase, db);
 
 const main = async () => {

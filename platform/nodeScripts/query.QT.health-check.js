@@ -1,7 +1,6 @@
 'use strict';
 
-import config from './shared/config.js';
-import { firebase, app, db } from './shared/admin.js';
+import { app, db } from './shared/admin.js';
 import { getDocuments } from '../functions/shared/helpers.js';
 
 const main = async () => {

@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import initSignIn from '../functions/actions/qualifyingTests/signIn';
+import initSignIn from '../functions/actions/qualifyingTests/signIn.js';
 const signIn = initSignIn(config, firebase, db);
 
 const main = async () => {

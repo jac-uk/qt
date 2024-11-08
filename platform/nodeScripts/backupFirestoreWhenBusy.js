@@ -2,7 +2,7 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import { initBackupFirestoreWhenBusy } from '../functions/actions/backup/firestore';
+import { initBackupFirestoreWhenBusy } from '../functions/actions/backup/firestore.js';
 const backupFirestoreWhenBusy = initBackupFirestoreWhenBusy(config, firebase, db);
 
 const main = async () => {

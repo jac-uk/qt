@@ -120,5 +120,5 @@ export {
   heldFeePaidJudicialRole,
   flattenCurrentLegalRole,
   flattenProfessionalBackground,
-  attendedUKStateSchool,
+  attendedUKStateSchool
 };

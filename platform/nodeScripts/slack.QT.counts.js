@@ -62,8 +62,18 @@ const main = async () => {
     cancelled = qualifyingTest.counts.cancelled;
     outOfTime = qualifyingTest.counts.outOfTime;
   }
-
-  await slack.post(`*Summary Stats: ${qualifyingTest.title}*\n\n - ${activated} participants\n - ${started} started\n - ${inProgress} in progress\n - ${completed} completed\n - ${outOfTime} auto-submitted`);
+    initialised;
+    other;
+    cancelled;
+  await slack.post(
+    `*Summary Stats: ${qualifyingTest.title}*\n
+    \n 
+    - ${activated} participants\n
+    - ${started} started\n
+    - ${inProgress} in progress\n
+    - ${completed} completed\n
+    - ${outOfTime} auto-submitted`
+  );
 
   return true;
 };

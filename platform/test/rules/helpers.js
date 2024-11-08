@@ -12,8 +12,11 @@ export const setup = async (auth, data) => {
     },
     auth,
   });
+// sorry whoever did the clever auth?.uid thing - upgrade broke it @todo fix it back to:
+// const db = testEnv.authenticatedContext(auth?.uid || null).firestore();
 
-  const db = testEnv.authenticatedContext(auth?.uid || null).firestore();
+  const authContext = auth ? auth.uid : null;
+  const db = testEnv.authenticatedContext(authContext).firestore();
 
   if (data) {
     const adminDb = testEnv.unauthenticatedContext().firestore();

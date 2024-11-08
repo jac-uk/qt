@@ -3,7 +3,7 @@ import config from '../shared/config.js';
 import { firebase, db } from '../shared/admin.js';
 import initOnQualifyingTestUpdate from '../actions/qualifyingTests/onUpdate.js';
 
-const onQualifyingTestUpdate = initOnQualifyingTestUpdate(config, firebase, db)
+const onQualifyingTestUpdate = initOnQualifyingTestUpdate(config, firebase, db);
 
 export default functions.region('europe-west2').firestore
   .document('qualifyingTests/{qualifyingTestId}')
