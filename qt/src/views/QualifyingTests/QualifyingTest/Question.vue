@@ -109,7 +109,7 @@ export default {
       responses,
       showDetails: true,
       previousTestQuestion: false,
-      questionSessionStart: undefined,
+      questionSessionStart: Timestamp.now(),
     };
   },
   computed: {
@@ -193,21 +193,9 @@ export default {
     const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
     await this.$store.dispatch('qualifyingTestResponse/save', saveData);
     window.scrollTo(0, 0);
-    this.questionSessionStart = Timestamp.now();
   },
   async created() {
-    if (this.isScenario) {
-      this.$router.push({
-        name: 'online-test-review',
-      });
-      return;
-    }
-    if (this.questionNumber > this.qualifyingTestResponse.testQuestions.questions.length) {
-      this.$router.push({
-        name: 'online-test-review',
-      });
-      return;
-    }
+    await this.handleLanding();
     if (this.qualifyingTestResponse) {
       if (this.response && !this.response.started) {
         this.response.started = Timestamp.fromDate(new Date());
@@ -249,6 +237,20 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', data);
       if (isCompleted) {
         this.$router.push(this.nextPage);
+      }
+    },
+    async handleLanding() {
+      if (this.isScenario) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
+      }
+      if (this.questionNumber > this.qualifyingTestResponse.testQuestions.questions.length) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
       }
     },
     questionAnswered(val) {

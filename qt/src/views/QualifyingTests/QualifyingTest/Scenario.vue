@@ -10,6 +10,7 @@
       >
         {{ qualifyingTestResponse.qualifyingTest.title }}
       </h1>
+      <h1>{{ questionSessionStart }}</h1>
       <!-- <h1
         class="govuk-caption-m"
       >
