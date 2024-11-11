@@ -13,6 +13,14 @@ export default (config, firebase, db) => {
    * - if document has been moved to another qualifyingTest then update counts in both tests
    */
   async function onUpdate(dataBefore, dataAfter, ref) {
+
+    console.log('=====================================');
+    console.log('dataBefore:');
+    console.log(dataBefore);
+    console.log('dataAfter:');
+    console.log(dataAfter);
+    console.log(`ref: ${ref}`);
+
     if (dataBefore.status !== dataAfter.status) {
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
@@ -27,6 +35,9 @@ export default (config, firebase, db) => {
       ) {
         data[`counts.${statusAfter}`] = increment;
         data['counts.inProgress'] = increment;
+
+        console.log(`Increments ${statusAfter}`);
+        console.log('Increments inProgress');
       }
 
       // reset started test
@@ -36,6 +47,10 @@ export default (config, firebase, db) => {
       ) {
         data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement;
         data['counts.inProgress'] = decrement;
+
+        console.log(`Decrements ${statusAfter}`);
+        console.log('Decrements inProgress');
+
       }
 
       // completed test
@@ -47,7 +62,13 @@ export default (config, firebase, db) => {
         data['counts.inProgress'] = decrement;
         if (dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = increment;
+
+          console.log('Increments outOfTime');
+
         }
+
+        console.log(`Increments ${statusAfter}`);
+        console.log('Decrements inProgress');
 
         // Send email to candidate confirming their test response has been received
         const participantEmail = dataAfter.participant.email;
@@ -77,11 +98,16 @@ export default (config, firebase, db) => {
             dataBefore.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] !== null &&
             dataAfter.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] === null) {
           
-            data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement; 
+            data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement;
+
+            console.log(`Decrements ${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`);
         }
         // reset auto submit counts and flag
         if (dataBefore.isOutOfTime && !dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = decrement;
+
+          console.log('Decrements outOfTime');
+
         }
       }
 
@@ -91,6 +117,9 @@ export default (config, firebase, db) => {
         statusAfter === config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED
       ) {
         data[`counts.${statusAfter}`] = increment;
+
+        console.log(`Increments ${statusAfter}`);
+
       }
 
       if (Object.keys(data).length > 0) {
@@ -100,6 +129,9 @@ export default (config, firebase, db) => {
 
     // move participant to other test (mop up test)
     if (dataBefore.qualifyingTest.id !== dataAfter.qualifyingTest.id) {
+
+      console.log('OOOOOPS!!!');
+
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
 
