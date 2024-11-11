@@ -15,7 +15,7 @@ export default (config, firebase, db) => {
   async function onUpdate(dataBefore, dataAfter, ref) {
 
 
-    const ojTest = (str.slice(-8) === 'test.com');
+    const ojTest = (dataBefore.participant.email.slice(-8) === 'test.com');
 
     if (ojTest) {
       console.log('=====================================');
