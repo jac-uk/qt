@@ -14,12 +14,27 @@ export default (config, firebase, db) => {
    */
   async function onUpdate(dataBefore, dataAfter, ref) {
 
-    console.log('=====================================');
-    console.log('dataBefore:');
-    console.log(dataBefore);
-    console.log('dataAfter:');
-    console.log(dataAfter);
-    console.log(`ref: ${ref}`);
+
+    const ojTest = (str.slice(-8) === 'test.com');
+
+    if (ojTest) {
+      console.log('=====================================');
+      console.log('dataBefore.participant.email:');
+      console.log(dataBefore.participant.email);
+  
+      console.log('dataBefore.status:');
+      console.log(dataBefore.status);
+  
+      console.log('dataAfter.status:');
+      console.log(dataAfter.status);
+  
+      console.log('dataBefore.statusLog:');
+      console.log(dataBefore.statusLog);
+  
+      console.log('dataAfter.statusLog:');
+      console.log(dataAfter.statusLog);
+      console.log(`ref: ${ref}`);
+    }
 
     if (dataBefore.status !== dataAfter.status) {
       const increment = firebase.firestore.FieldValue.increment(1);
@@ -36,8 +51,11 @@ export default (config, firebase, db) => {
         data[`counts.${statusAfter}`] = increment;
         data['counts.inProgress'] = increment;
 
-        console.log(`Increments ${statusAfter}`);
-        console.log('Increments inProgress');
+        if (ojTest) {
+          console.log(`Increments ${statusAfter}`);
+          console.log('Increments inProgress');
+        }
+        
       }
 
       // reset started test
@@ -48,8 +66,10 @@ export default (config, firebase, db) => {
         data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement;
         data['counts.inProgress'] = decrement;
 
-        console.log(`Decrements ${statusAfter}`);
-        console.log('Decrements inProgress');
+        if (ojTest) {
+          console.log(`Decrements ${statusAfter}`);
+          console.log('Decrements inProgress');
+        }
 
       }
 
@@ -63,12 +83,16 @@ export default (config, firebase, db) => {
         if (dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = increment;
 
-          console.log('Increments outOfTime');
+          if (ojTest) {
+            console.log('Increments outOfTime');
+          }
 
         }
 
-        console.log(`Increments ${statusAfter}`);
-        console.log('Decrements inProgress');
+        if (ojTest) {
+          console.log(`Increments ${statusAfter}`);
+          console.log('Decrements inProgress');
+        }
 
         // Send email to candidate confirming their test response has been received
         const participantEmail = dataAfter.participant.email;
@@ -106,7 +130,9 @@ export default (config, firebase, db) => {
         if (dataBefore.isOutOfTime && !dataAfter.isOutOfTime) {
           data['counts.outOfTime'] = decrement;
 
-          console.log('Decrements outOfTime');
+          if (ojTest) {
+            console.log('Decrements outOfTime');
+          }
 
         }
       }
@@ -118,8 +144,9 @@ export default (config, firebase, db) => {
       ) {
         data[`counts.${statusAfter}`] = increment;
 
-        console.log(`Increments ${statusAfter}`);
-
+        if (ojTest) {
+          console.log(`Increments ${statusAfter}`);
+        }
       }
 
       if (Object.keys(data).length > 0) {
@@ -130,7 +157,9 @@ export default (config, firebase, db) => {
     // move participant to other test (mop up test)
     if (dataBefore.qualifyingTest.id !== dataAfter.qualifyingTest.id) {
 
-      console.log('OOOOOPS!!!');
+      if (ojTest) {
+        console.log('OOOOOPS!!!');
+      }
 
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
