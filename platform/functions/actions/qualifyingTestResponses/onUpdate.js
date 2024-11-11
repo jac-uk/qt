@@ -14,29 +14,30 @@ export default (config, firebase, db) => {
    */
   async function onUpdate(dataBefore, dataAfter, ref) {
 
-
-    const ojTest = (dataBefore.participant.email.slice(-8) === 'test.com');
-
-    if (ojTest) {
-      console.log('=====================================');
-      console.log('dataBefore.participant.email:');
-      console.log(dataBefore.participant.email);
-  
-      console.log('dataBefore.status:');
-      console.log(dataBefore.status);
-  
-      console.log('dataAfter.status:');
-      console.log(dataAfter.status);
-  
-      console.log('dataBefore.statusLog:');
-      console.log(dataBefore.statusLog);
-  
-      console.log('dataAfter.statusLog:');
-      console.log(dataAfter.statusLog);
-      console.log(`ref: ${ref}`);
-    }
-
     if (dataBefore.status !== dataAfter.status) {
+
+      // oj debugging
+      const ojTest = (dataBefore.participant.email.slice(-8) === 'test.com');
+
+      if (ojTest) {
+        console.log('=====================================');
+        console.log('dataBefore.participant.email:');
+        console.log(dataBefore.participant.email);
+    
+        console.log('dataBefore.status:');
+        console.log(dataBefore.status);
+    
+        console.log('dataAfter.status:');
+        console.log(dataAfter.status);
+    
+        console.log('dataBefore.statusLog:');
+        console.log(dataBefore.statusLog);
+    
+        console.log('dataAfter.statusLog:');
+        console.log(dataAfter.statusLog);
+        console.log(`ref: ${ref}`);
+      }
+    
       const increment = firebase.firestore.FieldValue.increment(1);
       const decrement = firebase.firestore.FieldValue.increment(-1);
       const qualifyingTestId = dataBefore.qualifyingTest.id;
