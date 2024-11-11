@@ -293,7 +293,9 @@ export default {
     },
   },
   async created() {
-    if (isNaN(this.questionNumber) || isNaN(this.scenarioNumber)) {this.$router.push(this.nextPage);}
+    if (isNaN(this.questionNumber) || isNaN(this.scenarioNumber)) {
+      this.$router.push(this.nextPage);
+    }
     if (this.qualifyingTestResponse.qualifyingTest.type !== QUALIFYING_TEST.TYPE.SCENARIO) {
       return this.$router.replace({ name: 'online-tests' });
     }
@@ -305,10 +307,10 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', data);
     }
     this.questionSessionStart = Timestamp.now();
-  },
-  async mounted() {
     const saveData = await saveHistoryAndSession({ action: 'start' }, this.getOverallQuestionNumber, this.questionSessionStart);
     await this.$store.dispatch('qualifyingTestResponse/save', saveData);
+  },
+  async mounted() {
     window.scrollTo(0, 0);
   },
   methods: {

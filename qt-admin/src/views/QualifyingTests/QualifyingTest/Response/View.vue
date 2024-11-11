@@ -601,7 +601,7 @@
                 </td>
                 <td class="log_row_date">
                   <span v-if="log.action">{{ log.action }} </span>
-                  <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
+                  <span v-if="log.question >= 0"> question {{ log.question + 1 }} </span>
                   <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
                   <span v-if="log.answer">(to answer {{ log.answer.value + 1 }} {{ log.answer.type }})</span>
                   <!-- <span v-if="log.location">{{ log.location }}</span> -->

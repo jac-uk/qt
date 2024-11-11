@@ -190,8 +190,6 @@ export default {
     },
   },
   async mounted() {
-    const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
-    await this.$store.dispatch('qualifyingTestResponse/save', saveData);
     window.scrollTo(0, 0);
   },
   async created() {
@@ -251,6 +249,9 @@ export default {
           name: 'online-test-review',
         });
         return;
+      } else {
+        const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
+        await this.$store.dispatch('qualifyingTestResponse/save', saveData);
       }
     },
     questionAnswered(val) {
