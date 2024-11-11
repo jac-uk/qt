@@ -1063,7 +1063,12 @@ export default {
           }
         });
       }
-      return new Date(millisecs).toISOString().substr(11, 8);
+      let result;
+      if (!isNaN(millisecs)) {
+        result = new Date(millisecs).toISOString().substr(11, 8);
+      }
+      return result;
+
     },
     amountOfTimeVisitedQuestion(index) {
       let counter = 0;

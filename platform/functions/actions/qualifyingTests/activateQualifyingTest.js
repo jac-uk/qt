@@ -1,5 +1,6 @@
 import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
-import newQuestionsWithoutSolutions from '../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
+import initNewQuestionsWithoutSolutions from '../../shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
+const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
 
 export default (config, firebase, db) => {
 

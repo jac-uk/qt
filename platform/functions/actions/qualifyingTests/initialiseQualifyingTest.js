@@ -1,4 +1,4 @@
-import { getDocument, getDocuments, applyUpdates } from '../../shared/helpers.js';
+import { getDocument, applyUpdates } from '../../shared/helpers.js';
 import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse.js';
 
 export default (config, firebase, db) => {
