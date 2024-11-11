@@ -458,6 +458,7 @@
           <div v-if="responses.length">
             <table class="history-logs">
               <div v-if="!isScenario">
+                <hr>
                 <div
                   v-for="(testQuestion, index) in questions"
                   :key="index"
@@ -468,6 +469,7 @@
                       Question {{ index + 1 }}
                     </td>
                   </tr>
+                  <hr>
                   <tr>
                     <td>First started question: </td>
                     <td>
@@ -511,6 +513,7 @@
                     <td>How many times changed answer: </td>
                     <td>{{ historyCount('changed', index) }}</td>
                   </tr>
+                  <hr>
                 </div>
               </div>
               <div v-else-if="isScenario">
