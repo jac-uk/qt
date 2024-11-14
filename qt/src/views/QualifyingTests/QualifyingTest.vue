@@ -92,12 +92,16 @@ export default {
     Countdown,
     Banner,
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
       vm.isComingFromReview = from.name === 'online-test-review';
-      return true;
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    this.isComingFromReview = from.name === 'online-test-review';
+    next();
+  },
+
   data() {
     return {
       loaded: false,
@@ -108,6 +112,7 @@ export default {
       serverTimeOffset: 0,
       testInProgress: false,
       questionNumber: parseInt(this.$route.params.questionNumber),
+      isComingFromReview: false,
     };
   },
   computed: {
@@ -131,6 +136,8 @@ export default {
       return false;
     },
     showSkip() {
+      if (this.isComingFromReview)
+        return false;
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
         return this.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
       else if (this.isScenario)
@@ -182,7 +189,13 @@ export default {
       return this.$route.name === 'online-test-review';
     },
     isLastQuestion() {
-      return this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+      let result = false;
+      if (!this.isScenario) {
+        result = this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+      } else {
+        result = this.isLastScenario && this.isLastQuestionInScenario;
+      }
+      return result;
     },
     nextPage() {
       // Handle navigation to the review page for both scenarios and non-scenarios
@@ -326,6 +339,13 @@ export default {
     btnSkip() {
       const dataToSave = prepareSaveHistory({ action: 'skip', txt: 'Skip' }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
+
+      if (this.isComingFromReview) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
+      }
 
       if (this.isSituationalJudgement || this.isCriticalAnalysis) {
         this.$router.replace({ params: { questionNumber: this.questionNumber + 1 } });
