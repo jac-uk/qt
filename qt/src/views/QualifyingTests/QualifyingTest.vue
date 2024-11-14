@@ -485,8 +485,8 @@ export default {
     color: white !important;
   }
 
-  .qt_page {
+  // .qt_page {
     // padding-top: 60px;
-  }
+  // }
 
 </style>
