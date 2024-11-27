@@ -484,9 +484,4 @@ export default {
   .countdown-link {
     color: white !important;
   }
-
-  // .qt_page {
-    // padding-top: 60px;
-  // }
-
 </style>
