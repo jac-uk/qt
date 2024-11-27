@@ -36,7 +36,7 @@
               type="button"
               @click="skip"
             >
-              Skip to next question
+              {{ isComingFromReview || isLastQuestion ? 'Skip to Review' : 'Skip to next question' }}
             </button>
             <button
               :class="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
@@ -64,12 +64,16 @@ export default {
     SituationalJudgement,
     Banner,
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
       vm.isComingFromReview = from.name === 'online-test-review';
-      return true;
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    this.isComingFromReview = from.name === 'online-test-review';
+    next();
+  },
+
   props: {
     autoSave: {
       type: Boolean,
@@ -106,7 +110,8 @@ export default {
       responses,
       showDetails: true,
       previousTestQuestion: false,
-      questionSessionStart: undefined,
+      questionSessionStart: Timestamp.now(),
+      isComingFromReview: false,
     };
   },
   computed: {
@@ -153,12 +158,21 @@ export default {
     },
     nextPage() {
       // Determine the next page for non-scenario-based tests
-      return {
-        name: 'online-test-question',
-        params: {
-          questionNumber: this.questionNumber + 1,
-        },
-      };
+      if (this.isLastQuestion || isNaN(this.questionNumber + 1) || this.isComingFromReview) {
+        return {
+          name: 'online-test-review',
+          params: {
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      } else {
+        return {
+          name: 'online-test-question',
+          params: {
+            questionNumber: this.questionNumber + 1,
+          },
+        };
+      }
     },
   },
   watch: {
