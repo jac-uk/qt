@@ -1,9 +1,8 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const {getDocument, getDocuments, applyUpdates} = require('../functions/shared/helpers');
-const sizeof = require('firestore-size');
+import { app, db } from './shared/admin.js';
+import {getDocument, getDocuments, applyUpdates} from '../functions/shared/helpers.js';
+import sizeof from 'firestore-size';
 
 const main = async () => {
   const qualifyingTestId = 'oFGBwCCxsHccl9I72c2V';
@@ -32,8 +31,8 @@ const main = async () => {
       ref: qualifyingTestRef,
       data: {
         status: 'approved',
-        counts: {}
-      }
+        counts: {},
+      },
     });
   }
 

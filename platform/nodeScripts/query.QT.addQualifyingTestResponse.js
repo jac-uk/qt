@@ -1,17 +1,21 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const { getDocument, applyUpdates } = require('../functions/shared/helpers');
-const newQualifyingTestResponse = require('../functions/shared/factories/QualifyingTests/newQualifyingTestResponse')(config, firebase);
-const newQuestionsWithoutSolutions = require('../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import { getDocument, applyUpdates } from '../functions/shared/helpers.js';
+
+import initNewQualifyingTestResponse from '../functions/shared/factories/QualifyingTests/newQualifyingTestResponse.js';
+const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);
+
+import initNewQuestionsWithoutSolutions from '../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
+const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
 
 const main = async () => {
-  const qualifyingTestId = 'yubYbWZ5WGQoG2OhHTfT';
+  const qualifyingTestId = 'A7TesElY4aI3392MfBKo';
   const participant = { 
     adjustments: false,
     fullName: '',
-    email: 'sophie.austin@judicialappointments.gov.uk',
+    email: 'tom.tom@tom.gov.uk',
     ref: '',
     srcId: '',
   };

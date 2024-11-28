@@ -1,71 +1,67 @@
-const firebase = require('@firebase/rules-unit-testing');
-const fs = require('fs');
-const admin = require('firebase-admin');
+import { initializeTestEnvironment } from '@firebase/rules-unit-testing';
+import { Timestamp } from 'firebase-admin/firestore';
+import fs from 'fs';
 
 const projectId = `rules-spec-${Date.now()}`;
 
-module.exports.setup = async (auth, data) => {
-
-  const rules = fs.readFileSync('database/firestore.rules', 'utf8');
-
-  const app = await firebase.initializeTestApp({
+export const setup = async (auth, data) => {
+  const testEnv = await initializeTestEnvironment({
     projectId,
+    firestore: {
+      rules: fs.readFileSync('database/firestore.rules', 'utf8'),
+    },
     auth,
   });
+// sorry whoever did the clever auth?.uid thing - upgrade broke it @todo fix it back to:
+// const db = testEnv.authenticatedContext(auth?.uid || null).firestore();
 
-  const db = app.firestore();
+  const authContext = auth ? auth.uid : null;
+  const db = testEnv.authenticatedContext(authContext).firestore();
 
   if (data) {
-    const adminApp = await firebase.initializeAdminApp({
-      projectId: projectId,
-    });
-    const adminDb = adminApp.firestore();
+    const adminDb = testEnv.unauthenticatedContext().firestore();
     for (const key in data) {
       const ref = adminDb.doc(key);
       await ref.set(data[key]);
     }
   }
-
-  await firebase.loadFirestoreRules({
-    projectId,
-    rules: rules,
-  });
 
   return db;
 };
 
-module.exports.teardown = async () => {
-  await Promise.all(firebase.apps().map(app => app.delete()));
+export const teardown = async (testEnv) => {
+  if (testEnv) {
+    await testEnv.cleanup();
+  }
 };
 
-module.exports.setupAdmin = async (db, data) => {
-  const app = await firebase.initializeAdminApp({
-    projectId: db.app.options.projectId,
-  });
-  const adminDb = app.firestore();
+export const setupAdmin = async (testEnv, data) => {
+  const adminDb = testEnv.unauthenticatedContext().firestore();
+
   if (data) {
     for (const key in data) {
       const ref = adminDb.doc(key);
       await ref.set(data[key]);
     }
   }
+
   return adminDb;
 };
 
-module.exports.getTimeStamp = (date) => {
-  return admin.firestore.Timestamp.fromDate(date);
+export const getTimeStamp = (date) => {
+  return Timestamp.fromDate(date);
 };
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
-module.exports.getValidExerciseData = () => {
+export const getValidExerciseData = () => {
   return {
     referenceNumber: '000' + getRandomInt(100, 1000),
-    progress: {started: true},
+    progress: { started: true },
     state: 'draft',
     createdBy: 'user1',
   };

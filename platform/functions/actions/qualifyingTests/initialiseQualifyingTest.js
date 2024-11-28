@@ -1,7 +1,8 @@
-const { getDocument, getDocuments, applyUpdates } = require('../../shared/helpers');
+import { getDocument, applyUpdates } from '../../shared/helpers.js';
+import initNewQualifyingTestResponse from '../../shared/factories/QualifyingTests/newQualifyingTestResponse.js';
 
-module.exports = (config, firebase, db) => {
-  const newQualifyingTestResponse = require('../../shared/factories/QualifyingTests/newQualifyingTestResponse')(config, firebase);
+export default (config, firebase, db) => {
+  const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);
 
   return initialiseQualifyingTest;
 

@@ -92,12 +92,16 @@ export default {
     Countdown,
     Banner,
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
       vm.isComingFromReview = from.name === 'online-test-review';
-      return true;
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    this.isComingFromReview = from.name === 'online-test-review';
+    next();
+  },
+
   data() {
     return {
       loaded: false,
@@ -108,6 +112,7 @@ export default {
       serverTimeOffset: 0,
       testInProgress: false,
       questionNumber: parseInt(this.$route.params.questionNumber),
+      isComingFromReview: false,
     };
   },
   computed: {
@@ -131,6 +136,8 @@ export default {
       return false;
     },
     showSkip() {
+      if (this.isComingFromReview)
+        return false;
       if (this.isSituationalJudgement || this.isCriticalAnalysis)
         return this.questionNumber < this.qualifyingTestResponse.testQuestions.questions.length;
       else if (this.isScenario)
@@ -138,7 +145,7 @@ export default {
       return false;
     },
     numberOfScenarios() {
-      return this.qualifyingTestResponse.testQuestions.questions.length;
+      return this.qualifyingTestResponse ? this.qualifyingTestResponse.testQuestions.questions.length : 0;
     },
     numberOfQuestionsInCurrentScenario() {
       return this.scenarioNumber && this.questionNumber
@@ -182,7 +189,13 @@ export default {
       return this.$route.name === 'online-test-review';
     },
     isLastQuestion() {
-      return this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+      let result = false;
+      if (!this.isScenario) {
+        result = this.questionNumber === this.qualifyingTestResponse.testQuestions.questions.length;
+      } else {
+        result = this.isLastScenario && this.isLastQuestionInScenario;
+      }
+      return result;
     },
     nextPage() {
       // Handle navigation to the review page for both scenarios and non-scenarios
@@ -256,6 +269,13 @@ export default {
     this.questionSessionStart = Timestamp.now();
   },
   mounted() {
+    if (this.numberOfScenarios) {
+      if (this.scenarioNumber > this.numberOfScenarios) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+      }
+    }
     window.addEventListener('beforeunload', this.handleBeforeUnload);
   },
   beforeUnmount() {
@@ -320,6 +340,13 @@ export default {
       const dataToSave = prepareSaveHistory({ action: 'skip', txt: 'Skip' }, this.questionNumber);
       this.$store.dispatch('qualifyingTestResponse/save', dataToSave);
 
+      if (this.isComingFromReview) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
+      }
+
       if (this.isSituationalJudgement || this.isCriticalAnalysis) {
         this.$router.replace({ params: { questionNumber: this.questionNumber + 1 } });
       } else if (this.isScenario) {
@@ -330,8 +357,10 @@ export default {
           });
         }
         else {
-          const scenarioNumber = this.isLastQuestionInScenario ? this.scenarioNumber + 1 : this.scenarioNumber;
-          const nextQuestionNumber = this.isLastQuestionInScenario ? 1 : this.questionNumber + 1;
+          let scenarioNumber;
+          scenarioNumber = (this.isLastQuestionInScenario || this.questionNumber > this.numberOfQuestionsInCurrentScenario) ? this.scenarioNumber + 1 : this.scenarioNumber;
+          scenarioNumber = scenarioNumber > this.numberOfScenarios ? this.numberOfScenarios : scenarioNumber;
+          const nextQuestionNumber = (this.isLastQuestionInScenario || this.questionNumber > this.numberOfQuestionsInCurrentScenario) ? 1 : this.questionNumber + 1;
           this.$router.push({
             name: 'online-test-scenario',
             params: {
@@ -455,9 +484,4 @@ export default {
   .countdown-link {
     color: white !important;
   }
-
-  .qt_page {
-    // padding-top: 60px;
-  }
-
 </style>

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { connectFirestoreEmulator, getFirestore, Timestamp } from 'firebase/firestore';
+import { connectFirestoreEmulator, getFirestore, Timestamp } from '@firebase/firestore';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectDatabaseEmulator, getDatabase } from 'firebase/database';

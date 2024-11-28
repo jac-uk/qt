@@ -94,4 +94,4 @@ class htmlWriter {
   }
 }
 
-module.exports = htmlWriter;
+export default htmlWriter;

@@ -1,11 +1,11 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const signIn = require('../functions/actions/qualifyingTests/signIn')(config, firebase, db);
+import { auth, app, db } from './shared/admin.js';
+import initSignIn from '../functions/actions/qualifyingTests/signIn.js';
+const signIn = initSignIn(db, auth);
 
 const main = async () => {
-  return signIn({ email: 'warren@precise-minds.co.uk' });
+  return signIn({ email: 'test1@jac.test' });
 };
 
 main()

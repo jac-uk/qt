@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   PROJECT_ID: 'jac-qualifying-tests-develop',
   QT_URL: `https://europe-west2-${process.env.PROJECT_ID}.cloudfunctions.net/api/v1`,
   QT_KEY: 'secret',

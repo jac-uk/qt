@@ -11,22 +11,31 @@
     "logs": "firebase functions:log",
     "emulators:kill": "lsof -t -i tcp:9099 | xargs kill && lsof -t -i tcp:5001 | xargs kill && lsof -t -i tcp:8080 | xargs kill && lsof -t -i tcp:9000 | xargs kill && lsof -t -i tcp:8085 | xargs kill && lsof -t -i tcp:9199 | xargs kill && lsof -t -i tcp:4500 | xargs kill && lsof -t -i tcp:9150 | xargs kill && lsof -t -i tcp:4000 | xargs kill"
   },
+  "type": "module",
   "engines": {
-    "node": "10"
+    "node": "18"
   },
   "dependencies": {
-    "axios": "^0.21.2",
+    "@google-cloud/firestore": "^7.10.0",
+    "axios": "^1.7.7",
     "bottleneck": "^2.19.5",
-    "firebase-admin": "^9.7.0",
-    "firebase-functions": "^3.13.2",
-    "firebase-tools": "^9.11.0",
-    "notifications-node-client": "^4.8.0",
-    "googleapis": "^49.0.0"
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^5.0.1",
+    "firebase-tools": "^13.24.2",
+    "googleapis": "^49.0.0",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "notifications-node-client": "^8.2.1"
   },
   "devDependencies": {
-    "eslint": "^7.15.0",
-    "firebase-functions-test": "^0.1.6"
+    "eslint": "^7.15.0"
   },
   "private": true,
-  "snyk": true
+  "snyk": true,
+  "overrides": {
+    "path-to-regexp": "^1.2.0"
+  }
 }

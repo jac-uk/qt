@@ -1,7 +1,5 @@
-const lookup = require('./lookup');
-
-const firebase = require('firebase-admin');
-const Timestamp = firebase.firestore.Timestamp;
+import lookup from './lookup.js';
+import { Timestamp } from 'firebase-admin/firestore';
 
 const addField = (array, label, value, lineBreak = false) => {
   if (value === undefined || value === null || value === '') {
@@ -113,7 +111,7 @@ const attendedUKStateSchool = (equalityAndDiversitySurvey) => {
   return toYesNo(['uk-state-selective', 'uk-state-non-selective'].indexOf(equalityAndDiversitySurvey.stateOrFeeSchool) >= 0);
 };
 
-module.exports = {
+export {
   addField,
   toYesNo,
   formatDate,
@@ -122,5 +120,5 @@ module.exports = {
   heldFeePaidJudicialRole,
   flattenCurrentLegalRole,
   flattenProfessionalBackground,
-  attendedUKStateSchool,
+  attendedUKStateSchool
 };

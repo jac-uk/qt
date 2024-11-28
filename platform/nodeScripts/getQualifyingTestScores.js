@@ -1,9 +1,11 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const getQualifyingTestScores = require('../functions/actions/qualifyingTests/getQualifyingTestScores')(config, firebase, db);
-// const qts = require('../functions/shared/qts')(config);
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+import initGetQualifyingTestScores from '../functions/actions/qualifyingTests/getQualifyingTestScores.js';
+const getQualifyingTestScores = initGetQualifyingTestScores(config, firebase, db);
+// import initQts from '../functions/shared/qts.js';
+// const qts = initQts(config);
 
 const main = async () => {
 

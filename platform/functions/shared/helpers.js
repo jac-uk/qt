@@ -1,7 +1,6 @@
-const firebase = require('firebase-admin');
-const Timestamp = firebase.firestore.Timestamp;
+import { Timestamp } from 'firebase-admin/firestore';
 
-module.exports = {
+export {
   getDocument,
   getDocuments,
   getDocumentsFromQueries,
@@ -18,7 +17,7 @@ module.exports = {
   getLatestDate,
   convertStringToSearchParts,
   lookup,
-  replaceCharacters,
+  replaceCharacters
 };
 
 async function getDocument(query) {
@@ -131,9 +130,12 @@ function checkArguments(definitions, data) {
 
   // check data contains required definitions
   const requiredKeys = [];
-  for (key in definitions) {
-    if (definitions[key].required) { requiredKeys.push(key); }
+  for (let key in definitions) {
+    if (definitions[key].required) {
+      requiredKeys.push(key);
+    }
   }
+  
   for (let i = 0, len = requiredKeys.length; i < len; ++i) {
     if (providedKeys.indexOf(requiredKeys[i]) < 0) {
       // console.log('data does not contain required props');

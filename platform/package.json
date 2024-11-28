@@ -5,8 +5,10 @@
   "repository": "https://github.com/jac-uk/qt",
   "license": "MIT",
   "readme": "README.md",
+  "main": "index.js",
+  "type": "module",
   "engines": {
-    "node": "10"
+    "node": "18"
   },
   "scripts": {
     "lint": "eslint .",
@@ -19,7 +21,7 @@
     "start": "npm run shell",
     "logs": "firebase functions:log",
     "local:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && export FIRESTORE_EMULATOR_HOST='localhost:8080' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
-    "develop:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
+    "develop:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.json' && run(){ node --trace-warnings -r dotenv/config nodeScripts/$1; }; run",
     "live:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.live.json' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
     "nodeScriptOnWindows": "set GOOGLE_APPLICATION_CREDENTIALS=service-account.json&& node nodeScripts/%SCRIPT%",
     "indexes:export": "firebase firestore:indexes > database/firestore.indexes.json --project=jac-qualifying-tests-develop",
@@ -38,8 +40,8 @@
     "live:deploy:realtime-rules": "firebase deploy --project=jac-qualifying-tests-live --only database",
     "test:rules": "export FIRESTORE_EMULATOR_HOST='localhost:8080' && mocha './test/rules/**/*.spec.js' --timeout=10000",
     "test:functions": "mocha './test/functions/**/*.spec.js' --timeout=10000",
-    "test:actions": "jest test/actions",
-    "test:shared": "jest test/shared",
+    "test:actions": "NODE_OPTIONS=--experimental-vm-modules jest test/actions",
+    "test:shared": "NODE_OPTIONS=--experimental-vm-modules jest test/shared",
     "watch:test:rules": "export FIRESTORE_EMULATOR_HOST='localhost:8282' && mocha './test/rules/**/*.spec.js' --timeout=10000 --reporter=min --watch --watch-extensions=rules",
     "ci:test:rules": "firebase emulators:exec --only firestore 'npm run test:rules'",
     "db:export": "firestore-export -a ./service-account.json -b ./data/firestore.json",
@@ -50,29 +52,24 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^5.7.2",
-    "axios": "^0.21.2",
-    "bottleneck": "^2.19.5",
-    "firebase": "^8.4.3",
-    "firebase-admin": "^9.7.0",
-    "firebase-functions": "^3.14.1",
-    "firebase-functions-test": "^0.2.3",
-    "firebase-tools": "^9.11.0",
-    "googleapis": "^67.0.0",
-    "lodash": "^4.17.21",
-    "notifications-node-client": "^4.9.0"
+    "firebase": "^11.0.1",
+    "firebase-admin": "^12.1.1",
+    "firebase-functions": "^5.0.1",
+    "firebase-functions-test": "^3.2.0",
+    "firebase-tools": "^13.24.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.5",
-    "@firebase/rules-unit-testing": "^1.1.9",
-    "@firebase/util": "^1.1.0",
+    "@firebase/rules-unit-testing": "^4.0.0",
     "csv-writer": "^1.6.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.18.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-promise": "^4.2.1",
-    "firebase-mock": "^2.2.10",
     "firestore-size": "^2.0.7",
-    "jest": "^25.2.1",
-    "mocha": "^6.2.3"
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "mocha": "^10.4.0"
   },
   "private": true
 }

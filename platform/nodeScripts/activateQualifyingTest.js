@@ -3,12 +3,13 @@
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
 
-import initBackupFirestore from '../functions/actions/backup/firestore.js';
-const { backupFirestore } = initBackupFirestore(config, firebase, db);
-
+import initActivateQualifyingTest from '../functions/actions/qualifyingTests/activateQualifyingTest.js';
+const activateQualifyingTest = initActivateQualifyingTest(config, firebase, db);
 
 const main = async () => {
-  return backupFirestore();
+  return activateQualifyingTest({
+    qualifyingTestId: 'A7TesElY4aI3392MfBKo',
+  });
 };
 
 main()
@@ -18,6 +19,6 @@ main()
     return process.exit();
   })
   .catch((error) => {
-    console.error(error);
+    console.log(error);
     process.exit();
   });

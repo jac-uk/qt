@@ -56,6 +56,9 @@
       <!-- <Footer
         v-if="!fullPageMode"
       /> -->
+      <div class="govuk-visually-hidden">
+        {{ versionNumber }}
+      </div>
     </template>
   </div>
 </template>
@@ -79,6 +82,9 @@ export default {
     };
   },
   computed: {
+    versionNumber() {
+      return import.meta.env.PACKAGE_VERSION;
+    },
     fullPageMode() {
       return this.$route.meta.fullPageMode;
     },
