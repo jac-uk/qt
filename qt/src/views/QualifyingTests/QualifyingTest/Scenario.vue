@@ -97,11 +97,14 @@ export default {
   components: {
     TextareaInput,
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
       vm.isComingFromReview = from.name === 'online-test-review';
-      return true;
     });
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.isComingFromReview = from.name === 'online-test-review';
+    next();
   },
   props: {
     timeIsUp: {
@@ -148,6 +151,7 @@ export default {
       showDetails: true,
       enableScenario: true,
       // questionSessionStart: undefined,
+      isComingFromReview: false,
     };
   },
   computed: {
