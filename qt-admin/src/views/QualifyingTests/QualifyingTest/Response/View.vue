@@ -280,7 +280,7 @@
                 <br>
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index].started"
+                  :start="questionStartTimestamps(index).length ? questionStartTimestamps(index) : responses[index]?.started"
                   :end="lastUpdatedQuestion(index)"
                 />
                 <div
