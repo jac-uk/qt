@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * This nodescript adds a participant to a qualifying test
+ */
+
 const config = require('./shared/config');
 const { firebase, app, db } = require('./shared/admin.js');
 const { getDocument, applyUpdates } = require('../functions/shared/helpers');
