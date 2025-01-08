@@ -7,7 +7,7 @@ module.exports = (config, firebase, db) => {
     const qualifyingTest = await getDocument(db.collection('qualifyingTests').doc(qualifyingTestId));
     if (!qualifyingTest) return false;
   
-    const qualifyingTestResponses = await getDocuments(db.collection('qualifyingTestResponses').where('qualifyingTest.id', '==', qualifyingTestId).select('status', 'isOutOfTime'));
+    const qualifyingTestResponses = await getDocuments(db.collection('qualifyingTestResponses').where('qualifyingTest.id', '==', qualifyingTestId).select('participant', 'status', 'isOutOfTime'));
   
     let initialised = 0;
     let activated = 0;
@@ -19,30 +19,33 @@ module.exports = (config, firebase, db) => {
     let other = 0;
   
     qualifyingTestResponses.forEach(qtr => {
-      initialised += 1;
-      switch (qtr.status) {
-      case config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED:
-        activated += 1;
-        break;
-      case config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED:
-        activated += 1;
-        started += 1;
-        inProgress += 1;
-        break;
-      case config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED:
-        activated += 1;
-        started += 1;
-        completed += 1;
-        if (qtr.isOutOfTime) {
-          outOfTime += 1;
+      // Exclude .digital email addresses
+      if (!String.prototype.endsWith.call(qtr.participant.email, '.digital')) {
+        initialised += 1;
+        switch (qtr.status) {
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED:
+          activated += 1;
+          break;
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED:
+          activated += 1;
+          started += 1;
+          inProgress += 1;
+          break;
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED:
+          activated += 1;
+          started += 1;
+          completed += 1;
+          if (qtr.isOutOfTime) {
+            outOfTime += 1;
+          }
+          break;
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.CANCELLED: 
+          cancelled += 1;
+          break;
+        default:
+          console.log('other status', qtr.status);
+          other += 1;
         }
-        break;
-      case config.QUALIFYING_TEST_RESPONSES.STATUS.CANCELLED: 
-        cancelled += 1;
-        break;
-      default:
-        console.log('other status', qtr.status);
-        other += 1;
       }
     });
   
