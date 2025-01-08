@@ -19,8 +19,11 @@ module.exports = (config, firebase, db) => {
     let other = 0;
   
     qualifyingTestResponses.forEach(qtr => {
+
+      // @TODO: IDEALLY WANT TO EXCLUDE THE FULL DOMAIN (NOT JUST .digital) SO CHECK WITH NICK WHAT THE FULL EMAIL DOMAIN IS!!
+
       // Exclude .digital email addresses
-      if (!String.prototype.endsWith.call(qtr.participant.email, '.digital')) {
+      if (!String.prototype.endsWith.call(qtr.participant.email, '@judicialappointments.digital')) {
         initialised += 1;
         switch (qtr.status) {
         case config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED:
