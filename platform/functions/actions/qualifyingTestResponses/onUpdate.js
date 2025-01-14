@@ -62,7 +62,7 @@ export default (config, firebase, db) => {
           testType: testType,
           feedbackSurvey: feedbackSurvey,
         };
-        sendEmail(participantEmail, templateId, personalisation);
+        await sendEmail(participantEmail, templateId, personalisation);
       }
 
       // reset completed test

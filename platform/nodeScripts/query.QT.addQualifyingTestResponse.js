@@ -1,14 +1,14 @@
 'use strict';
 
-import config from './shared/config.js';
-import { firebase, app, db } from './shared/admin.js';
-import { getDocument, applyUpdates } from '../functions/shared/helpers.js';
+/**
+ * This nodescript adds a participant to a qualifying test
+ */
 
-import initNewQualifyingTestResponse from '../functions/shared/factories/QualifyingTests/newQualifyingTestResponse.js';
-const newQualifyingTestResponse = initNewQualifyingTestResponse(config, firebase);
-
-import initNewQuestionsWithoutSolutions from '../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions.js';
-const newQuestionsWithoutSolutions = initNewQuestionsWithoutSolutions();
+const config = require('./shared/config');
+const { firebase, app, db } = require('./shared/admin.js');
+const { getDocument, applyUpdates } = require('../functions/shared/helpers');
+const newQualifyingTestResponse = require('../functions/shared/factories/QualifyingTests/newQualifyingTestResponse')(config, firebase);
+const newQuestionsWithoutSolutions = require('../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
 
 const main = async () => {
   const qualifyingTestId = 'A7TesElY4aI3392MfBKo';
