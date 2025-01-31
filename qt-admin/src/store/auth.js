@@ -30,6 +30,8 @@ const module = {
           'tom.russell@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'drie@judicialappointments.digital',
+          'Wincen.Lowe@Justice.gov.uk',
+          'Janine.Djeundje@justice.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
