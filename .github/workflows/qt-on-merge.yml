@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'qt/'
+      - 'qt/**'
 
 jobs:
   draft_release:
