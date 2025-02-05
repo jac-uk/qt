@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - 'qt/'
-    paths-ignore:
-      - 'package.json'
-      - 'package-lock.json'
 
 jobs:
   draft_release:
