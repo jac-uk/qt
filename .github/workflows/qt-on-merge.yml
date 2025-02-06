@@ -1,14 +1,4 @@
-name: QT. On merge
-
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'qt/**'
-
 jobs:
-
   deploy_to_develop:
     runs-on: ubuntu-latest
     environment:
@@ -17,6 +7,8 @@ jobs:
       environment: develop
     steps:
       - uses: actions/checkout@v2
+
+      # Cache node modules
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -28,44 +20,21 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
+      # Setup node environment
       - uses: actions/setup-node@master
         with:
           node-version: '20.10.0'
+
+      # Installing project dependencies
       - name: Installing project dependencies
-        run: cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
-
-      # Check if the "develop-qt-app" hosting target is in firebase.json
-      - name: Check if develop-qt-app is in firebase.json
-        id: check_firebase_json
         run: |
-          if grep -q 'develop-qt-app' firebase.json; then
-            echo "Found develop-qt-app in firebase.json"
-            echo "found_in_firebase_json=true" >> $GITHUB_ENV
-          else
-            echo "develop-qt-app NOT found in firebase.json"
-            echo "found_in_firebase_json=false" >> $GITHUB_ENV
-          fi
+          cd /qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
 
-      # Check if the "develop-qt-app" target is in .firebaserc
-      - name: Check if develop-qt-app is in .firebaserc
-        id: check_firebaserc
-        run: |
-          if grep -q 'develop-qt-app' .firebaserc; then
-            echo "Found develop-qt-app in .firebaserc"
-            echo "found_in_firebaserc=true" >> $GITHUB_ENV
-          else
-            echo "develop-qt-app NOT found in .firebaserc"
-            echo "found_in_firebaserc=false" >> $GITHUB_ENV
-          fi
-
-      # Log the boolean check results for both files
-      - name: Log check results
-        run: |
-          echo "Is develop-qt-app in firebase.json? ${{ env.found_in_firebase_json }}"
-          echo "Is develop-qt-app in .firebaserc? ${{ env.found_in_firebaserc }}"
-
+      # Create env file
       - name: Create env file
         run: |
+          cd /qt
           touch .env.${{ env.environment }}
           echo "VITE_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env.${{ env.environment }}
           echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> .env.${{ env.environment }}
@@ -76,8 +45,23 @@ jobs:
           echo "VITE_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
+
+      # Add checks for develop-qt-app in Firebase config
+      - name: Check if develop-qt-app is in firebase.json and .firebaserc
+        run: |
+          cd /qt
+          echo "Is develop-qt-app in firebase.json?"
+          grep -q '"develop-qt-app"' firebase.json && echo "Found develop-qt-app in firebase.json" || echo "develop-qt-app not found in firebase.json"
+          
+          echo "Is develop-qt-app in .firebaserc?"
+          grep -q '"develop-qt-app"' .firebaserc && echo "Found develop-qt-app in .firebaserc" || echo "develop-qt-app not found in .firebaserc"
+
+      # Building the project
       - name: Building the project
-        run: cd qt && npm run ${{ env.environment }}:build && cd ../
+        run: |
+          cd /qt && npm run ${{ env.environment }}:build && cd ../
+
+      # Deploy to Firebase
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -85,8 +69,3 @@ jobs:
           projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
           target: '${{ env.environment }}-qt-app'
           channelId: live
-
-      # Deploy with Debugging
-      - name: Deploy to Firebase with Debugging
-        run: |
-          npx firebase-tools deploy --only hosting:${{ env.environment }}-qt-app --project "${{ secrets.FIREBASE_PROJECT_ID }}" --debug
