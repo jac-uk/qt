@@ -1,9 +1,9 @@
 'use strict';
 
-const config = require('./shared/config.js');
-const { app, db } = require('./shared/admin.js');
-const { getDocument } = require('../functions/shared/helpers');
-
+import config from './shared/config.js';
+import { app, db } from './shared/admin.js';
+import { getDocument } from '../functions/shared/helpers.js';
+import csv from 'csv-writer';
 
 const main = async () => {
 
@@ -39,7 +39,7 @@ const main = async () => {
     });
   });
 
-  const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+  const createCsvWriter = csv.createObjectCsvWriter;
 
   const questionReportHeaders = [
     { id: 'questionNumber', title: 'Question' },

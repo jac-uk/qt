@@ -1,10 +1,10 @@
 // TODO sort out firestore date formatting
 
-const htmlWriter = require('../htmlWriter');
-const {addField} = require('./helpers');
-const _ = require('lodash');
+import htmlWriter from '../../shared/htmlWriter.js';
+import { addField } from './helpers.js';
+import _ from 'lodash';
 
-module.exports = () => {
+export default () => {
 
   return {
     getHtmlQualifyingTestResponse,

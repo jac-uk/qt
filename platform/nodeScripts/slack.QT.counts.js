@@ -1,9 +1,10 @@
 'use strict';
 
-const config = require('./shared/config');
-const { app, db } = require('./shared/admin.js');
-const { getDocument, getDocuments } = require('../functions/shared/helpers');
-const slack = require('../functions/shared/slack')(config);
+import config from './shared/config.js';
+import { app, db } from './shared/admin.js';
+import { getDocument, getDocuments } from '../functions/shared/helpers.js';
+import initSlack from '../functions/shared/slack.js';
+const slack = initSlack(config);
 
 const main = async () => {
 
@@ -61,8 +62,18 @@ const main = async () => {
     cancelled = qualifyingTest.counts.cancelled;
     outOfTime = qualifyingTest.counts.outOfTime;
   }
-
-  await slack.post(`*Summary Stats: ${qualifyingTest.title}*\n\n - ${activated} participants\n - ${started} started\n - ${inProgress} in progress\n - ${completed} completed\n - ${outOfTime} auto-submitted`);
+    initialised;
+    other;
+    cancelled;
+  await slack.post(
+    `*Summary Stats: ${qualifyingTest.title}*\n
+    \n 
+    - ${activated} participants\n
+    - ${started} started\n
+    - ${inProgress} in progress\n
+    - ${completed} completed\n
+    - ${outOfTime} auto-submitted`
+  );
 
   return true;
 };

@@ -1,5 +1,5 @@
-const { setup, teardown, setupAdmin } = require('./helpers');
-const { assertFails, assertSucceeds } = require('@firebase/rules-unit-testing');
+import { setup, teardown, setupAdmin } from './helpers.js';
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 const COLLECTION_NAME = 'qualifyingTestResponses';
 
 describe(COLLECTION_NAME, () => {

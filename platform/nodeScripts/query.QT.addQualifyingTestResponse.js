@@ -11,11 +11,11 @@ const newQualifyingTestResponse = require('../functions/shared/factories/Qualify
 const newQuestionsWithoutSolutions = require('../functions/shared/factories/QualifyingTests/newQuestionsWithoutSolutions')();
 
 const main = async () => {
-  const qualifyingTestId = 'yubYbWZ5WGQoG2OhHTfT';
+  const qualifyingTestId = 'A7TesElY4aI3392MfBKo';
   const participant = { 
     adjustments: false,
     fullName: '',
-    email: 'sophie.austin@judicialappointments.gov.uk',
+    email: 'tom.tom@tom.gov.uk',
     ref: '',
     srcId: '',
   };

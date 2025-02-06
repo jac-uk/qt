@@ -1,6 +1,6 @@
-const { applyUpdates, getDocuments } = require('../../shared/helpers');
+import { applyUpdates, getDocuments } from '../../shared/helpers.js';
 
-module.exports = (config, firebase, db) => {
+export default (config, firebase, db) => {
   return onUpdate;
 
   /**

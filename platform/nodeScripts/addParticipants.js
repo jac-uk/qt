@@ -2,15 +2,24 @@
 
 import config from './shared/config.js';
 import { firebase, app, db } from './shared/admin.js';
-import initGetQualifyingTestScores from '../functions/actions/qualifyingTests/getQualifyingTestScores.js';
-const getQualifyingTestScores = initGetQualifyingTestScores(config, firebase, db);
+
+import initAddParticipants from '../functions/actions/qualifyingTests/updateQualifyingTestParticipants.js';
+const addParticipants = initAddParticipants(config, firebase, db);
 // import initQts from '../functions/shared/qts.js';
 // const qts = initQts(config);
 
 const main = async () => {
 
-  const result = await getQualifyingTestScores({
-    testId: 'uDU98kUdVyDoqVesSHfM',
+  const result = await addParticipants({
+    testId: 'yOoxvzGEx2FSRko04zop',
+    participants: [
+      {
+        ref: 'ref123',
+        email: 'warren@precise-minds.co.uk',
+        fullName: 'Warren Searle',
+        adjustments: false,
+      },
+    ],
   });
 
   return result;

@@ -1,22 +1,43 @@
 
 // Scheduled
-exports.backupFirestore = require('./scheduledFunctions/backupFirestore');
-exports.backupFirestoreWhenBusy = require('./scheduledFunctions/backupFirestoreWhenBusy');
-exports.backupAuthentication = require('./scheduledFunctions/backupAuthentication');
+import backupFirestore from './scheduledFunctions/backupFirestore.js';
+import backupFirestoreWhenBusy from './scheduledFunctions/backupFirestoreWhenBusy.js';
+import backupAuthentication from './scheduledFunctions/backupAuthentication.js';
 
 // Background
-exports.onDelete = require('./backgroundFunctions/onDelete');
-exports.onQualifyingTestResponseUpdate = require('./backgroundFunctions/onQualifyingTestResponseUpdate');
-exports.onQualifyingTestUpdate = require('./backgroundFunctions/onQualifyingTestUpdate');
+import onDelete from './backgroundFunctions/onDelete.js';
+import onQualifyingTestResponseUpdate from './backgroundFunctions/onQualifyingTestResponseUpdate.js';
+import onQualifyingTestUpdate from './backgroundFunctions/onQualifyingTestUpdate.js';
 
 // Callable
-exports.api = require('./callableFunctions/api');
-exports.activateQualifyingTest = require('./callableFunctions/activateQualifyingTest');
-exports.exportQualifyingTestResponses = require('./callableFunctions/exportQualifyingTestResponses');
-exports.initialiseQualifyingTest = require('./callableFunctions/initialiseQualifyingTest');
-exports.logEvent = require('./callableFunctions/logEvent');
-exports.scoreQualifyingTest = require('./callableFunctions/scoreQualifyingTest');
-exports.signIn = require('./callableFunctions/signIn');
+import api from './callableFunctions/api.js';
+import activateQualifyingTest from './callableFunctions/activateQualifyingTest.js';
+import exportQualifyingTestResponses from './callableFunctions/exportQualifyingTestResponses.js';
+import initialiseQualifyingTest from './callableFunctions/initialiseQualifyingTest.js';
+import logEvent from './callableFunctions/logEvent.js';
+import scoreQualifyingTest from './callableFunctions/scoreQualifyingTest.js';
+import signIn from './callableFunctions/signIn.js';
 
 // admin call api
-exports.adminCallAPI = require('./callableFunctions/admin.callAPI');
+import adminCallAPI from './callableFunctions/admin.callAPI.js';
+
+export {
+  // Scheduled
+  backupFirestore,
+  backupFirestoreWhenBusy,
+  backupAuthentication,
+  // Background
+  onDelete,
+  onQualifyingTestResponseUpdate,
+  onQualifyingTestUpdate,
+  // Callable
+  api,
+  activateQualifyingTest,
+  exportQualifyingTestResponses,
+  initialiseQualifyingTest,
+  logEvent,
+  scoreQualifyingTest,
+  signIn,
+  // admin call api
+  adminCallAPI
+};

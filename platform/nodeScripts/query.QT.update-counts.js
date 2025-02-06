@@ -1,8 +1,11 @@
 'use strict';
 
-const config = require('./shared/config');
-const { db, firebase } = require('./shared/admin.js');
-const updateCounts = require('../functions/actions/qualifyingTests/updateCounts')(config, firebase, db);
+import config from './shared/config.js';
+import { db, firebase } from './shared/admin.js';
+
+import initUpdateCounts from '../functions/actions/qualifyingTests/updateCounts.js';
+const updateCounts = initUpdateCounts(config, firebase, db);
+
 const main = async () => {
   const qualifyingTestId = 'LkhJCypOfRgj90NT2gQs';
 

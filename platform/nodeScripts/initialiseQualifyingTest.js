@@ -1,8 +1,10 @@
 'use strict';
 
-const config = require('./shared/config');
-const { firebase, app, db } = require('./shared/admin.js');
-const initialiseQualifyingTest = require('../functions/actions/qualifyingTests/initialiseQualifyingTest')(config, firebase, db);
+import config from './shared/config.js';
+import { firebase, app, db } from './shared/admin.js';
+
+import initInitialiseQualifyingTest from '../functions/actions/qualifyingTests/initialiseQualifyingTest.js';
+const initialiseQualifyingTest = initInitialiseQualifyingTest(config, firebase, db);
 
 const main = async () => {
   return initialiseQualifyingTest({

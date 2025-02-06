@@ -1,10 +1,13 @@
 
-const config = require('../../../functions/shared/config');
-const { firebase } = require('firebase-admin');
+import config from '../../../functions/shared/config.js';
+import firebase from 'firebase-admin';
+import { jest } from '@jest/globals';
+
 // @TODO use firebase testing tools (and emulator)
 const mockDb = jest.fn();
 
-const onQualifyingTestResponsesUpdate = require('../../../functions/actions/qualifyingTestResponses/onUpdate')(config, firebase, mockDb);
+import initOnQualifyingTestResponsesUpdate from '../../../functions/actions/qualifyingTestResponses/onUpdate.js';
+const onQualifyingTestResponsesUpdate = initOnQualifyingTestResponsesUpdate(config, firebase, mockDb);
 
 describe('onQualifyingTestResponsesUpdate()', () => {
 
