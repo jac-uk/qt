@@ -38,12 +38,11 @@ jobs:
       # Installing project dependencies
       - name: Installing project dependencies
         run: |
-          cd /qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+          cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
 
       # Create env file
       - name: Create env file
         run: |
-          cd /qt
           touch .env.${{ env.environment }}
           echo "VITE_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env.${{ env.environment }}
           echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> .env.${{ env.environment }}
@@ -58,7 +57,7 @@ jobs:
       # Add checks for develop-qt-app in Firebase config
       - name: Check if develop-qt-app is in firebase.json and .firebaserc
         run: |
-          cd /qt
+          cd qt
           echo "Is develop-qt-app in firebase.json?"
           grep -q '"develop-qt-app"' firebase.json && echo "Found develop-qt-app in firebase.json" || echo "develop-qt-app not found in firebase.json"
           
@@ -68,7 +67,7 @@ jobs:
       # Building the project
       - name: Building the project
         run: |
-          cd /qt && npm run ${{ env.environment }}:build && cd ../
+          cd qt && npm run ${{ env.environment }}:build && cd ../
 
       # Deploy to Firebase
       - uses: FirebaseExtended/action-hosting-deploy@v0
