@@ -61,7 +61,7 @@ jobs:
       - name: Installing project dependencies
         run: cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Lint
-        run: npm run lint-ci
+        run: cd qt && npm run lint-ci && cd ../
       - name: Test
         run: echo "TODO npm run test-ci"
 
