@@ -1,5 +1,6 @@
 {
-  "hosting": [{
+  "hosting": [
+    {
       "target": "develop-qt-app",
       "public": "dist",
       "ignore": [
