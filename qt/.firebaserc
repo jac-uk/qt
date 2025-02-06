@@ -1,8 +1,8 @@
 {
   "projects": {
+    "default": "jac-qualifying-tests-develop",
     "develop": "jac-qualifying-tests-develop",
-    "live": "jac-qualifying-tests-live",
-    "default": "jac-qualifying-tests-develop"
+    "live": "jac-qualifying-tests-live"
   },
   "targets": {
     "jac-qualifying-tests-develop": {
@@ -19,5 +19,6 @@
         ]
       }
     }
-  }
+  },
+  "etags": {}
 }
