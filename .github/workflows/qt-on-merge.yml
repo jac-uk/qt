@@ -104,7 +104,7 @@ jobs:
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
-        run: cd qt && npm run build-${{ env.environment }} && cd ../
+        run: cd qt && npm run ${{ env.environment }}:build && cd ../
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -152,7 +152,7 @@ jobs:
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
-        run: cd qt && npm run build-${{ env.environment }} && cd ../
+        run: cd qt && npm run {{ env.environment }}:build && cd ../
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
