@@ -37,8 +37,7 @@ jobs:
           npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
           git push
 
-
-  test:
+ test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -58,7 +57,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '12'
+          node-version: '20.10.0'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Lint
