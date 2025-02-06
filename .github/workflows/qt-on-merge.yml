@@ -89,7 +89,7 @@ jobs:
         with:
           node-version: '12'
       - name: Installing project dependencies
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+        run: cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file
         run: |
           touch .env.${{ env.environment }}
@@ -104,7 +104,7 @@ jobs:
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
-        run: npm run build-${{ env.environment }}
+        run: cd qt && npm run build-${{ env.environment }} && cd ../
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -137,7 +137,7 @@ jobs:
         with:
           node-version: '12'
       - name: Installing project dependencies
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+        run: cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file
         run: |
           touch .env.${{ env.environment }}
@@ -152,7 +152,7 @@ jobs:
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
-        run: npm run build-${{ env.environment }}
+        run: cd qt && npm run build-${{ env.environment }} && cd ../
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
