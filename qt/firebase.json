@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "develop-qt-app",
-      "public": "index.html",
+      "public": ".",
       "ignore": [
         "firebase.json",
         "**/.*",
