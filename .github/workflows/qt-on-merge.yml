@@ -33,6 +33,37 @@ jobs:
           node-version: '20.10.0'
       - name: Installing project dependencies
         run: cd qt && echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+
+      # Check if the "develop-qt-app" hosting target is in firebase.json
+      - name: Check if develop-qt-app is in firebase.json
+        id: check_firebase_json
+        run: |
+          if grep -q 'develop-qt-app' firebase.json; then
+            echo "Found develop-qt-app in firebase.json"
+            echo "found_in_firebase_json=true" >> $GITHUB_ENV
+          else
+            echo "develop-qt-app NOT found in firebase.json"
+            echo "found_in_firebase_json=false" >> $GITHUB_ENV
+          fi
+
+      # Check if the "develop-qt-app" target is in .firebaserc
+      - name: Check if develop-qt-app is in .firebaserc
+        id: check_firebaserc
+        run: |
+          if grep -q 'develop-qt-app' .firebaserc; then
+            echo "Found develop-qt-app in .firebaserc"
+            echo "found_in_firebaserc=true" >> $GITHUB_ENV
+          else
+            echo "develop-qt-app NOT found in .firebaserc"
+            echo "found_in_firebaserc=false" >> $GITHUB_ENV
+          fi
+
+      # Log the boolean check results for both files
+      - name: Log check results
+        run: |
+          echo "Is develop-qt-app in firebase.json? ${{ env.found_in_firebase_json }}"
+          echo "Is develop-qt-app in .firebaserc? ${{ env.found_in_firebaserc }}"
+
       - name: Create env file
         run: |
           touch .env.${{ env.environment }}
@@ -54,3 +85,8 @@ jobs:
           projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
           target: '${{ env.environment }}-qt-app'
           channelId: live
+
+      # Deploy with Debugging
+      - name: Deploy to Firebase with Debugging
+        run: |
+          npx firebase-tools deploy --only hosting:${{ env.environment }}-qt-app --project "${{ secrets.FIREBASE_PROJECT_ID }}" --debug
