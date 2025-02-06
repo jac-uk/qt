@@ -37,7 +37,7 @@ jobs:
           npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
           git push
 
- test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
