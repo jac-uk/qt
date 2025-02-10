@@ -10,6 +10,7 @@ import mitt from 'mitt';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
 import './styles/main.scss';
+//
 /**
  * Mitt is used to replace the event bus, which is no longer supported in Vue3.
  * Ultimately this should be replaced by another pattern.
