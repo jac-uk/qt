@@ -10,7 +10,7 @@ const mockSnapshot = {
   },
 };
 
-exports.mockDb = {
+let mockDb = {
   collection: jest.fn().mockReturnValue({
     doc: jest.fn().mockReturnValue({
       delete: jest.fn(),
@@ -22,3 +22,6 @@ exports.mockDb = {
   }),
 };
 
+export {
+  mockDb
+};

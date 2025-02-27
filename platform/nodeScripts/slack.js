@@ -1,7 +1,8 @@
 'use strict';
 
-const config = require('./shared/config');
-const slack = require('../functions/shared/slack')(config);
+import config from './shared/config.js';
+import initSlack from '../functions/shared/slack.js';
+const slack = initSlack(config);
 
 const main = async () => {
   await slack.post('Test :)');

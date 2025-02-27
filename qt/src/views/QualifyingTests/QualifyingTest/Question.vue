@@ -38,12 +38,13 @@
             >
               {{ isComingFromReview || isLastQuestion ? 'Skip to Review' : 'Skip to next question' }}
             </button>
-            <button
-              :class="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
+            <ActionButton
+              :propclass="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
               :disabled="!canSaveAndContinue"
+              :action="save"
             >
               Save and continue
-            </button>
+            </ActionButton>
           </div>
         </div>
       </form>
@@ -57,12 +58,14 @@ import SituationalJudgement from '@/views/QualifyingTests/QualifyingTest/Questio
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner.vue';
 import { prepareSaveHistory, prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
+import ActionButton from '@/components/ActionButton.vue';
 
 export default {
   components: {
     CriticalAnalysis,
     SituationalJudgement,
     Banner,
+    ActionButton,
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -192,24 +195,10 @@ export default {
     },
   },
   async mounted() {
-    const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
-    await this.$store.dispatch('qualifyingTestResponse/save', saveData);
     window.scrollTo(0, 0);
-    this.questionSessionStart = Timestamp.now();
   },
   async created() {
-    if (this.isScenario) {
-      this.$router.push({
-        name: 'online-test-review',
-      });
-      return;
-    }
-    if (this.questionNumber > this.qualifyingTestResponse.testQuestions.questions.length) {
-      this.$router.push({
-        name: 'online-test-review',
-      });
-      return;
-    }
+    await this.handleLanding();
     if (this.qualifyingTestResponse) {
       if (this.response && !this.response.started) {
         this.response.started = Timestamp.fromDate(new Date());
@@ -251,6 +240,23 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', data);
       if (isCompleted) {
         this.$router.push(this.nextPage);
+      }
+    },
+    async handleLanding() {
+      if (this.isScenario) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
+      }
+      if (this.questionNumber > this.qualifyingTestResponse.testQuestions.questions.length) {
+        this.$router.push({
+          name: 'online-test-review',
+        });
+        return;
+      } else {
+        const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
+        await this.$store.dispatch('qualifyingTestResponse/save', saveData);
       }
     },
     questionAnswered(val) {

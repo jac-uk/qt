@@ -1,11 +1,11 @@
-const { replaceCharacters } = require('./helpers');
+import { replaceCharacters } from './helpers.js';
 
-module.exports = {
+export {
   getSearchMap,
-  formatSearchTerm,
+  formatSearchTerm
 };
 
-function getSearchMap(searchables = []) {
+const getSearchMap = function(searchables = []) {
   const searchMap = {};
   const n = 3;
   searchables.forEach(searchable => {
@@ -17,13 +17,13 @@ function getSearchMap(searchables = []) {
     }
   });
   return searchMap;
-}
+};
 
 /**
  * Firestore keys cannot contain certain (illegal) characters so replace them with an acceptable character
  * @param String str 
  */
-function formatSearchTerm(str) {
+const formatSearchTerm = function(str) {
   const characterMap = {
     '[': '-',
     ']': '-',
@@ -34,4 +34,4 @@ function formatSearchTerm(str) {
     '\\': '-',
   };
   return replaceCharacters(str, characterMap);
-}
+};

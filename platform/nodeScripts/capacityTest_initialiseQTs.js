@@ -7,15 +7,27 @@
  *   npm run nodeScript example.js
  *   ```
  */
- 'use strict';
 
-const config = require('./shared/config');
-const { auth, firebase, app, db } = require('./shared/admin.js');
-const action = require('../functions/actions/applications/applications')(config, firebase, db, auth);
-const { initialiseApplicationRecords } = require('../functions/actions/applicationRecords')(config, firebase, db, auth);
-const initialiseQualifyingTest = require('../functions/actions/qualifyingTests/initialiseQualifyingTest')(config, firebase, db);
-const {getDocument, getDocuments, applyUpdates} = require('../functions/shared/helpers');
-const { faker } = require('@faker-js/faker');
+// nodescript broken
+
+'use strict';
+
+import config from './shared/config.js';
+import { auth, firebase, app, db } from './shared/admin.js';
+let initAction;
+// import initAction from '../functions/actions/applications/applications.js';
+const action = initAction(config, firebase, db, auth);
+
+let initInitialiseApplicationRecords;
+// import { initInitialiseApplicationRecords } from '../functions/actions/applicationRecords.js';
+const initialiseApplicationRecords = initInitialiseApplicationRecords(config, firebase, db, auth);
+
+import initInitialiseQualifyingTest from '../functions/actions/qualifyingTests/initialiseQualifyingTest.js';
+const initialiseQualifyingTest = initInitialiseQualifyingTest(config, firebase, db);
+
+import { getDocument, getDocuments, applyUpdates } from '../functions/shared/helpers.js';
+
+import { faker } from '@faker-js/faker';
 
 const getNowString = () => {
   return new Date().toJSON().slice(0,10).split('-').reverse().join('/');

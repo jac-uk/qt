@@ -458,6 +458,7 @@
           <div v-if="responses.length">
             <table class="history-logs">
               <div v-if="!isScenario">
+                <hr>
                 <div
                   v-for="(testQuestion, index) in questions"
                   :key="index"
@@ -468,6 +469,7 @@
                       Question {{ index + 1 }}
                     </td>
                   </tr>
+                  <hr>
                   <tr>
                     <td>First started question: </td>
                     <td>
@@ -511,6 +513,7 @@
                     <td>How many times changed answer: </td>
                     <td>{{ historyCount('changed', index) }}</td>
                   </tr>
+                  <hr>
                 </div>
               </div>
               <div v-else-if="isScenario">
@@ -598,7 +601,7 @@
                 </td>
                 <td class="log_row_date">
                   <span v-if="log.action">{{ log.action }} </span>
-                  <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
+                  <span v-if="log.question >= 0"> question {{ log.question + 1 }} </span>
                   <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
                   <span v-if="log.answer">(to answer {{ log.answer.value + 1 }} {{ log.answer.type }})</span>
                   <!-- <span v-if="log.location">{{ log.location }}</span> -->
@@ -839,6 +842,13 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
+    getQuestionDurationStart(responses, index) {
+      let result = null;
+      if (responses && responses[index]) {
+        result = this.questionStartTimestamps(index).length ? this.questionStartTimestamps(index) : responses[index].started;
+      }
+      return result;
+    },
     scenarioQuestionIndex(scenario, question){
       return this.getOverallQuestionNumber(scenario + 1, question + 1) - 1;
     },
@@ -1056,7 +1066,12 @@ export default {
           }
         });
       }
-      return new Date(millisecs).toISOString().substr(11, 8);
+      let result;
+      if (!isNaN(millisecs)) {
+        result = new Date(millisecs).toISOString().substr(11, 8);
+      }
+      return result;
+
     },
     amountOfTimeVisitedQuestion(index) {
       let counter = 0;

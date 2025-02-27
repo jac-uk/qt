@@ -30,7 +30,7 @@
               v-if="response"
               id="scenario-question"
               v-model="response.text"
-              :label="`Question ${getOverallQuestionNumber}: ${qualifyingTestResponse.testQuestions.questions[scenarioNumber - 1].options[questionNumber - 1].question}`"
+              :label="scenarioLabel"
               :hint="$filters.showHTMLBreaks(question.hint) || 'Answer below:'"
               :word-limit="wordLimit"
               :hard-word-limit="true"
@@ -41,12 +41,13 @@
 
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
-              <button
-                :class="`moj-button-menu__item govuk-button info-btn--scenario--${infoClass()}--save-and-continue`"
+              <ActionButton
+                :prop-class="`moj-button-menu__item govuk-button info-btn--scenario--${infoClass()}--save-and-continue`"
                 :disabled="reachMaxWords || isEmpty"
+                :action="save"
               >
                 Save and continue
-              </button>
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -56,8 +57,11 @@
           class="govuk-grid-column-one-half"
         >
           <div class="jac-scenario__additional">
-            <dl ref="accordion">
-              <span
+            <div
+              v-if="scenario"
+              ref="accordion"
+            >
+              <div
                 v-for="(document, index) of scenario.documents"
                 :key="index"
               >
@@ -73,10 +77,10 @@
                   </button>
                 </dt>
                 <!-- eslint-disable -->
-                <dd v-html="document.content" />
-                <!-- eslint-enable -->
-              </span>
-            </dl>
+                  <dd v-html="document.content" />
+                  <!-- eslint-enable -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -92,10 +96,12 @@ import { prepareSaveHistory } from '@/helpers/qualifyingTestResponseHelpers';
 import plusIcon from '@/assets/plus.png';
 import minusIcon from '@/assets/minus.png';
 import { prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
+import ActionButton from '@/components/ActionButton.vue';
 
 export default {
   components: {
     TextareaInput,
+    ActionButton,
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -143,7 +149,7 @@ export default {
     const response = responses[scenarioNumber - 1] ? responses[scenarioNumber - 1].responsesForScenario[questionNumber - 1] : {};
 
     return {
-      previsitText: response.text || null,
+      previsitText: response ? response.text : null,
       qualifyingTestResponse,
       scenario,
       response,
@@ -198,15 +204,25 @@ export default {
         return {};
       }
     },
-    wordsCounter() {
-      let content = this.response ? this.response.text : '';
-      let words = '';
-      if (content === '' || content === null) {
-        return 0;
+    scenarioLabel() {
+      let res = '';
+      if (!isNaN(this.scenarioNumber) || !isNaN(this.questionNumber)) {
+        res = `Question ${this.getOverallQuestionNumber}: ${this.qualifyingTestResponse.testQuestions.questions[this.scenarioNumber - 1].options[this.questionNumber - 1].question}`;
       }
-      if (content) {
-        content = content.trim().split(/[\s]+/);
-        words = content.length;
+      return res;
+
+    },
+    wordsCounter() {
+      let words = '';
+      if (this.response) {
+        let content = this.response.text;
+        if (content === '' || content === null) {
+          return 0;
+        }
+        if (content) {
+          content = content.trim().split(/[\s]+/);
+          words = content.length;
+        }
       }
       return words;
     },
@@ -222,8 +238,7 @@ export default {
       return this.question.wordLimit;
     },
     nextPage() {
-      // Check if it's the last scenario and the last question or coming from the review page
-      if ((this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
+      if (isNaN(this.scenarioNumber + 1) || isNaN(this.questionNumber + 1) || (this.isLastQuestionInScenario && this.isLastScenario) || this.isComingFromReview) {
         return {
           name: 'online-test-review',
         };
@@ -281,6 +296,9 @@ export default {
     },
   },
   async created() {
+    if (isNaN(this.questionNumber) || isNaN(this.scenarioNumber)) {
+      this.$router.push(this.nextPage);
+    }
     if (this.qualifyingTestResponse.qualifyingTest.type !== QUALIFYING_TEST.TYPE.SCENARIO) {
       return this.$router.replace({ name: 'online-tests' });
     }
@@ -292,10 +310,10 @@ export default {
       await this.$store.dispatch('qualifyingTestResponse/save', data);
     }
     this.questionSessionStart = Timestamp.now();
-  },
-  async mounted() {
     const saveData = await saveHistoryAndSession({ action: 'start' }, this.getOverallQuestionNumber, this.questionSessionStart);
     await this.$store.dispatch('qualifyingTestResponse/save', saveData);
+  },
+  async mounted() {
     window.scrollTo(0, 0);
   },
   methods: {

@@ -1,6 +1,6 @@
-const { getSearchMap } = require('../../search');
- 
-module.exports = (config, firebase) => {
+import { getSearchMap } from '../../search.js';
+
+export default (config, firebase) => {
 
   return newQualifyingTestResponse;
 
