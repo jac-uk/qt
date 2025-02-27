@@ -1,5 +1,5 @@
 
-module.exports = (config) => {
+export default (config) => {
 
   return newResponsesWithScores;
 

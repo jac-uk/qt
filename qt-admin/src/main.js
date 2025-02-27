@@ -47,15 +47,15 @@ auth.onAuthStateChanged(async (user) => {
     vueInstance.mount('#app');
 
     // Initialise Sentry
-    if (import.meta.env.NODE_ENV !== 'development') {
+    if (import.meta.env.PROD) {
       Sentry.init({
         app: vueInstance,
         dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
         environment: store.getters.appEnvironment.toLowerCase(),
         release: import.meta.env.PACKAGE_VERSION, // made available in vue.config.js
         integrations: [
-          new Sentry.BrowserTracing({
-            routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+          new Sentry.browserTracingIntegration({
+            router,
           }),
         ],
       });

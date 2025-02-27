@@ -1,5 +1,5 @@
-const { getDocument, getDocuments } = require('../../shared/helpers');
-module.exports = (config, firebase, db) => {
+import { getDocument, getDocuments } from '../../shared/helpers.js';
+export default (config, firebase, db) => {
 
   return updateCounts;
 

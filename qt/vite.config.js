@@ -19,6 +19,8 @@ export default defineConfig({
         additionalData: `
         @import "@/styles/_shared.scss";
         `,
+        quietDeps: true,
+        silenceDeprecations: ['legacy-js-api'],
       },
     },
   },

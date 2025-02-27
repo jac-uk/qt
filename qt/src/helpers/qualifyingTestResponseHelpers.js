@@ -27,7 +27,7 @@ const prepareSaveQuestionSession = function (questionSessionStart, questionNumbe
   const timeNow = serverTimestamp();
   const date = new Date();
   const data = {
-    start: questionSessionStart ? questionSessionStart : 'error', // @todo solve issues arrising with questionSessionStart on SJ and CA tests
+    start: questionSessionStart,
     end: Timestamp.fromDate(date),
     question: questionNumber - 1,
     timestamp: Timestamp.fromDate(date),
