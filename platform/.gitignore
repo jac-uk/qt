@@ -93,10 +93,12 @@ functions/pendingReferences.csv
 # Cypress integration tests
 hosting/reference/cypress/screenshots/
 
+# .DS_Store
 .DS_Store
 
-# nodeScript output
+# nodeScript outputs
 output.csv
+Monthly_Stats.csv
 
 # JSDoc
 out/
