@@ -1,6 +1,5 @@
 {
   "name": "qt",
-  "version": "1.60.1",
   "private": true,
   "engines": {
     "node": "18"

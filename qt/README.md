@@ -1,4 +1,4 @@
-## Apply 
+## Apply
 
 [![CircleCI](https://circleci.com/gh/jac-uk/apply.svg?style=svg)](https://circleci.com/gh/jac-uk/apply)
 
@@ -81,7 +81,7 @@ Merging to `master` automatically triggers a deploy to `production`.
 Merging to `staging` automatically triggers a deploy to `staging`.
 
 
-### CircleCI configuration 
+### CircleCI configuration
 
 The CircleCI instance has to have a `FIREBASE_DEPLOY_TOKEN` set.  This is tied to a specific firebase user.  If that user leaves
 the organisation, the token will need to be reset.  To do so run `firebase login:ci` and follow the instructions there and then on
@@ -94,6 +94,5 @@ https://circleci.com/gh/jac-uk/apply/edit#env-vars
 Firebase environment variables bound to the CircleCI environment variables defined here:
 
 https://console.firebase.google.com/project/platform-production-9207d/settings/general/web:OTI4N2U1OGEtY2RkMi00ZTdjLWJiOWEtYWEyNjM1ZjhkNjJk
-
 
 

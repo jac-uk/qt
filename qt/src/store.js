@@ -7,6 +7,7 @@ import qualifyingTestResponses from '@/store/qualifyingTestResponses';
 import logs from '@/store/logs';
 import connectionMonitor from '@/store/connectionMonitor';
 import session from '@/store/session';
+import packageContent from '../../package.json';
 
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -20,7 +21,7 @@ const store = createStore({
     session,
   },
   state: {
-    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
+    packageVersion: packageContent.version || '0',
     env: import.meta.env.NODE_ENV,
   },
   mutations: {},
