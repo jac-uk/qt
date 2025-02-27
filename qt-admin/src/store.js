@@ -13,6 +13,8 @@ import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 import connectionMonitor from '@/store/connectionMonitor';
 
+import packageData from '../../package.json';
+
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: import.meta.env.DEV,
@@ -28,7 +30,7 @@ const store = createStore({
     connectionMonitor,
   },
   state: {
-    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
+    packageVersion: packageData.version || '0',
   },
   mutations: {},
   actions: {},
