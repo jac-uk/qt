@@ -72,12 +72,13 @@ export default (config, firebase, db) => {
       ) {
         data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.COMPLETED}`] = decrement;
         // rollback started number if added
-        if (dataBefore.statusLog &&
-            dataAfter.statusLog &&
-            dataBefore.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] !== null &&
-            dataAfter.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] === null) {
-          
-            data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement; 
+        if (
+          dataBefore.statusLog &&
+          dataAfter.statusLog &&
+          dataBefore.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] !== null &&
+          dataAfter.statusLog[config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED] === null
+        ) {
+          data[`counts.${config.QUALIFYING_TEST_RESPONSES.STATUS.STARTED}`] = decrement;
         }
         // reset auto submit counts and flag
         if (dataBefore.isOutOfTime && !dataAfter.isOutOfTime) {
