@@ -27,7 +27,7 @@ api.get(['/v1', '/v1/'], async (req, res) => {
 
 // list qualifying tests
 api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
-  checkAccess(req, res);
+  if (checkAccess(req, res) === false) return;
   if (!checkArguments({
     key: { required: true },
     folder: { required: true },
@@ -50,7 +50,7 @@ api.get(['/v1/qualifying-tests', '/v1/qualifying-tests/'], async (req, res) => {
 
 // create qualifying test
 api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
-  checkAccess(req, res);
+  if (checkAccess(req, res) === false) return;
   if (!checkArguments({
     key: { required: true },
     folder: { required: true },
@@ -74,7 +74,7 @@ api.post(['/v1/qualifying-test', '/v1/qualifying-test/'], async (req, res) => {
 
 // update qualifying participants
 api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
-  checkAccess(req, res);
+  if (checkAccess(req, res) === false) return;
   if (!checkArguments({
     key: { required: true },
     testId: { required: true },
@@ -98,7 +98,7 @@ api.post(['/v1/participants', '/v1/participants/'], async (req, res) => {
 
 // get scores
 api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
-  checkAccess(req, res);
+  if (checkAccess(req, res) === false) return;
   if (!checkArguments({
     key: { required: true },
     testId: { required: true },
@@ -120,8 +120,14 @@ api.get(['/v1/scores', '/v1/scores/'], async (req, res) => {
 });
 
 function checkAccess(req, res) {
-  if (!req.query.key) { res.status(400).send('Missing key'); }
-  if (req.query.key !== config.QT_KEY) { res.status(400).send('Incorrect key'); }
+  if (!req.query.key) {
+    res.status(400).send('Missing key');
+    return false;
+  } else if (req.query.key !== config.QT_KEY) {
+    res.status(400).send('Incorrect key');
+    return false;
+  }
+  return true;
 }
 
 export default functions.region('europe-west2').https.onRequest(api);
