@@ -6,7 +6,7 @@ import { getDocument, getDocuments, applyUpdates } from '../functions/shared/hel
 
 const main = async () => {
   const qualifyingTestId = '062pKOisqldPaq5HuZGN';
-  const applyChanges = true;  // whether or not to actually make changes to data
+  const applyChanges = false;  // whether or not to actually make changes to data
 
   // get qualifyingTest
   const qualifyingTest = await getDocument(db.collection('qualifyingTests').doc(qualifyingTestId));
