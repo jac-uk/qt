@@ -83,6 +83,9 @@ async function applyUpdates(db, commands) {
         const batch = db.batch();
         for (let i = 0, len = commands.length; i < len; ++i) {
           switch (commands[i].command) {
+          case 'replace': // introduced 'replace' for replacing existing data with new (ie not merging). We are already using 'set' for merging data
+              batch.set(commands[i].ref, commands[i].data, { merge: false });
+            break;
           case 'set':
               batch.set(commands[i].ref, commands[i].data, { merge: true });
             break;
@@ -135,7 +138,7 @@ function checkArguments(definitions, data) {
       requiredKeys.push(key);
     }
   }
-  
+
   for (let i = 0, len = requiredKeys.length; i < len; ++i) {
     if (providedKeys.indexOf(requiredKeys[i]) < 0) {
       // console.log('data does not contain required props');
@@ -274,9 +277,9 @@ function lookup(config, value) {
 
 /**
  * Replace characters in a string according to a map
- * @param String str 
- * @param String characterMap 
- * @returns 
+ * @param String str
+ * @param String characterMap
+ * @returns
  */
 function replaceCharacters(inputString, characterMap) {
   // Convert the inputString to an array of characters
@@ -285,7 +288,7 @@ function replaceCharacters(inputString, characterMap) {
   // Iterate through each character in the array
   for (let i = 0; i < inputArray.length; i++) {
     const char = inputArray[i];
-    
+
     // Check if the character exists in the charMap
     if (Object.prototype.hasOwnProperty.call(characterMap, char)) {
       // Replace the character with its corresponding value from charMap
