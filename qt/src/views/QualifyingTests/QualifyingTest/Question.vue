@@ -270,7 +270,6 @@ export default {
       if (!this.previousTestQuestion) {
         const saveData = saveHistoryAndSession({ action: 'changed', txt: 'Changed', answer: { value: val.value, type: val.type } }, this.questionNumber, this.questionSessionStart);
         await this.$store.dispatch('qualifyingTestResponse/save', saveData);
-        // this.save(false, { action: 'changed', answer: { value: val.value, type: val.type } });
       }
     },
     questionStartedOnPreviousTest() {
