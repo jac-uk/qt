@@ -10,6 +10,7 @@
         :name="inputName[field]"
         :value="value"
         :aria-describedby="hint ? hintId : false"
+        :disabled="disabled"
       >
       <input
         v-else
@@ -20,6 +21,7 @@
         :name="inputName"
         :value="value"
         :aria-describedby="hint ? hintId : null"
+        :disabled="disabled"
       >
       <label
         class="govuk-label govuk-radios__label"
@@ -67,6 +69,11 @@ export default {
     hint: {
       default: '',
       type: String,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {

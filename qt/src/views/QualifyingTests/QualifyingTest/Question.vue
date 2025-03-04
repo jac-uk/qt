@@ -1,25 +1,25 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <Banner
-        v-if="previousTestQuestion"
-        status="warning"
-      >
-        <template>
-          You cannot amend your answer for this question as it was started on a previous test
-        </template>
-      </Banner>
-
       <form
-        v-if="response"
+        v-if="response && loaded"
         ref="formRef"
         @submit.prevent="save(true, {})"
       >
+
+        <Banner
+          v-if="previousTestQuestion"
+          status="warning"
+        >
+          You cannot amend your answer for this question as it was started on a previous test
+        </Banner>
+
         <component
           :is="questionType"
           v-model="response.selection"
           :question="`${questionNumber}. ${question.details}`"
           :options="question.options"
+          :disabled="previousTestQuestion"
           @answered="questionAnswered"
         />
 
@@ -29,6 +29,7 @@
         >
           Please select one option 'Most appropriate' and one 'Least appropriate' before clicking on 'Save and continue'.
         </p>
+
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
@@ -39,6 +40,7 @@
               {{ isComingFromReview || isLastQuestion ? 'Skip to Review' : 'Skip to next question' }}
             </button>
             <ActionButton
+              v-if="!previousTestQuestion"
               :propclass="`moj-button-menu__item govuk-button info-btn--question-${questionNumber}-${$route.params.qualifyingTestId}-save-and-continue`"
               :disabled="!canSaveAndContinue"
               :action="save"
@@ -48,6 +50,7 @@
           </div>
         </div>
       </form>
+      <LoadingMessage v-else/>
     </div>
   </div>
 </template>
@@ -59,6 +62,7 @@ import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner.vue';
 import { prepareSaveHistory, prepareSaveQuestionSession, saveHistoryAndSession } from '@/helpers/qualifyingTestResponseHelpers';
 import ActionButton from '@/components/ActionButton.vue';
+import LoadingMessage from '@/components/LoadingMessage.vue';
 
 export default {
   components: {
@@ -66,6 +70,7 @@ export default {
     SituationalJudgement,
     Banner,
     ActionButton,
+    LoadingMessage,
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -115,6 +120,7 @@ export default {
       previousTestQuestion: false,
       questionSessionStart: Timestamp.now(),
       isComingFromReview: false,
+      loaded: false,
     };
   },
   computed: {
@@ -188,7 +194,7 @@ export default {
             location: 'modal',
             question: this.questionNumber - 1,
           };
-          const saveData = await saveHistoryAndSession(sessionData, this.questionNumber, this.questionSessionStart);
+          const saveData = saveHistoryAndSession(sessionData, this.questionNumber, this.questionSessionStart);
           await this.$store.dispatch('qualifyingTestResponse/save', saveData);
         }
       }
@@ -211,11 +217,12 @@ export default {
       if (this.qualifyingTestResponse._unlockPreviousAnswers !== true) {
         this.questionStartedOnPreviousTest();
       }
+      this.loaded = true;
     }
   },
   methods: {
     async skip() {
-      const saveData = await saveHistoryAndSession({ action: 'skip', txt: 'Skip' }, this.questionNumber, this.questionSessionStart);
+      const saveData = saveHistoryAndSession({ action: 'skip', txt: 'Skip' }, this.questionNumber, this.questionSessionStart);
       await this.$store.dispatch('qualifyingTestResponse/save', saveData);
       this.$router.push(this.nextPage);
     },
@@ -255,16 +262,22 @@ export default {
         });
         return;
       } else {
-        const saveData = await saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
+        const saveData = saveHistoryAndSession({ action: 'start' }, this.questionNumber, this.questionSessionStart);
         await this.$store.dispatch('qualifyingTestResponse/save', saveData);
       }
     },
-    questionAnswered(val) {
-      this.save(false, { action: 'changed', answer: { value: val.value, type: val.type } });
+    async questionAnswered(val) {
+      if (!this.previousTestQuestion) {
+        const saveData = saveHistoryAndSession({ action: 'changed', txt: 'Changed', answer: { value: val.value, type: val.type } }, this.questionNumber, this.questionSessionStart);
+        await this.$store.dispatch('qualifyingTestResponse/save', saveData);
+      }
     },
     questionStartedOnPreviousTest() {
       if (this.response.started && this.response.completed) {
-        if (this.response.started < this.qualifyingTestResponse.qualifyingTest.startDate) {
+        if (
+          this.response.started < this.qualifyingTestResponse.qualifyingTest.startDate
+          && this.response.completed < this.qualifyingTestResponse.qualifyingTest.startDate
+        ) {
           this.previousTestQuestion = true;
         }
       }

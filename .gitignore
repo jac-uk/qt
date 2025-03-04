@@ -69,3 +69,5 @@ platform/data/auth_export/accounts.json
 
 # ds store
 .DS_Store
+
+platform/data/storage_export
