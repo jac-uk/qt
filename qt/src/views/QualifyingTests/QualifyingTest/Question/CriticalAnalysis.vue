@@ -11,6 +11,7 @@
         :key="index"
         :value="index"
         :label="item.answer"
+        :disabled="disabled"
       />
     </RadioGroup>
   </fieldset>
@@ -36,6 +37,11 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   emits: ['update:modelValue', 'answered'],

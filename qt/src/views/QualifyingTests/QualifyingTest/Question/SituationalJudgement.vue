@@ -16,12 +16,14 @@
         <p>
           <RadioItem
             :value="index"
+            :disabled="disabled"
             field="mostAppropriate"
             label="Most appropriate"
           />
           <br>
           <RadioItem
             :value="index"
+            :disabled="disabled"
             field="leastAppropriate"
             label="Least appropriate"
           />
@@ -51,6 +53,11 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   emits: ['update:modelValue', 'answered'],
