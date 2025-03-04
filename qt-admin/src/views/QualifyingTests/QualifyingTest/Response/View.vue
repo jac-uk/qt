@@ -474,11 +474,6 @@
                     <td>First started question: </td>
                     <td>
                       <li
-                        style="list-style-type: none;"
-                      >
-                        {{ $filters.formatDate(responses[index].started, 'datetime') }}
-                      </li>
-                      <li
                         v-for="started in firstVisitOfDayToQuestion(index)"
                         :key="started"
                         style="list-style-type: none;"
