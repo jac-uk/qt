@@ -8,6 +8,7 @@
       <div class="govuk-grid-column-two-thirds">
         <Table
           v-if="hasData"
+          :key="timestamp"
           data-key="id"
           :data="tableData"
           :columns="tableColumns"
@@ -73,6 +74,8 @@ export default {
         { title: 'Test' },
         { title: 'Status' },
       ],
+      timestamp: new Date().getTime(), // used to force a refresh of the table
+      refreshInterval: null,
     };
   },
   computed: {
@@ -92,7 +95,6 @@ export default {
     },
   },
   async mounted() {
-    this.qualifyingTest;
     try {
       await this.$store.dispatch('qualifyingTestResponses/bind');
       await this.$store.dispatch('qualifyingTestResponses/bindDryRuns');
@@ -101,12 +103,20 @@ export default {
       this.loadFailed = true;
       throw e;
     }
+
+    this.refreshInterval = setInterval(this.refreshTable, 1000); // Refresh every second
+  },
+  beforeUnmount() {
+    clearInterval(this.refreshInterval);
   },
   unmounted() {
     this.$store.dispatch('qualifyingTestResponses/unbind');
     this.$store.dispatch('qualifyingTestResponses/unbindDryRuns');
   },
   methods: {
+    async refreshTable() {
+      this.timestamp = new Date().getTime();
+    },
     status(obj) {
       // TODO this needs re-coding against requirements
       const startedOrCompleted = obj.status === QUALIFYING_TEST.STATUS.STARTED || obj.status === QUALIFYING_TEST.STATUS.COMPLETED;
