@@ -104,7 +104,7 @@ export default {
       throw e;
     }
 
-    this.refreshInterval = setInterval(this.refreshTable, 1000); // Refresh every second
+    this.refreshInterval = setInterval(this.refreshTable, 1000); // refresh every second
   },
   beforeUnmount() {
     clearInterval(this.refreshInterval);
