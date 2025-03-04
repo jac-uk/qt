@@ -112,3 +112,5 @@ out/
 /data/firestore.json
 /data/firestore_export/
 /data/firebase-export-metadata.json
+/data/storage_export/
+/data/storage_export/buckets.json
