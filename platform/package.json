@@ -26,6 +26,7 @@
     "live:nodeScript": "export GOOGLE_APPLICATION_CREDENTIALS='service-account.live.json' && run(){ node -r dotenv/config nodeScripts/$1; }; run",
     "nodeScriptOnWindows": "set GOOGLE_APPLICATION_CREDENTIALS=service-account.json&& node nodeScripts/%SCRIPT%",
     "indexes:export": "firebase firestore:indexes > database/firestore.indexes.json --project=jac-qualifying-tests-develop",
+    "live:indexes:export": "firebase firestore:indexes > database/firestore.indexes.json --project=jac-qualifying-tests-live",
     "deploy": "firebase deploy --project=jac-qualifying-tests-develop",
     "deploy:rules": "firebase deploy --project=jac-qualifying-tests-develop --only firestore:rules",
     "deploy:indexes": "firebase deploy --project=jac-qualifying-tests-develop --only firestore:indexes",

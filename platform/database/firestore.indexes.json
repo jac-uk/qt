@@ -277,6 +277,20 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "qualifyingTest.startDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "statusLog.started",
           "order": "ASCENDING"
         },
@@ -315,6 +329,20 @@
         {
           "fieldPath": "title",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
         }
       ]
     }
