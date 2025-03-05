@@ -1,5 +1,5 @@
 import { firestore, auth } from '@/firebase';
-import { collection, query, where, orderBy, writeBatch, doc, getDocs,addDoc, updateDoc, serverTimestamp } from '@firebase/firestore';
+import { collection, query, where, orderBy, writeBatch, doc, getDocs,addDoc, updateDoc, serverTimestamp, or } from '@firebase/firestore';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
@@ -34,7 +34,10 @@ export default {
       if (isSearchAdjustment) {
         firestoreRef = query(
           firestoreRef,
-          where('participant.reasonableAdjustments', '==', true)
+          or(
+            where('participant.reasonableAdjustments', '==', true),
+            where('duration.reasonableAdjustment', '!=', 0)
+          )
         );
       }
 

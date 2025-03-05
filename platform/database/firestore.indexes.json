@@ -31,6 +31,50 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "participant.email",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "duration.reasonableAdjustment",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "participant.reasonableAdjustments",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "participant.email",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "duration.reasonableAdjustment",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "participant.reasonableAdjustments",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "participant.fullName",
           "order": "ASCENDING"
         }
@@ -88,6 +132,42 @@
         },
         {
           "fieldPath": "participant.email",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "duration.reasonableAdjustment",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "participant.email",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "qualifyingTestResponses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "qualifyingTest.id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "participant.email",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "duration.reasonableAdjustment",
           "order": "DESCENDING"
         }
       ]
