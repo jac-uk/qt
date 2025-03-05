@@ -3,12 +3,12 @@ export default (config, firebase, db) => {
 
   return updateCounts;
 
-  async function updateCounts(qualifyingTestId) {  
+  async function updateCounts(qualifyingTestId) {
     const qualifyingTest = await getDocument(db.collection('qualifyingTests').doc(qualifyingTestId));
     if (!qualifyingTest) return false;
-  
+
     const qualifyingTestResponses = await getDocuments(db.collection('qualifyingTestResponses').where('qualifyingTest.id', '==', qualifyingTestId).select('participant', 'status', 'isOutOfTime'));
-  
+
     let initialised = 0;
     let activated = 0;
     let started = 0;
@@ -17,7 +17,7 @@ export default (config, firebase, db) => {
     let cancelled = 0;
     let outOfTime = 0;
     let other = 0;
-  
+
     qualifyingTestResponses.forEach(qtr => {
       // Exclude .digital email addresses
       if (!String.prototype.endsWith.call(qtr.participant.email, '@judicialappointments.digital')) {
@@ -39,7 +39,7 @@ export default (config, firebase, db) => {
             outOfTime += 1;
           }
           break;
-        case config.QUALIFYING_TEST_RESPONSES.STATUS.CANCELLED: 
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.CANCELLED:
           cancelled += 1;
           break;
         default:
@@ -48,16 +48,7 @@ export default (config, firebase, db) => {
         }
       }
     });
-  
-    console.log('initialised', initialised);
-    console.log('activated', activated);
-    console.log('started', started);
-    console.log('inProgress', inProgress);
-    console.log('completed', completed);
-    console.log('cancelled', cancelled);
-    console.log('outOfTime', outOfTime);
-    console.log('other', other);
-  
+
     const saveData = {};
     saveData['counts.initialised'] = initialised;
     saveData['counts.activated'] = activated;
@@ -66,10 +57,9 @@ export default (config, firebase, db) => {
     saveData['counts.completed'] = completed;
     saveData['counts.cancelled'] = cancelled;
     saveData['counts.outOfTime'] = outOfTime;
-  
-    console.log('saveData', saveData);
+
     await qualifyingTest.ref.update(saveData);
-  
+
     return qualifyingTestResponses.length;
   }
 

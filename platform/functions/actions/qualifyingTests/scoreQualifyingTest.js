@@ -25,6 +25,8 @@ export default (config, firebase, db) => {
 
     // get qualifying test
     const qualifyingTest = await getDocument(db.doc(`qualifyingTests/${params.qualifyingTestId}`));
+    if (!qualifyingTest) return false;
+
     const mainQualifyingTestId = qualifyingTest.mode === config.QUALIFYING_TEST.MODE.MOP_UP ? qualifyingTest.relationship.copiedFrom : qualifyingTest.id;
 
     const responsesReport = newQualifyingTestResponsesReport(qualifyingTest);
