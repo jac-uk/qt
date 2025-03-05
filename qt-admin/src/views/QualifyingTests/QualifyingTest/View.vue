@@ -193,6 +193,9 @@
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>
         </p>
+
+        <p v-if="isCompleted" class="govuk-body-s govuk-!-margin-bottom-0 note">@judicialappointments.digital email addresses are excluded from final counts</p>
+
       </div>
     </div>
 
@@ -730,7 +733,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tooltip-anchor {
   position: relative;
   width: 20px;
@@ -755,5 +758,9 @@ export default {
 .tooltip-wrapper {
   position: absolute;
   top: -10px
+}
+
+.note {
+  color: $govuk-secondary-text-colour;
 }
 </style>
