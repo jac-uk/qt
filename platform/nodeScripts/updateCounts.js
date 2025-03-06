@@ -6,7 +6,7 @@ import initUpdateCounts from '../functions/actions/qualifyingTests/updateCounts.
 const updateCounts = initUpdateCounts(config, firebase, db);
 
 const main = async () => {
-  return updateCounts('xDuIoTP5EtiW13WoEWJd');
+  return updateCounts('Rpg63mAI2tF47Soch7io');
 };
 
 main()

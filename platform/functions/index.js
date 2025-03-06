@@ -16,6 +16,7 @@ import exportQualifyingTestResponses from './callableFunctions/exportQualifyingT
 import initialiseQualifyingTest from './callableFunctions/initialiseQualifyingTest.js';
 import logEvent from './callableFunctions/logEvent.js';
 import scoreQualifyingTest from './callableFunctions/scoreQualifyingTest.js';
+import updateCounts from './callableFunctions/updateCounts.js';
 import signIn from './callableFunctions/signIn.js';
 
 // admin call api
@@ -37,6 +38,7 @@ export {
   initialiseQualifyingTest,
   logEvent,
   scoreQualifyingTest,
+  updateCounts,
   signIn,
   // admin call api
   adminCallAPI

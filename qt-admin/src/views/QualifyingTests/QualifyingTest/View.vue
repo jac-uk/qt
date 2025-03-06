@@ -360,6 +360,16 @@
       >
         Close & Score
       </ActionButton>
+
+      <ActionButton
+        v-if="isCompleted"
+        type="secondary"
+        class="govuk-!-margin-right-3"
+        :action="btnUpdateCounts"
+      >
+        Refresh Final Counts
+      </ActionButton>
+
     </div>
 
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
@@ -690,6 +700,10 @@ export default {
     },
     async btnGetScores() {
       await httpsCallable(functions, 'scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      return true;
+    },
+    async btnUpdateCounts() {
+      await httpsCallable(functions, 'updateCounts')({ qualifyingTestId: this.qualifyingTestId });
       return true;
     },
     btnResponses(status) {
