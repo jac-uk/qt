@@ -58,6 +58,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { markRaw } from 'vue';
 
 export default {
   components: {
@@ -78,7 +79,7 @@ export default {
     const qualifyingTest = { ...defaults, ...data };
     return {
       repeatableFields: {
-        QualifyingTestQuestion,
+        QualifyingTestQuestion: markRaw(QualifyingTestQuestion),
       },
       qualifyingTest: qualifyingTest,
       testQuestionsJson: JSON.stringify(qualifyingTest.testQuestions),

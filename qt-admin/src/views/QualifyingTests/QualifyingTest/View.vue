@@ -95,11 +95,12 @@
           style="display: flex;"
         >
           <div>
-            <RouterLink
-              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: 'all', }}"
+            <a
+            href=""
+            @click.prevent="btnResponses('all')"
             >
               Initialised
-            </RouterLink>
+          </a>
           </div>
           <div class="tooltip-anchor">
             <div class="tooltip-wrapper">
@@ -118,11 +119,12 @@
           </div>
           <div>/</div>
           <div>
-            <RouterLink
-              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
+            <a
+            href=""
+            @click.prevent="btnResponses(qtStatus('ACTIVATED'))"
             >
               Activated
-            </RouterLink>
+          </a>
           </div>
 
           <div class="tooltip-anchor">
@@ -155,11 +157,12 @@
           style="display: flex;"
         >
           <div>
-            <RouterLink
-              :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
+            <a
+              href=""
+              @click.prevent="btnResponses(qtStatus('COMPLETED'))"
             >
               Completed
-            </RouterLink>
+          </a>
           </div>
           <div class="tooltip-anchor">
             <div class="tooltip-wrapper">
@@ -210,19 +213,21 @@
           Progress
         </h2>
         <p class="govuk-body">
-          <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+          <a
+            href=""
+            @click.prevent="btnResponses(qtStatus('STARTED'))"
           >
             Started
-          </RouterLink>
+          </a>
           <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.started }}</span>
         </p>
         <p class="govuk-body">
-          <RouterLink
-            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: $route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
+          <a
+            href=""
+            @click.prevent="btnResponses(qtStatus('PROGRESS'))"
           >
             In Progress
-          </RouterLink>
+          </a>
           <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.inProgress }}</span>
         </p>
       </div>
@@ -711,8 +716,8 @@ export default {
         name: `${this.routeNamePrefix}-responses`,
         params: {
           qualifyingTestId: this.$route.params.qualifyingTestId,
-          status: status,
         },
+        query: { status },
       };
       this.$router.push(route);
     },

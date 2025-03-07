@@ -127,7 +127,7 @@ const routes = [
             },
           },
           {
-            path: 'responses/:status',
+            path: 'responses',
             component: QualifyingTestResponses,
             name: 'qualifying-test-responses',
             meta: {

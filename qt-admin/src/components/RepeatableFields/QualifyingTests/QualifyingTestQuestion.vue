@@ -127,6 +127,7 @@ import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/Scen
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis.vue';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { markRaw } from 'vue';
 
 export default {
   name: 'QualifyingTestQuestion',
@@ -165,9 +166,9 @@ export default {
     const question = { ...defaults, ...this.row };
     return {
       repeatableFields: {
-        Answer,
-        ScenarioQuestion,
-        AdditionalDocument,
+        Answer: markRaw(Answer),
+        ScenarioQuestion: markRaw(ScenarioQuestion),
+        AdditionalDocument: markRaw(AdditionalDocument),
       },
       question: question,
     };
