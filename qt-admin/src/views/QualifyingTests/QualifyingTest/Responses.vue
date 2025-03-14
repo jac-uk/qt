@@ -108,7 +108,7 @@ export default {
       return this.$route.params.qualifyingTestId;
     },
     searchStatus() {
-      return this.$route.params.status;
+      return this.$route.query.status || 'all';
     },
     isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;

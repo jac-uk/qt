@@ -90,6 +90,7 @@ import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import QTAdditionalInstruction from '@/components/RepeatableFields/QualifyingTests/AdditionalInstruction.vue';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { markRaw } from 'vue';
 
 export default {
   components: {
@@ -115,7 +116,7 @@ export default {
 
     return {
       repeatableFields: {
-        QTAdditionalInstruction,
+        QTAdditionalInstruction: markRaw(QTAdditionalInstruction),
       },
       qualifyingTest: qualifyingTest,
     };
