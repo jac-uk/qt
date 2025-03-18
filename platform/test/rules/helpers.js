@@ -40,8 +40,8 @@ export const teardown = async (testEnv) => {
   }
 };
 
-export const setupAdmin = async (testEnv, data) => {
-  const testEnv1 = await initializeTestEnvironment({
+export const setupAdmin = async (data) => {
+  const testEnv = await initializeTestEnvironment({
     projectId,
     firestore: {
       rules: fs.readFileSync('database/firestore.rules', 'utf8'),
@@ -50,7 +50,7 @@ export const setupAdmin = async (testEnv, data) => {
 
   if (data) {
     // Add data bypassing security rules
-    await testEnv1.withSecurityRulesDisabled(async (context) => {
+    await testEnv.withSecurityRulesDisabled(async (context) => {
       const db = context.firestore();
       for (const key in data) {
         console.log(key, data[key]);
@@ -58,17 +58,6 @@ export const setupAdmin = async (testEnv, data) => {
       }
     });
   }
-
-  const adminDb = testEnv1.unauthenticatedContext().firestore();
-
-  // if (data) {
-  //   for (const key in data) {
-  //     const ref = adminDb.doc(key);
-  //     await ref.set(data[key]);
-  //   }
-  // }
-
-  return adminDb;
 };
 
 export const getTimeStamp = (date) => {
