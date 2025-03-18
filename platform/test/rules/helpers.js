@@ -10,13 +10,18 @@ export const setup = async (auth, data) => {
     firestore: {
       rules: fs.readFileSync('database/firestore.rules', 'utf8'),
     },
-    auth,
   });
-// sorry whoever did the clever auth?.uid thing - upgrade broke it @todo fix it back to:
-// const db = testEnv.authenticatedContext(auth?.uid || null).firestore();
+  // sorry whoever did the clever auth?.uid thing - upgrade broke it @todo fix it back to:
+  //const db = testEnv.authenticatedContext(auth?.uid || null).firestore();
 
-  const authContext = auth ? auth.uid : null;
-  const db = testEnv.authenticatedContext(authContext).firestore();
+  let db;
+  if (auth && auth.uid) {
+    const options = JSON.parse(JSON.stringify(auth));
+    delete options.uid;
+    db = testEnv.authenticatedContext(auth.uid, options).firestore();
+  } else {
+    db = testEnv.unauthenticatedContext().firestore();
+  }
 
   if (data) {
     const adminDb = testEnv.unauthenticatedContext().firestore();
@@ -36,14 +41,32 @@ export const teardown = async (testEnv) => {
 };
 
 export const setupAdmin = async (testEnv, data) => {
-  const adminDb = testEnv.unauthenticatedContext().firestore();
+  const testEnv1 = await initializeTestEnvironment({
+    projectId,
+    firestore: {
+      rules: fs.readFileSync('database/firestore.rules', 'utf8'),
+    },
+  });
 
   if (data) {
-    for (const key in data) {
-      const ref = adminDb.doc(key);
-      await ref.set(data[key]);
-    }
+    // Add data bypassing security rules
+    await testEnv1.withSecurityRulesDisabled(async (context) => {
+      const db = context.firestore();
+      for (const key in data) {
+        console.log(key, data[key]);
+        await db.doc(key).set(data[key]);
+      }
+    });
   }
+
+  const adminDb = testEnv1.unauthenticatedContext().firestore();
+
+  // if (data) {
+  //   for (const key in data) {
+  //     const ref = adminDb.doc(key);
+  //     await ref.set(data[key]);
+  //   }
+  // }
 
   return adminDb;
 };
