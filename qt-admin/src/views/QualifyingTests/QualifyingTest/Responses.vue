@@ -39,7 +39,7 @@
         </TableCell>
         <TableCell :title="tableColumns[3].title">
           <RouterLink
-            :to="{ name: `${routeNamePrefix}-response-view`, params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
+            :to="{ name: `${routeNamePrefix}-response-view`, params: { qualifyingTestId: qualifyingTestId, responseId: row.id }, query: { status: searchStatus } }"
           >
             View
           </RouterLink>
