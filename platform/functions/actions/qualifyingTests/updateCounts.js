@@ -23,6 +23,9 @@ export default (config, firebase, db) => {
       if (!String.prototype.endsWith.call(qtr.participant.email, '@judicialappointments.digital')) {
         initialised += 1;
         switch (qtr.status) {
+        case config.QUALIFYING_TEST_RESPONSES.STATUS.CREATED:
+          // nothing to do here as initialised count captures this status
+          break;
         case config.QUALIFYING_TEST_RESPONSES.STATUS.ACTIVATED:
           activated += 1;
           break;
