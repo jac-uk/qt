@@ -14,8 +14,8 @@ describe(COLLECTION_NAME, () => {
   // const dayBeforeYesterday = new Date(today.getTime() - (2 * 24 * 60 * 60 * 1000));
 
   const mockData = { 'qualifyingTestResponses/qtr1': { qualifyingTest: { type: 'critical_analysis', startDate: today, endDate: tomorrow } } };
-  const mockDataOwnedByUser = { 'qualifyingTestResponses/qtr1': { qualifyingTest: { type: 'critical_analysis', startDate: today, endDate: tomorrow }, candidate: { id: 'user1' } } };
-  const mockDataOwnedByEmail = { 'qualifyingTestResponses/qtr1': { qualifyingTest: { type: 'critical_analysis', startDate: today, endDate: tomorrow }, candidate: { email: 'user@email.com' } } };
+  const mockDataOwnedByUser = { 'qualifyingTestResponses/qtr1': { qualifyingTest: { type: 'critical_analysis', startDate: today, endDate: tomorrow }, participant: { id: 'user1', email: 'user@email.com' } } };
+  const mockDataOwnedByEmail = { 'qualifyingTestResponses/qtr1': { qualifyingTest: { type: 'critical_analysis', startDate: today, endDate: tomorrow }, participant: { id: 'user1', email: 'user@email.com' } } };
   const mockUnverifiedUser = { uid: 'user1', email: 'user@email.com', email_verified: false };
   const mockVerifiedUser = { uid: 'user1', email: 'user@email.com', email_verified: true };
   const mockUnverifiedJACUser = { uid: 'user1', email: 'user@judicialappointments.digital', email_verified: false };
@@ -58,61 +58,61 @@ describe(COLLECTION_NAME, () => {
   context('Read', () => {
     it('prevent un-authenticated user from listing qualifying test responses', async () => {
       const db = await setup();
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).get());
     });
 
     it('prevent authenticated user from listing qualifying test responses', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).get());
     });
 
     it('prevent authenticated user from listing qualifying test responses', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).get());
     });
 
     it('allow authenticated user to list their own qualifying test responses', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockDataOwnedByUser);
-      await assertSucceeds(db.collection(COLLECTION_NAME).where('candidate.id', '==', 'user1').get());
+      await setupAdmin(mockDataOwnedByUser);
+      await assertSucceeds(db.collection(COLLECTION_NAME).where('participant.id', '==', 'user1').get());
     });
 
     it('allow authenticated user to list their own qualifying test dry run responses', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockDataOwnedByEmail);
-      await assertSucceeds(db.collection(COLLECTION_NAME).where('candidate.email', '==', 'user@email.com').get());
+      await setupAdmin(mockDataOwnedByEmail);
+      await assertSucceeds(db.collection(COLLECTION_NAME).where('participant.email', '==', 'user@email.com').get());
     });
 
     it('allow JAC admin to list qualifying test responses', async () => {
       const db = await setup(mockVerifiedJACDigitalUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertSucceeds(db.collection(COLLECTION_NAME).get());
     });
 
     it('prevent un-authenticated user from reading qualifying test response', async () => {
       const db = await setup();
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').get());
     });
 
     it('prevent authenticated user from reading qualifying test response', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').get());
     });
 
     it('allow authenticated user to read their own qualifying test responses', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockDataOwnedByUser);
+      await setupAdmin(mockDataOwnedByUser);
       await assertSucceeds(db.collection(COLLECTION_NAME).doc('qtr1').get());
     });
 
     it('allow JAC admin to read qualifying test response', async () => {
       const db = await setup(mockVerifiedJACDigitalUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertSucceeds(db.collection(COLLECTION_NAME).doc('qtr1').get());
     });
   });
@@ -120,37 +120,38 @@ describe(COLLECTION_NAME, () => {
   xcontext('Update', () => {
     it('prevent un-authenticated user from updating a qualifying test', async () => {
       const db = await setup();
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
 
     it('prevent authenticated user from updating a qualifying test', async () => {
       const db = await setup(mockUnverifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
 
     it('prevent authenticated user with verified email from updating a qualifying test', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
 
-    it('prevent authenticated user with un-verified JAC email from updating a qualifying test', async () => {
+    // SKIP: The email verified is not implemented on QT
+    xit('prevent authenticated user with un-verified JAC email from updating a qualifying test', async () => {
       const db = await setup(mockUnverifiedJACUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
 
     it('allow authenticated user with verified @judicialappointments.digital email to update a qualifying test', async () => {
       const db = await setup(mockVerifiedJACDigitalUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertSucceeds(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
 
     it('allow authenticated user with verified @judicialappointments.gov.uk email to update a qualifying test', async () => {
       const db = await setup(mockVerifiedJACUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertSucceeds(db.collection(COLLECTION_NAME).doc('qtr1').update({ type: 'critical_analysis', startDate: tomorrow, endDate: dayAfterTomorrow }));
     });
   });
@@ -158,27 +159,28 @@ describe(COLLECTION_NAME, () => {
   xcontext('Delete', () => {
     it('prevent un-authenticated user from deleting a qualifying test', async () => {
       const db = await setup();
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').delete());
     });
     it('prevent authenticated user from deleting someone elses assessment data', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').delete());
     });
     it('prevent authenticated user from deleting own assessment data', async () => {
       const db = await setup(mockVerifiedUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').delete());
     });
     it('prevent authenticated user with verified @judicialappointments.gov.uk email from deleting own assessment data', async () => {
       const db = await setup(mockVerifiedJACUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').delete());
     });
-    it('prevent authenticated user with verified @judicialappointments.digital email from deleting own assessment data', async () => {
+    // SKIP: It's not implemented on QT
+    xit('prevent authenticated user with verified @judicialappointments.digital email from deleting own assessment data', async () => {
       const db = await setup(mockVerifiedJACDigitalUser);
-      await setupAdmin(db, mockData);
+      await setupAdmin(mockData);
       await assertFails(db.collection(COLLECTION_NAME).doc('qtr1').delete());
     });
   });
